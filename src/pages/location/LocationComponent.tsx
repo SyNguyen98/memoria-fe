@@ -1,0 +1,216 @@
+import './LocationComponent.scss';
+import React, {useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import {openSnackbar} from "../../reducers/SnackbarReducer";
+import {openSidebar} from "../../reducers/SidebarReducer";
+import {useAppDispatch, useAppSelector} from "../../app/hook";
+import {
+    AppBar,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Toolbar,
+    Typography
+} from "@mui/material";
+import {Add, Delete, Edit, KeyboardArrowRight, Menu} from "@mui/icons-material";
+// Components
+import AppLoader from "../../components/AppLoader";
+import LocationDialog from "./location-dialog/LocationDialog";
+// Models & Constants
+import {Location} from "../../models/Location";
+// Utils & Services
+import {CollectionApi} from "../../api/CollectionApi";
+import {LocationApi} from "../../api/LocationApi";
+
+function LocationComponent() {
+    const [isLoading, setLoading] = useState(false);
+    const [collectionName, setCollectionName] = useState('');
+    const [locations, setLocations] = useState<Location[]>([]);
+    const [choseLocation, setChoseLocation] = useState<Location | null>(null);
+    const [dialogOpened, setDialogOpened] = useState(false);
+    const [isDialogSaved, setDialogSaved] = useState(false);
+    const [dltDialogOpened, setDltDialogOpened] = useState(false);
+
+    const {collectionId} = useParams();
+    const currentUser = useAppSelector(state => state.user.value);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (currentUser && collectionId) {
+            setLoading(true);
+            CollectionApi.getCollectionById(collectionId).then(res => {
+                setCollectionName(res.name);
+            }).catch(() => {
+                dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
+            });
+            LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
+                setLocations(res);
+                setLoading(false);
+            }).catch(() => {
+                dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
+                setLoading(false);
+            });
+        }
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (collectionId && isDialogSaved) {
+            setLoading(true);
+            LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
+                setLocations(res);
+                setLoading(false);
+            }).catch(() => {
+                dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
+                setLoading(false);
+            });
+        }
+    }, [isDialogSaved]);
+
+    const handleOpenMenu = () => {
+        dispatch(openSidebar())
+    }
+
+    const renderTime = (location: Location): string => {
+        let result = String(location.takenYear);
+        if (location.takenMonth) {
+            const month = location.takenMonth < 10 ? `0${location.takenMonth}` : String(location.takenMonth);
+            result = `${month}/${result}`;
+            if (location.takenDay) {
+                const day = location.takenDay < 10 ? `0${location.takenDay}` : String(location.takenDay);
+                result = `${day}/${result}`;
+                if (location.takenTime) {
+                    result = `${location.takenTime} ${result}`;
+                }
+            }
+        }
+        return result;
+    }
+
+    const handleOpenEditDialog = (location?: Location) => {
+        setDialogOpened(true);
+        setChoseLocation(location || null);
+    }
+
+    const onEditDialogClose = () => {
+        setDialogOpened(false);
+        setChoseLocation(null)
+    }
+
+    const handleOpenDeleteDialog = (location: Location) => {
+        setDltDialogOpened(true);
+        setChoseLocation(location);
+    }
+
+    const onDeleteDialogClose = () => {
+        setDltDialogOpened(false);
+        setChoseLocation(null);
+    }
+
+    const handleDeleteCollection = () => {
+        // CollectionApi.deleteCollectionById(choseLocation!.id!).then(() => {
+        //     onDeleteDialogClose();
+        //     dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
+        //     setLoading(true);
+        //     CollectionApi.getAllCollectionsHavingAccess().then(res => {
+        //         setLocations(res);
+        //         setLoading(false);
+        //     }).catch(() => {
+        //         dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
+        //         setLoading(false);
+        //     });
+        // }).catch(() => {
+        //     dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
+        //     setLoading(false);
+        // });
+    }
+
+    return (
+        <section className="location-container">
+            {/* App Bar */}
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton size="large" edge="start" color="inherit" onClick={handleOpenMenu}>
+                        <Menu/>
+                    </IconButton>
+                    <Typography className="page-title" variant="h6" component="div" sx={{flexGrow: 1}}>
+                        <Link className="collection-title" to="/collection">
+                            Bộ Sưu Tập
+                        </Link>
+                        <KeyboardArrowRight />
+                        {collectionName}
+                    </Typography>
+                    <Button className="add-btn" variant="outlined" startIcon={<Add/>}
+                            onClick={() => handleOpenEditDialog()}>
+                        Thêm
+                    </Button>
+                </Toolbar>
+            </AppBar>
+            {/* Collection List */}
+            {isLoading ? <AppLoader /> : (
+                <Table className="location-table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">#</TableCell>
+                            <TableCell align="center">Địa Điểm</TableCell>
+                            <TableCell align="center">Thời Gian</TableCell>
+                            <TableCell align="center"></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {locations.map((location, index) => (
+                            <TableRow key={location.id}>
+                                <TableCell align="center">
+                                    {index + 1}
+                                </TableCell>
+                                <TableCell>
+                                    {location.place}
+                                </TableCell>
+                                <TableCell>
+                                    {renderTime(location)}
+                                </TableCell>
+                                <TableCell align="center">
+                                    <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(location)}>
+                                        <Edit/>
+                                    </IconButton>
+                                    <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(location)}>
+                                        <Delete/>
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            )}
+            {/* Edit dialog */}
+            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} collectionId={collectionId!}
+                            location={choseLocation} isSaved={setDialogSaved}/>
+            {/* Delete dialog */}
+            {choseLocation && (
+                <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>
+                    <DialogTitle>Xóa Địa Điểm</DialogTitle>
+                    <DialogContent>
+                        Bạn có chắc là muốn xóa địa điểm <b><i>{choseLocation.place}</i></b>?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="error" onClick={handleDeleteCollection}>
+                            Xóa
+                        </Button>
+                        <Button variant="contained" color="inherit" onClick={onDeleteDialogClose}>
+                            Hủy
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            )}
+        </section>
+    )
+}
+
+export default LocationComponent;

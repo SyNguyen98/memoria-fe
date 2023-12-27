@@ -1,0 +1,47 @@
+@import "../../../styles/Color";
+
+.collection-dialog {
+  text-align: center;
+
+  .MuiDialog-paper {
+    background-color: $white !important;
+  }
+
+  .MuiDialogTitle-root {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .MuiDialogContent-root {
+
+    .MuiTextField-root {
+      margin: .5rem 0;
+    }
+
+    .email-list {
+      display: flex;
+      flex-direction: column;
+
+      .MuiChip-root {
+        width: fit-content;
+        margin-bottom: .5rem;
+      }
+    }
+  }
+
+  .MuiDialogActions-root {
+    justify-content: center;
+
+    .MuiButton-root {
+      width: 120px;
+      margin: 0 .5rem;
+    }
+
+    .cancel-btn {
+      background-color: $gray-500;
+      &:hover {
+        background-color: $gray-300;
+      }
+    }
+  }
+}

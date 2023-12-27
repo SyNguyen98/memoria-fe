@@ -1,0 +1,63 @@
+@import "../../styles/Breakpoint";
+@import "../../styles/Color";
+
+.image-container {
+
+  .page-title {
+    display: flex;
+
+    .collection {
+      font-weight: 400;
+      &:hover {
+        cursor: pointer;
+        opacity: .8;
+      }
+    }
+
+    .MuiSvgIcon-root {
+      margin: auto .5rem;
+    }
+  }
+
+  .add-btn {
+    color: $white;
+  }
+
+  .list-wrapper {
+    height: calc(100vh - 64px);
+    overflow-x: scroll;
+    padding: 1rem;
+
+    .image-list {
+      display: grid;
+      grid-template-columns: 15.4% 15.4% 15.4% 15.4% 15.4% 15.4%;
+      grid-column-gap: 1.52%;
+      @include respond(large-screen) {
+        grid-template-columns: 11.45% 11.45% 11.45% 11.45% 11.45% 11.45% 11.45% 11.45% 11.45%;
+        grid-column-gap: 1.2%;
+      }
+
+      .image-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        &:hover {
+          cursor: pointer;
+          transform: scale(1.05);
+        }
+
+        img, video {
+          margin: auto;
+          max-height: 200px;
+          max-width: 100%;
+        }
+
+        .image-name {
+          margin: .5rem auto 0;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

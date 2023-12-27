@@ -1,0 +1,25 @@
+@import "../../styles/Color";
+
+.profile-container {
+
+  .add-btn {
+    color: $white;
+  }
+
+  .user-profile {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    .MuiAvatar-root {
+      margin: auto;
+      height: 150px;
+      width: auto;
+    }
+
+    .MuiFormControl-root {
+      margin: 1rem auto;
+      max-width: 500px;
+    }
+  }
+}

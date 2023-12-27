@@ -1,0 +1,57 @@
+@import "../../styles/Color";
+@import url('https://fonts.googleapis.com/css2?family=Lemon&display=swap');
+
+#navigation-menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 1rem;
+
+    .app-name {
+      margin: 1rem 0;
+      font-family: 'Lemon', serif;
+      font-size: 30px;
+      font-weight: 500;
+      color: #0873B7;
+
+      .green {
+        color: #7BC143;
+      }
+    }
+
+    .MuiButtonBase-root {
+      margin: auto 0;
+      height: fit-content;
+    }
+  }
+
+  .menu-body {
+
+  }
+
+  .menu-footer {
+    margin: auto 0 0;
+    display: flex;
+    flex-direction: column;
+
+    .MuiAvatar-root {
+      width: 36px;
+      height: 36px;
+    }
+
+    .owner {
+      margin: 2rem auto 0;
+      display: flex;
+
+      .logo {
+        margin-left: .2rem;
+        width: 70px;
+        height: auto;
+      }
+    }
+  }
+}

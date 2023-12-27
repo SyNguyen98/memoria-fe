@@ -1,0 +1,39 @@
+@import "../styles/Breakpoint";
+@import "../styles/Color";
+@import "../styles/Component";
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $blue-400;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: $blue-200;
+  cursor: pointer;
+}
+
+.App {
+
+  .menu-btn {
+    position: fixed;
+    z-index: 999;
+    left: 2rem;
+    top: 1rem;
+  }
+
+  .main-container {
+    right: 0;
+    transition: width ease-in-out 200ms;
+  }
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}

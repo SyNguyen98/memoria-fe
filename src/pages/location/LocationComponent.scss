@@ -1,0 +1,66 @@
+@import "../../styles/Breakpoint";
+@import "../../styles/Color";
+
+.location-container {
+
+  .page-title {
+    display: flex;
+
+    .collection-title {
+      text-decoration: unset;
+      font-weight: 400;
+      color: white;
+
+      &:hover {
+        cursor: pointer;
+        opacity: .8;
+      }
+    }
+
+    .MuiSvgIcon-root {
+      margin: auto .5rem;
+    }
+  }
+
+
+  .add-btn {
+    color: $white;
+  }
+
+  .location-table {
+    width: calc(100vw - 2rem);
+    margin: 1rem;
+
+    .location-name {
+      text-decoration: unset;
+      font-size: 16px;
+      font-weight: bold;
+      color: $blue-700;
+
+      &:hover {
+        color: $blue-500;
+      }
+    }
+  }
+}
+
+#delete-collection-dialog {
+  text-align: center;
+
+  .MuiDialog-paper {
+    background-color: $white !important;
+  }
+
+  .MuiDialogTitle-root {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .MuiDialogActions-root {
+    justify-content: center;
+
+    .MuiButton-root {
+      width: 100px;
+    }
+  }
+}

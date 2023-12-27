@@ -1,0 +1,159 @@
+import './App.scss';
+import React, {Fragment, useEffect} from 'react';
+import {BrowserRouter, Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
+import {Alert, Snackbar} from "@mui/material";
+// Redux
+import {useAppDispatch, useAppSelector} from "./hook";
+import {setUser} from "../reducers/UserReducer";
+import {closeSnackbar, openSnackbar} from "../reducers/SnackbarReducer";
+// Components
+import AppLoader from "../components/AppLoader";
+import Sidebar from "../layout/sidebar/Sidebar";
+import HomeComponent from "../pages/home/HomeComponent";
+import MapComponent from "../pages/map/MapComponent";
+import CollectionComponent from "../pages/collection/CollectionComponent";
+import LocationComponent from "../pages/location/LocationComponent";
+import ImageComponent from "../pages/image/ImageComponent";
+import ProfileComponent from "../pages/profile/ProfileComponent";
+// Models
+import {User} from "../models/User";
+import {CookieKey} from "../constants/Storage";
+import {PagePath} from '../constants/Page';
+import {MICROSOFT_AUTH_URL} from '../constants/Url';
+// Services
+import {CookieUtil} from "../utils/CookieUtil";
+import {UserApi} from "../api/UserApi";
+import {AuthApi} from "../api/AuthApi";
+import {appAxios} from "../api";
+
+export default function App() {
+    const currentUser = useAppSelector(state => state.user.value);
+    const snackbar = useAppSelector(state => state.snackbar.value);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (CookieUtil.getCookie(CookieKey.ACCESS_TOKEN)) {
+            appAxios.interceptors.request.use((config) => {
+                config.headers.Authorization = CookieUtil.getCookie(CookieKey.ACCESS_TOKEN);
+                return config;
+            }, (error) => {
+                return Promise.reject(error);
+            });
+
+            UserApi.getCurrentUser().then((res: User) => {
+                dispatch(setUser(res));
+            }).catch(() => {
+                dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
+            })
+        }
+    }, []);
+
+    return (
+        <BrowserRouter>
+            <div className="App">
+                {currentUser && <Sidebar/>}
+                <div className="main-container">
+                    <Routes>
+                        <Route path="/" element={<HomeComponent/>}/>
+                        <Route path={PagePath.MAP} element={
+                            <Protected>
+                                <MapComponent/>
+                            </Protected>
+                        }/>
+                        <Route path={PagePath.COLLECTION}>
+                            <Route index element={
+                                <Protected>
+                                    <CollectionComponent/>
+                                </Protected>
+                            }/>
+                            <Route path=":collectionId" element={
+                                <Protected>
+                                    <LocationComponent/>
+                                </Protected>
+                            }/>
+                        </Route>
+                        <Route path={PagePath.PROFILE} element={
+                            <Protected>
+                                <ProfileComponent/>
+                            </Protected>
+                        }/>
+                        <Route path="oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
+                        <Route path="login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
+                    </Routes>
+                </div>
+            </div>
+            {/* Snackbar */}
+            <Snackbar open={snackbar.open} autoHideDuration={3000}
+                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+                      onClose={() => dispatch(closeSnackbar())}>
+                <Alert severity={snackbar.type}>{snackbar.message}</Alert>
+            </Snackbar>
+        </BrowserRouter>
+    );
+}
+
+function Protected({children}: Readonly<{ children: React.JSX.Element }>) {
+    const authenticated = Boolean(CookieUtil.getCookie(CookieKey.ACCESS_TOKEN));
+
+    return (
+        <Fragment>
+            {authenticated ? children : <Navigate to="/" replace/>}
+        </Fragment>
+    )
+}
+
+function OAuth2RedirectHandler() {
+    const [searchParams] = useSearchParams();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = searchParams.get('token');
+
+        if (token) {
+            CookieUtil.setCookie(CookieKey.ACCESS_TOKEN, `Bearer ${token}`, 1);
+
+            appAxios.interceptors.request.use((config) => {
+                config.headers.Authorization = `Bearer ${token}`;
+                return config;
+            }, (error) => {
+                return Promise.reject(error);
+            });
+
+            UserApi.getCurrentUser().then((res: User) => {
+                dispatch(setUser(res));
+                AuthApi.getMicrosoftTokenAvailable().then((res: { status: number; }) => {
+                    if (res.status === 200) {
+                        navigate("/map");
+                    } else {
+                        window.location.href = MICROSOFT_AUTH_URL;
+                    }
+                });
+            }).catch(() => {
+                dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
+            })
+        }
+    }, []);
+
+    return <AppLoader />;
+}
+
+function OAuth2MicrosoftRedirectHandler() {
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const code = searchParams.get('code');
+
+        if (code) {
+            AuthApi.sendAuthorizeCode(code).then(() => {
+                navigate("/map");
+            }).catch(() => {
+                dispatch(openSnackbar({type: "error", message: "Không thể gửi thông tin"}));
+            });
+        }
+    }, []);
+
+    return <AppLoader />;
+}

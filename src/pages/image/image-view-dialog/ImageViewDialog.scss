@@ -1,0 +1,36 @@
+@import "../../../styles/Color";
+
+.image-view-dialog {
+
+  .MuiAppBar-root {
+    background-color: transparent;
+
+    .MuiIconButton-root {
+      color: $white;
+    }
+
+    .MuiIconButton-root.Mui-disabled {
+      opacity: .5;
+    }
+
+    .index {
+      user-select: none;
+    }
+
+    .MuiDivider-root {
+      margin: 1rem;
+      height: 50%;
+      color: $white;
+    }
+  }
+
+  .MuiDialogContent-root {
+    display: flex;
+
+    .item {
+      max-height: 99%;
+      width: auto;
+      margin: auto;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+@import "Breakpoint";
+@import "Color";
+
+// Button
+.MuiButton-containedInherit {
+  background-color: $gray-300 !important;
+  &:hover {
+    background-color: $gray-200 !important;
+  }
+}
+.MuiButton-containedPrimary {
+  background-color: $blue-500 !important;
+  &:hover {
+    background-color: $blue-300 !important;
+  }
+}
+.MuiButton-containedError {
+  background-color: $red-500 !important;
+  &:hover {
+    background-color: $red-300 !important;
+  }
+}
+
+// Card
+.MuiPaper-root-MuiCard-root {
+  background-color: $gray-50;
+}
+
+// Chip
+.MuiChip-label {
+  font-size: 1rem;
+}
+.MuiChip-filled {
+  background-color: $blue-500 !important;
+  color: $white !important;
+  &:hover {
+    background-color: $blue-400 !important;
+  }
+}
+.MuiChip-outlined {
+  border-color: $blue-500 !important;
+  border-width: 1px !important;
+}
+
+// Input
+.MuiOutlinedInput-root {
+  border-radius: 10px;
+  background-color: $white;
+}
+.MuiFormLabel-root.Mui-focused {
+  color: $blue-500 !important;
+}
+.MuiOutlinedInput-notchedOutline {
+  border-color: $blue-500 !important;
+}
+
+// Slider
+.MuiSlider-rail {
+  background-color: $green-200 !important;
+}
+.MuiSlider-track {
+  background-color: $green-500 !important;
+  border-color: $green-500 !important;
+}
+.MuiSlider-thumb {
+  background-color: $green-500 !important;
+}
+
+// Table
+.MuiTableHead-root {
+  background-color: $gray-300;
+  border-bottom: 1px solid $gray-500;
+}
+
+.MuiTableRow-root {
+  &:last-child td, &:last-child th {
+    border: 0
+  }
+  &:nth-child(even) {
+    background-color: $gray-100;
+  }
+}

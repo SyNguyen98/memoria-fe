@@ -1,0 +1,58 @@
+@import "../../styles/Color";
+
+.map-container {
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+
+  .filter-title {
+    margin-right: 1rem;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .collection-select {
+    background-color: white;
+    min-width: 200px;
+  }
+
+  .map {
+    width: 100vw;
+    height: calc(100vh - 64px);
+
+    .leaflet-popup-content {
+      margin: 1rem;
+      min-width: 200px;
+
+      .col-name {
+        margin: 0 0 .5rem;
+        font-size: 18px;
+        font-weight: bold;
+        color: $blue-700;
+      }
+
+      .col-date, .col-place {
+        margin-bottom: .5rem;
+        display: flex;
+        color: $gray-500;
+
+        svg {
+          font-size: 18px;
+        }
+
+        p {
+          margin: auto .3rem;
+          font-size: 14px;
+        }
+      }
+
+      .col-img {
+        width: 100%;
+      }
+    }
+  }
+
+  .leaflet-control-attribution {
+    display: none;
+  }
+}

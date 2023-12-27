@@ -1,0 +1,100 @@
+@import "../../../styles/Color";
+
+.MuiDialog-paper {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+
+  .dialog-header {
+    color: $white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .dialog-title {
+      display: flex;
+
+      svg {
+        margin: auto 0;
+        font-size: 30px;
+        &:hover {
+          cursor: pointer;
+          opacity: .7;
+        }
+      }
+
+      p {
+        margin: auto 1rem;
+        font-size: 24px;
+        font-weight: 600;
+      }
+    }
+
+    .MuiTabs-scroller {
+      display: flex;
+
+      .MuiTabs-flexContainer {
+        margin: auto;
+
+        .MuiTab-root {
+          font-size: 14px;
+          color: $white;
+          opacity: .7;
+        }
+
+        .MuiTab-root.Mui-selected {
+          opacity: 1;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .dialog-body {
+    height: calc(100% - 200px);
+    display: flex;
+
+    .item-chose, .img-chose, .video-chose {
+      margin: auto;
+      max-height: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: center;
+
+    /* width */
+    ::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: $white;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: $light-blue;
+      cursor: pointer;
+    }
+
+    .item-list, .img-list, .video-list {
+      margin-top: .5rem;
+      max-width: 100%;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      display: flex;
+
+      img, video {
+        margin: .5rem;
+        height: 100px;
+        &:hover {
+          cursor: pointer;
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}
+
