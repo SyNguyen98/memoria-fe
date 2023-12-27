@@ -20,7 +20,7 @@
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@types/react-redux": "^7.1.33",
-    "axios": "^1.6.2",
+    "axios": "^1.6.3",
     "crypto-js": "^4.2.0",
     "date-fns": "^2.30.0",
     "leaflet": "^1.9.4",
