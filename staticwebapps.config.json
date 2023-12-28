@@ -1,23 +1,13 @@
 {
   "routes": [
     {
-      "route": "/",
-      "serve":"index.html"
-    },
-    {
-      "route": "/",
-      "serve":"/"
-    },
-    {
-      "route": "/map",
-      "serve":"/map"
-    },
-    {
-      "route": "/collection",
-      "serve":"/collection"
+      "route": "/*",
+      "redirect": "index.html",
+      "statusCode": 200
     }
   ],
   "navigationFallback": {
     "rewrite": "index.html",
     "exclude": ["*.{svg,png,jpg,gif}","*.{css,scss}","*.js"]
-  }}
+  }
+}
