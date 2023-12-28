@@ -10,11 +10,11 @@ import {useAppDispatch} from "../../../app/hook";
 import {Location} from "../../../models/Location";
 import {LocationApi} from "../../../api/LocationApi";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
+import {SessionKey} from "../../../constants/Storage";
 
 type Props = {
     open: boolean;
     onClose: () => void;
-    collectionId: string;
     location: Location | null;
     isSaved: (saved: boolean) => void;
 }
@@ -122,7 +122,7 @@ export default function LocationDialog(props: Props) {
                 latitude: inputs.latitude,
                 longitude: inputs.longitude
             },
-            collectionId: props.collectionId
+            collectionId: sessionStorage.getItem(SessionKey.COLLECTION_ID)!
         }
         if (props.location) {
             location.id = props.location.id;

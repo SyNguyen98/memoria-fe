@@ -12,12 +12,12 @@
     margin: 1rem;
 
     .collection-name {
-      text-decoration: unset;
       font-size: 16px;
       font-weight: bold;
       color: $blue-700;
       &:hover {
         color: $blue-500;
+        cursor: pointer;
       }
     }
   }

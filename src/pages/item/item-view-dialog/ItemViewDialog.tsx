@@ -1,20 +1,30 @@
-import "./ImageViewDialog.scss";
+import "./ItemViewDialog.scss";
 import React, {useEffect, useState} from "react";
 import {AppBar, Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from "@mui/icons-material";
-import {ImageViewDialogProps} from "./ImageViewDialogProps";
 import {Item} from "../../../models/Item";
+import {SessionKey} from "../../../constants/Storage";
 
-function ImageViewDialog(props: ImageViewDialogProps) {
-    const [item, setItem] = useState(null as null | Item);
+type Props = {
+    open: boolean;
+    onClose: () => void;
+    items: Item[];
+    itemIndex: number;
+}
+
+export default function ItemViewDialog(props: Props) {
+    const [locationPlace, setLocationPlace] = useState('');
+    const [item, setItem] = useState<Item | null>(null);
     const [index, setIndex] = useState(-1);
 
     useEffect(() => {
+        setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) || '');
         setIndex(props.itemIndex);
         setItem(props.items[props.itemIndex]);
     }, [props]);
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        console.log(event.key)
         switch (event.key) {
             case "ArrowRight":
                 handleNext();
@@ -46,12 +56,12 @@ function ImageViewDialog(props: ImageViewDialogProps) {
     }
 
     return (
-        <Dialog className="image-view-dialog" fullScreen
+        <Dialog className="item-view-dialog" fullScreen
                 open={props.open} onClose={props.onClose} onKeyDown={onKeyDown}>
             <AppBar position="static">
                 <Toolbar>
                     <Typography className="page-title" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Hình Ảnh
+                        Hình Ảnh / Video
                     </Typography>
                     <div className="image-index">
                         <IconButton aria-label="previous"
@@ -82,5 +92,3 @@ function ImageViewDialog(props: ImageViewDialogProps) {
         </Dialog>
     )
 }
-
-export default ImageViewDialog;

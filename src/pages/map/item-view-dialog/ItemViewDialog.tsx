@@ -1,4 +1,4 @@
-import "./ImageDialog.scss";
+import "./ItemViewDialog.scss";
 import React, {useEffect, useState} from "react";
 import {Dialog} from "@mui/material";
 import {KeyboardBackspace} from '@mui/icons-material';

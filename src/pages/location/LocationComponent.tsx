@@ -1,6 +1,6 @@
 import './LocationComponent.scss';
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
@@ -26,8 +26,9 @@ import AppLoader from "../../components/AppLoader";
 import LocationDialog from "./location-dialog/LocationDialog";
 // Models & Constants
 import {Location} from "../../models/Location";
+import {SessionKey} from "../../constants/Storage";
+import {PathName} from "../../constants/Page";
 // Utils & Services
-import {CollectionApi} from "../../api/CollectionApi";
 import {LocationApi} from "../../api/LocationApi";
 
 function LocationComponent() {
@@ -36,21 +37,18 @@ function LocationComponent() {
     const [locations, setLocations] = useState<Location[]>([]);
     const [choseLocation, setChoseLocation] = useState<Location | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
-    const [isDialogSaved, setDialogSaved] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
+    const [isRefresh, setRefresh] = useState(false);
 
-    const {collectionId} = useParams();
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
         if (currentUser && collectionId) {
             setLoading(true);
-            CollectionApi.getCollectionById(collectionId).then(res => {
-                setCollectionName(res.name);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-            });
+            setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) || '');
             LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
                 setLocations(res);
                 setLoading(false);
@@ -59,10 +57,11 @@ function LocationComponent() {
                 setLoading(false);
             });
         }
-    }, [currentUser]);
+    }, [currentUser, dispatch]);
 
     useEffect(() => {
-        if (collectionId && isDialogSaved) {
+        const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
+        if (collectionId && isRefresh) {
             setLoading(true);
             LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
                 setLocations(res);
@@ -72,10 +71,16 @@ function LocationComponent() {
                 setLoading(false);
             });
         }
-    }, [isDialogSaved]);
+    }, [dispatch, isRefresh]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
+    }
+
+    const handleNavigateToItem = (location: Location) => {
+        sessionStorage.setItem(SessionKey.LOCATION_PLACE, location.place);
+        sessionStorage.setItem(SessionKey.DRIVE_ITEM_ID, location.driveItemId!);
+        navigate(PathName.ITEM);
     }
 
     const renderTime = (location: Location): string => {
@@ -115,21 +120,16 @@ function LocationComponent() {
     }
 
     const handleDeleteCollection = () => {
-        // CollectionApi.deleteCollectionById(choseLocation!.id!).then(() => {
-        //     onDeleteDialogClose();
-        //     dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
-        //     setLoading(true);
-        //     CollectionApi.getAllCollectionsHavingAccess().then(res => {
-        //         setLocations(res);
-        //         setLoading(false);
-        //     }).catch(() => {
-        //         dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-        //         setLoading(false);
-        //     });
-        // }).catch(() => {
-        //     dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
-        //     setLoading(false);
-        // });
+        setLoading(true);
+        LocationApi.deleteLocationById(choseLocation!.id!).then(() => {
+            onDeleteDialogClose();
+            dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
+            setLoading(false);
+            setRefresh(true);
+        }).catch(() => {
+            dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
+            setLoading(false);
+        });
     }
 
     return (
@@ -171,7 +171,10 @@ function LocationComponent() {
                                     {index + 1}
                                 </TableCell>
                                 <TableCell>
-                                    {location.place}
+                                    <Typography variant="body1" className="location-name"
+                                                onClick={() => handleNavigateToItem(location)}>
+                                        {location.place}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell>
                                     {renderTime(location)}
@@ -190,8 +193,7 @@ function LocationComponent() {
                 </Table>
             )}
             {/* Edit dialog */}
-            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} collectionId={collectionId!}
-                            location={choseLocation} isSaved={setDialogSaved}/>
+            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation} isSaved={setRefresh}/>
             {/* Delete dialog */}
             {choseLocation && (
                 <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>

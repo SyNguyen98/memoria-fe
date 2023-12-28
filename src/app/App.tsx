@@ -13,12 +13,12 @@ import HomeComponent from "../pages/home/HomeComponent";
 import MapComponent from "../pages/map/MapComponent";
 import CollectionComponent from "../pages/collection/CollectionComponent";
 import LocationComponent from "../pages/location/LocationComponent";
-import ImageComponent from "../pages/image/ImageComponent";
+import ItemComponent from "../pages/item/ItemComponent";
 import ProfileComponent from "../pages/profile/ProfileComponent";
 // Models
 import {User} from "../models/User";
 import {CookieKey} from "../constants/Storage";
-import {PagePath} from '../constants/Page';
+import {PathName} from '../constants/Page';
 import {MICROSOFT_AUTH_URL} from '../constants/Url';
 // Services
 import {CookieUtil} from "../utils/CookieUtil";
@@ -46,7 +46,7 @@ export default function App() {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
             })
         }
-    }, []);
+    }, [dispatch]);
 
     return (
         <BrowserRouter>
@@ -55,24 +55,31 @@ export default function App() {
                 <div className="main-container">
                     <Routes>
                         <Route path="/" element={<HomeComponent/>}/>
-                        <Route path={PagePath.MAP} element={
+                        <Route path={PathName.MAP} element={
                             <Protected>
                                 <MapComponent/>
                             </Protected>
                         }/>
-                        <Route path={PagePath.COLLECTION}>
+                        <Route path={PathName.COLLECTION}>
                             <Route index element={
                                 <Protected>
                                     <CollectionComponent/>
                                 </Protected>
                             }/>
-                            <Route path=":collectionId" element={
-                                <Protected>
-                                    <LocationComponent/>
-                                </Protected>
-                            }/>
+                            <Route path={PathName.LOCATION}>
+                                <Route index element={
+                                    <Protected>
+                                        <LocationComponent/>
+                                    </Protected>
+                                }/>
+                                <Route path={PathName.ITEM} element={
+                                    <Protected>
+                                        <ItemComponent/>
+                                    </Protected>
+                                }/>
+                            </Route>
                         </Route>
-                        <Route path={PagePath.PROFILE} element={
+                        <Route path={PathName.PROFILE} element={
                             <Protected>
                                 <ProfileComponent/>
                             </Protected>
@@ -133,7 +140,7 @@ function OAuth2RedirectHandler() {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
             })
         }
-    }, []);
+    }, [dispatch, navigate, searchParams]);
 
     return <AppLoader />;
 }
@@ -142,18 +149,16 @@ function OAuth2MicrosoftRedirectHandler() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const currentUser = useAppSelector(state => state.user.value);
 
     useEffect(() => {
         const code = searchParams.get('code');
-
-        if (code) {
+        if (currentUser && code) {
             AuthApi.sendAuthorizeCode(code).then(() => {
                 navigate("/map");
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể gửi thông tin"}));
             });
         }
-    }, []);
+    }, [currentUser, dispatch, navigate, searchParams]);
 
     return <AppLoader />;
 }

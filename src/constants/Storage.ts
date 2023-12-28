@@ -3,7 +3,8 @@ export const CookieKey = {
 }
 
 export const SessionKey = {
-    ALL_COLLECTIONS: 'ALL_COLLECTIONS',
-    IMAGES: (collectionId: string) => `${collectionId}_IMAGES`,
-    VIDEOS: (collectionId: string) => `${collectionId}_VIDEOS`,
+    COLLECTION_ID: 'collectionId',
+    COLLECTION_NAME: 'collectionName',
+    LOCATION_PLACE: 'locationName',
+    DRIVE_ITEM_ID: 'driveItemId',
 }
