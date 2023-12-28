@@ -57,11 +57,10 @@
     width: 1200px;
     margin: 5rem auto;
 
-    .introduce-title {
+    .MuiTypography-h3 {
       margin-bottom: 1rem;
       text-align: center;
       font-family: 'Signika', sans-serif;
-      font-size: 48px;
       font-weight: 600;
     }
 
@@ -80,7 +79,6 @@
   }
 
   .quote-wrapper {
-    margin: 5rem 0;
     width: 100vw;
     height: 16vw;
     background-image: url('../../../public/images/quote-bg.svg');
@@ -94,6 +92,40 @@
       font-size: 42px;
       font-weight: 300;
       font-style: italic;
+    }
+  }
+
+  .feature-list {
+    width: 1200px;
+    margin: 5rem auto;
+
+    .text-wrapper {
+      margin: auto 0;
+
+      .MuiTypography-h3 {
+        text-align: center;
+        font-family: 'Signika', sans-serif;
+        font-size: 40px;
+        font-weight: 600;
+        line-height: 50px;
+      }
+
+      .MuiTypography-body1 {
+        margin-top: 1rem;
+        text-align: justify;
+        font-family: 'Signika', sans-serif;
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 34px;
+      }
+    }
+
+    .img-wrapper {
+      display: flex;
+
+      .float-right {
+        margin-left: auto;
+      }
     }
   }
 }
