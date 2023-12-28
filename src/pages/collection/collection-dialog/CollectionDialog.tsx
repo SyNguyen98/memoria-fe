@@ -1,24 +1,12 @@
 import "./CollectionDialog.scss";
-import React, {Fragment, useEffect, useState} from "react";
-import {
-    Button,
-    Chip,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Grid,
-    IconButton,
-    TextField
-} from "@mui/material";
-import {FileUpload, MyLocation} from "@mui/icons-material";
+import React, {useEffect, useState} from "react";
+import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 // Redux
 import {useAppDispatch} from "../../../app/hook";
+import {openSnackbar} from "../../../reducers/SnackbarReducer";
 // Models
 import {Collection} from "../../../models/Collection";
-import PositionDialog from "../position-dialog/PositionDialog";
 import {CollectionApi} from "../../../api/CollectionApi";
-import {openSnackbar} from "../../../reducers/SnackbarReducer";
 
 type Props = {
     open: boolean;

@@ -43,7 +43,7 @@ function MapComponent() {
                 setLoading(false);
             });
         }
-    }, [currentUser]);
+    }, [currentUser, dispatch]);
 
     useEffect(() => {
         let lat = 0, lng = 0;
@@ -118,7 +118,7 @@ function MapComponent() {
                         <ChangeView center={[latCenter, lngCenter]} locations={locations}/>
                         <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                        {locations.map((location, index) => {
+                        {locations.map(location => {
                             const coordinate = location.coordinate;
                             return (
                                 <Marker key={location.id} position={[coordinate.latitude, coordinate.longitude]}
