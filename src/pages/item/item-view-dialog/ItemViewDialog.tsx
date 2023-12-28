@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {AppBar, Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from "@mui/icons-material";
 import {Item} from "../../../models/Item";
-import {SessionKey} from "../../../constants/Storage";
 
 type Props = {
     open: boolean;
@@ -13,12 +12,10 @@ type Props = {
 }
 
 export default function ItemViewDialog(props: Props) {
-    const [locationPlace, setLocationPlace] = useState('');
     const [item, setItem] = useState<Item | null>(null);
     const [index, setIndex] = useState(-1);
 
     useEffect(() => {
-        setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) || '');
         setIndex(props.itemIndex);
         setItem(props.items[props.itemIndex]);
     }, [props]);

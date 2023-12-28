@@ -29,7 +29,7 @@ export default function ImageDialog(props: Readonly<Props>) {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải hình ảnh"}));
             })
         }
-    }, [props.open, props.location]);
+    }, [props.open, props.location, dispatch]);
 
     const handleChangeItem = (item: Item) => {
         setItemChose(item);
