@@ -1,0 +1,9 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  },
+  "globalHeaders": {
+    "Access-Control-Allow-Origin": "https://chika-memoria.azurewebsites.net",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
+  }
+}
