@@ -2,11 +2,8 @@
   "routes": [
     {
       "route": "/",
-      "serve":"index.html"
-    },
-    {
-      "route": "/",
       "serve":"/"
+
     },
     {
       "route": "/map",
@@ -16,8 +13,5 @@
       "route": "/collection",
       "serve":"/collection"
     }
-  ],
-  "navigationFallback": {
-    "rewrite": "index.html",
-    "exclude": ["*.{svg,png,jpg,gif}","*.{css,scss}","*.js"]
-  }}
+  ]
+}
