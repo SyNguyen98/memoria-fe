@@ -1,6 +1,6 @@
 import './CollectionComponent.scss';
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
@@ -26,6 +26,8 @@ import AppLoader from "../../components/AppLoader";
 import CollectionDialog from "./collection-dialog/CollectionDialog";
 // Models & Constants
 import {Collection} from "../../models/Collection";
+import {SessionKey} from "../../constants/Storage";
+import {PathName} from "../../constants/Page";
 // Utils & Services
 import {CollectionApi} from "../../api/CollectionApi";
 
@@ -34,11 +36,12 @@ function CollectionComponent() {
     const [collections, setCollections] = useState<Collection[]>([]);
     const [choseCollection, setChoseCollection] = useState<Collection | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
-    const [isDialogSaved, setDialogSaved] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
+    const [isRefresh, setRefresh] = useState(false);
 
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (currentUser) {
@@ -53,10 +56,10 @@ function CollectionComponent() {
                 setLoading(false);
             });
         }
-    }, [currentUser]);
+    }, [currentUser, dispatch]);
 
     useEffect(() => {
-        if (isDialogSaved) {
+        if (isRefresh) {
             setLoading(true);
             CollectionApi.getAllCollectionsHavingAccess().then(res => {
                 setCollections(res);
@@ -66,10 +69,16 @@ function CollectionComponent() {
                 setLoading(false);
             });
         }
-    }, [isDialogSaved]);
+    }, [dispatch, isRefresh]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
+    }
+
+    const handleNavigateToLocation = (collection: Collection) => {
+        sessionStorage.setItem(SessionKey.COLLECTION_ID, collection.id!);
+        sessionStorage.setItem(SessionKey.COLLECTION_NAME, collection.name);
+        navigate(PathName.LOCATION);
     }
 
     const handleOpenEditDialog = (collection?: Collection) => {
@@ -97,13 +106,7 @@ function CollectionComponent() {
             onDeleteDialogClose();
             dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
             setLoading(true);
-            CollectionApi.getAllCollectionsHavingAccess().then(res => {
-                setCollections(res);
-                setLoading(false);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-                setLoading(false);
-            });
+            setRefresh(true);
         }).catch(() => {
             dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
             setLoading(false);
@@ -148,9 +151,10 @@ function CollectionComponent() {
                                     {index + 1}
                                 </TableCell>
                                 <TableCell>
-                                    <Link className="collection-name" to={"/collection/" + collection.id}>
+                                    <Typography variant="body1" className="collection-name"
+                                                onClick={() => handleNavigateToLocation(collection)}>
                                         {collection.name}
-                                    </Link>
+                                    </Typography>
                                 </TableCell>
                                 <TableCell>
                                     {collection.description}
@@ -172,7 +176,7 @@ function CollectionComponent() {
                 </Table>
             )}
             {/* Edit dialog */}
-            <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection} isSaved={setDialogSaved}/>
+            <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection} isSaved={setRefresh}/>
             {/* Delete dialog */}
             {choseCollection && (
                 <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>

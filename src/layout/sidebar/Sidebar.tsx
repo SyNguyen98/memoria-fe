@@ -18,7 +18,7 @@ import {Collections, KeyboardDoubleArrowLeft, Logout, Map} from "@mui/icons-mate
 import {CookieUtil} from "../../utils/CookieUtil";
 import {CookieKey} from "../../constants/Storage";
 import {Url} from "../../constants/Url";
-import {PagePath} from "../../constants/Page";
+import {PathName} from "../../constants/Page";
 
 export default function Sidebar() {
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -58,14 +58,14 @@ export default function Sidebar() {
                 <div className="menu-body">
                     <List component="nav" aria-label="menu map collections">
                         <ListItemButton selected={selectedIndex === 0}
-                                        onClick={() => handleListItemClick(0, PagePath.MAP)}>
+                                        onClick={() => handleListItemClick(0, PathName.MAP)}>
                             <ListItemIcon>
                                 <Map/>
                             </ListItemIcon>
                             <ListItemText primary="Bản Đồ"/>
                         </ListItemButton>
                         <ListItemButton selected={selectedIndex === 1}
-                                        onClick={() => handleListItemClick(1, PagePath.COLLECTION)}>
+                                        onClick={() => handleListItemClick(1, PathName.COLLECTION)}>
                             <ListItemIcon>
                                 <Collections/>
                             </ListItemIcon>
@@ -77,7 +77,7 @@ export default function Sidebar() {
                     <Divider/>
                     <List component="nav" aria-label="menu map collections">
                         {currentUser && (
-                            <ListItemButton onClick={() => handleListItemClick(2, PagePath.PROFILE)}>
+                            <ListItemButton onClick={() => handleListItemClick(2, PathName.PROFILE)}>
                                 <ListItemAvatar>
                                     <Avatar alt={currentUser.name} src={currentUser.avatarUrl}/>
                                 </ListItemAvatar>

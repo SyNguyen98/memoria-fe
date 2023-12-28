@@ -1,0 +1,53 @@
+@import "../../styles/Breakpoint";
+@import "../../styles/Color";
+
+.item-container {
+
+  .page-title {
+    display: flex;
+
+    .location-title {
+      text-decoration: unset;
+      font-weight: 400;
+      color: white;
+
+      &:hover {
+        cursor: pointer;
+        opacity: .8;
+      }
+    }
+
+    .MuiSvgIcon-root {
+      margin: auto .5rem;
+    }
+  }
+
+  .add-btn {
+    color: $white;
+  }
+
+  .item-list {
+    width: calc(100vw - 2rem);
+    margin: 1rem;
+
+    .MuiGrid-item {
+      display: flex;
+      flex-direction: column;
+
+      img, video {
+        margin: auto;
+        max-height: 200px;
+        max-width: 100%;
+        &:hover {
+          cursor: pointer;
+          transform: scale(1.03);
+        }
+      }
+
+      .item-name {
+        margin: .5rem auto 0;
+        font-size: 14px;
+      }
+    }
+  }
+}

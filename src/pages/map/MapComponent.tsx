@@ -15,7 +15,7 @@ import {CollectionApi} from "../../api/CollectionApi";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {LocationApi} from "../../api/LocationApi";
-import ImageDialog from "./image-dialog/ImageDialog";
+import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 
 function MapComponent() {
     const [isLoading, setLoading] = useState(false);
@@ -130,7 +130,7 @@ function MapComponent() {
                         })}
                     </MapContainer>
 
-                    <ImageDialog open={dialogOpened} onClose={handleCloseDialog} location={locationChose}/>
+                    <ItemViewDialog open={dialogOpened} onClose={handleCloseDialog} location={locationChose}/>
                 </Fragment>
             )}
         </section>
