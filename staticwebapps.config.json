@@ -1,6 +1,7 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "index.html",
+    "exclude": ["*.{svg,png,jpg,gif}","*.{css,scss}","*.js"]
   },
   "globalHeaders": {
     "Access-Control-Allow-Origin": "https://chika-memoria.azurewebsites.net",
