@@ -128,4 +128,64 @@
       }
     }
   }
+
+  .quote-wrapper-2 {
+    width: 100vw;
+    height: 10vw;
+    background-color: $purple-50;
+    display: flex;
+
+    .quote {
+      margin: auto;
+      font-family: 'Rosario', sans-serif;
+      font-size: 40px;
+      font-weight: 300;
+      font-style: italic;
+    }
+  }
+
+  .contact {
+    width: 1200px;
+    margin: 5rem auto;
+    text-align: center;
+
+    .MuiTypography-h3 {
+      font-family: 'Signika', sans-serif;
+      font-weight: 600;
+    }
+
+    .MuiTypography-body1 {
+      margin-top: 1rem;
+      font-family: 'Signika', sans-serif;
+      font-size: 24px;
+      font-weight: 300;
+    }
+  }
+
+  .app-footer {
+    width: 1200px;
+    margin: 0 auto 1rem;
+    display: flex;
+    justify-content: space-between;
+
+    .left-wrapper {
+      display: flex;
+
+      .MuiTypography-body1 {
+        margin: auto auto auto .5rem;
+        font-family: 'Signika', sans-serif;
+        font-weight: 600;
+      }
+    }
+
+    .right-wrapper {
+      display: flex;
+
+      .MuiTypography-body1 {
+        margin: auto 0;
+        font-family: 'Signika', sans-serif;
+        font-weight: 500;
+      }
+    }
+  }
 }
