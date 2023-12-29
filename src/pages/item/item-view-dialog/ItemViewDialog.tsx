@@ -1,6 +1,6 @@
 import "./ItemViewDialog.scss";
 import React, {useEffect, useState} from "react";
-import {AppBar, Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
+import {Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from "@mui/icons-material";
 import {Item} from "../../../models/Item";
 
@@ -21,8 +21,10 @@ export default function ItemViewDialog(props: Props) {
     }, [props]);
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        console.log(event.key)
         switch (event.key) {
+            case "Escape":
+                onClose();
+                break;
             case "ArrowRight":
                 handleNext();
                 break;
@@ -52,38 +54,47 @@ export default function ItemViewDialog(props: Props) {
         }
     }
 
+    const onClose = () => {
+        setItem(null);
+        setIndex(-1);
+        props.onClose();
+    }
+
     return (
         <Dialog className="item-view-dialog" fullScreen
-                open={props.open} onClose={props.onClose} onKeyDown={onKeyDown}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography className="page-title" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Hình Ảnh / Video
-                    </Typography>
-                    <div className="image-index">
+                open={props.open} onClose={onClose} onKeyDown={onKeyDown}>
+            <Toolbar>
+                <Typography variant="h6" component="div">
+                    Hình Ảnh / Video
+                </Typography>
+                <p className="item-name">
+                    {item ? item.name : ''}
+                </p>
+                <div className="btn-wrapper">
+                    <div className="item-index">
                         <IconButton aria-label="previous"
-                                    onClick={() => handlePrevious()} >
-                            <SkipPrevious />
+                                    onClick={() => handlePrevious()}>
+                            <SkipPrevious/>
                         </IconButton>
                         <span className="index">
                             {index + 1} / {props.items.length}
                         </span>
                         <IconButton aria-label="next"
                                     onClick={() => handleNext()}>
-                            <SkipNext />
+                            <SkipNext/>
                         </IconButton>
                     </div>
-                    <Divider orientation="vertical" />
-                    <IconButton aria-label="close" onClick={props.onClose}>
-                        <Close />
+                    <Divider orientation="vertical"/>
+                    <IconButton onClick={onClose}>
+                        <Close/>
                     </IconButton>
-                </Toolbar>
-            </AppBar>
+                </div>
+            </Toolbar>
             <DialogContent>
                 {item ? item.mimeType.includes('image') ? (
-                    <img className="item" alt={item.name} src={item.downloadUrl} />
+                    <img className="item" alt={item.name} src={item.downloadUrl}/>
                 ) : (
-                    <video className="item" controls autoPlay src={item.downloadUrl} />
+                    <video className="item" controls autoPlay src={item.downloadUrl}/>
                 ) : null}
             </DialogContent>
         </Dialog>

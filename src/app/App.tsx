@@ -100,11 +100,10 @@ export default function App() {
 }
 
 function Protected({children}: Readonly<{ children: React.JSX.Element }>) {
-    const authenticated = Boolean(CookieUtil.getCookie(CookieKey.ACCESS_TOKEN));
 
     return (
         <Fragment>
-            {authenticated ? children : <Navigate to="/" replace/>}
+            {CookieUtil.getCookie(CookieKey.ACCESS_TOKEN) ? children : <Navigate to="/" replace/>}
         </Fragment>
     )
 }

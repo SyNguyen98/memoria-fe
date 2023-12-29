@@ -119,7 +119,7 @@ export default function HomeComponent() {
                 <div className="left-wrapper">
                     <img src={`${Url.IMAGE}/app-logo.svg`} alt="App Logo" width={30} height={30}/>
                     <Typography variant="body1">
-                        MEMORIA, 2024
+                        MEMORIA vβ.1, 2024
                     </Typography>
                 </div>
                 <div className="right-wrapper">

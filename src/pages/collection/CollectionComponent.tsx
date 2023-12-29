@@ -123,7 +123,7 @@ function CollectionComponent() {
                                 onClick={handleOpenMenu}>
                         <Menu/>
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                    <Typography variant="h6" sx={{flexGrow: 1}}>
                         Bộ Sưu Tập
                     </Typography>
                     <Button className="add-btn" variant="outlined" startIcon={<Add/>}
@@ -138,10 +138,10 @@ function CollectionComponent() {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">#</TableCell>
-                            <TableCell align="center">Name</TableCell>
-                            <TableCell align="center">Description</TableCell>
-                            <TableCell align="center">User Email(s)</TableCell>
-                            <TableCell align="center">Action</TableCell>
+                            <TableCell>Tên</TableCell>
+                            <TableCell>Mô Tả</TableCell>
+                            <TableCell>Email Chia Sẻ</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

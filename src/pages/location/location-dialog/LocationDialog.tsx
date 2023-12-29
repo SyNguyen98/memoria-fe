@@ -1,12 +1,10 @@
 import "./LocationDialog.scss";
 import React, {useEffect, useState} from "react";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField} from "@mui/material";
-import {DatePicker, LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField} from "@mui/material";
+import {LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-import {vi} from "date-fns/locale";
 // Redux
 import {useAppDispatch} from "../../../app/hook";
-// Models
 import {Location} from "../../../models/Location";
 import {LocationApi} from "../../../api/LocationApi";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
@@ -16,11 +14,12 @@ type Props = {
     open: boolean;
     onClose: () => void;
     location: Location | null;
-    isSaved: (saved: boolean) => void;
+    isRefresh: (refresh: boolean) => void;
 }
 
 interface Input {
     place: string;
+    description: string;
     takenYear: number | null;
     takenMonth: number | null;
     takenDay: number | null;
@@ -31,6 +30,7 @@ interface Input {
 
 const initialInput: Input = {
     place: '',
+    description: '',
     takenYear: null,
     takenMonth: null,
     takenDay: null,
@@ -41,15 +41,26 @@ const initialInput: Input = {
 
 export default function LocationDialog(props: Props) {
     const [inputs, setInputs] = useState<Input>(initialInput);
+    const [years, setYears] = useState<number[]>([]);
 
     const dispatch = useAppDispatch();
 
+    const MONTHS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    const DAYS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+
     useEffect(() => {
+        const _years = []
+        const currentYear = new Date().getFullYear();
+        for (let i = 1990; i <= currentYear; i++) {
+            _years.push(i);
+        }
+        setYears(_years);
         if (props.location) {
             setInputs({
                 place: props.location.place,
+                description: props.location.description,
                 takenYear: props.location.takenYear,
-                takenMonth: Number(props.location.takenMonth) - 1,
+                takenMonth: Number(props.location.takenMonth),
                 takenDay: Number(props.location.takenDay),
                 takenTime: props.location.takenTime || '',
                 latitude: props.location.coordinate.latitude,
@@ -63,26 +74,8 @@ export default function LocationDialog(props: Props) {
         props.onClose();
     }
 
-    const onInputPlace = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputs(state => ({...state, place: event.target.value}))
-    }
-
-    const onInputYear = (value: Date | null) => {
-        if (value) {
-            setInputs(state => ({...state, takenYear: value.getFullYear()}))
-        }
-    }
-
-    const onInputMonth = (value: Date | null) => {
-        if (value) {
-            setInputs(state => ({...state, takenMonth: value.getMonth()}))
-        }
-    }
-
-    const onInputDay = (value: Date | null) => {
-        if (value) {
-            setInputs(state => ({...state, takenDay: value.getDate()}))
-        }
+    const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setInputs(state => ({...state, [event.target.name]: event.target.value}))
     }
 
     const onInputTime = (value: Date | null) => {
@@ -114,8 +107,9 @@ export default function LocationDialog(props: Props) {
     const handleSave = () => {
         const location: Location = {
             place: inputs.place,
+            description: inputs.description,
             takenYear: Number(inputs.takenYear),
-            takenMonth: Number(inputs.takenMonth) + 1,
+            takenMonth: Number(inputs.takenMonth),
             takenDay: Number(inputs.takenDay),
             takenTime: inputs.takenTime,
             coordinate: {
@@ -129,7 +123,7 @@ export default function LocationDialog(props: Props) {
             location.driveItemId = props.location.driveItemId;
             LocationApi.updateLocation(location).then(() => {
                 dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
-                props.isSaved(true);
+                props.isRefresh(true);
                 onClose();
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
@@ -137,7 +131,7 @@ export default function LocationDialog(props: Props) {
         } else {
             LocationApi.createLocation(location).then(() => {
                 dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
-                props.isSaved(true);
+                props.isRefresh(true);
                 onClose();
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
@@ -146,12 +140,12 @@ export default function LocationDialog(props: Props) {
     }
 
     const handleCancel = () => {
-        props.isSaved(false);
+        props.isRefresh(false);
         onClose();
     }
 
     return (
-        <Dialog className="collection-dialog" maxWidth='md'
+        <Dialog className="collection-dialog" maxWidth='lg'
                 open={props.open} onClose={onClose}>
             <DialogTitle>
                 {props.location ? "Chỉnh Sửa " : "Thêm "} Địa Điểm
@@ -161,33 +155,53 @@ export default function LocationDialog(props: Props) {
                 <TextField autoComplete="off" required fullWidth
                            name="place" label="Địa Điểm"
                            value={inputs.place}
-                           onChange={onInputPlace}/>
+                           onChange={onInputChange}/>
+                {/* Description */}
+                <TextField autoComplete="off" fullWidth multiline maxRows={3}
+                           name="description" label="Mô tả"
+                           value={inputs.description}
+                           onChange={onInputChange}/>
                 <Grid container spacing={1}>
                     <Grid item xs={3}>
                         {/* Year */}
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker label="Năm" openTo="year" views={['year']}
-                                        value={inputs.takenYear ? new Date(inputs.takenYear, 1) : null}
-                                        onYearChange={onInputYear}/>
-                        </LocalizationProvider>
+                        <TextField select fullWidth
+                                   name="takenYear" label="Năm"
+                                   value={inputs.takenYear}
+                                   onChange={onInputChange}>
+                            {years.map((year, index) => (
+                                <MenuItem key={index} value={year}>
+                                    {year}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={3}>
                         {/* Month */}
-                        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={vi}>
-                            <DatePicker label="Tháng" openTo="month" views={['month']}
-                                        disabled={inputs.takenYear === null}
-                                        value={inputs.takenMonth ? new Date(inputs.takenYear!, inputs.takenMonth) : null}
-                                        onMonthChange={onInputMonth}/>
-                        </LocalizationProvider>
+                        <TextField select fullWidth
+                                   name="takenMonth" label="Tháng"
+                                   disabled={inputs.takenYear === null}
+                                   value={inputs.takenMonth}
+                                   onChange={onInputChange}>
+                            {MONTHS.map((month, index) => (
+                                <MenuItem key={index} value={month}>
+                                    {month}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={3}>
                         {/* Day */}
-                        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={vi}>
-                            <DatePicker label="Ngày" openTo="day" views={['day']}
-                                        disabled={inputs.takenYear === null && inputs.takenMonth === null}
-                                        value={inputs.takenDay ? new Date(inputs.takenYear!, inputs.takenMonth!, inputs.takenDay) : null}
-                                        onChange={onInputDay}/>
-                        </LocalizationProvider>
+                        <TextField select fullWidth
+                                   name="takenDay" label="Ngày"
+                                   disabled={inputs.takenYear === null && inputs.takenMonth === null}
+                                   value={inputs.takenDay}
+                                   onChange={onInputChange}>
+                            {DAYS.map((day, index) => (
+                                <MenuItem key={index} value={day}>
+                                    {day}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={3}>
                         {/* Time */}

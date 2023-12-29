@@ -159,8 +159,9 @@ function LocationComponent() {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">#</TableCell>
-                            <TableCell align="center">Địa Điểm</TableCell>
-                            <TableCell align="center">Thời Gian</TableCell>
+                            <TableCell>Địa Điểm</TableCell>
+                            <TableCell>Mô Tả</TableCell>
+                            <TableCell>Thời Gian</TableCell>
                             <TableCell align="center"></TableCell>
                         </TableRow>
                     </TableHead>
@@ -175,6 +176,9 @@ function LocationComponent() {
                                                 onClick={() => handleNavigateToItem(location)}>
                                         {location.place}
                                     </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    {location.description}
                                 </TableCell>
                                 <TableCell>
                                     {renderTime(location)}
@@ -193,7 +197,7 @@ function LocationComponent() {
                 </Table>
             )}
             {/* Edit dialog */}
-            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation} isSaved={setRefresh}/>
+            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation} isRefresh={setRefresh}/>
             {/* Delete dialog */}
             {choseLocation && (
                 <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>

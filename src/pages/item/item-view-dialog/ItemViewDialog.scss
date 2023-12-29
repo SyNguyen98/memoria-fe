@@ -2,25 +2,38 @@
 
 .item-view-dialog {
 
-  .MuiAppBar-root {
-    background-color: transparent;
+  .MuiToolbar-root {
+    display: flex;
+    justify-content: space-between;
 
-    .MuiIconButton-root {
-      color: $white;
+    .MuiTypography-h6 {
+      font-family: 'Signika', sans-serif;
+      font-size: 20px;
+      font-weight: bold;
     }
 
-    .MuiIconButton-root.Mui-disabled {
-      opacity: .5;
-    }
+    .btn-wrapper {
+      display: flex;
 
-    .index {
-      user-select: none;
-    }
+      .item-index {
+        display: flex;
 
-    .MuiDivider-root {
-      margin: 1rem;
-      height: 50%;
-      color: $white;
+        .index {
+          margin: auto 0;
+          font-size: 18px;
+        }
+      }
+
+      .MuiDivider-root {
+        margin: auto 1rem;
+        height: 20px;
+        border-color: black;
+      }
+
+      .MuiIconButton-root {
+        margin: auto 0;
+        color: black;
+      }
     }
   }
 

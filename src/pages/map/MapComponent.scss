@@ -20,6 +20,22 @@
     width: 100vw;
     height: calc(100vh - 64px);
 
+    .marker-tooltip {
+      padding: .5rem;
+
+      .MuiTypography-h6 {
+        font-family: 'Signika', sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+        color: $blue-700;
+      }
+
+      .MuiTypography-body1 {
+        font-family: 'Signika', sans-serif;
+        font-weight: 300;
+      }
+    }
+
     .leaflet-popup-content {
       margin: 1rem;
       min-width: 200px;
