@@ -1,5 +1,4 @@
 @import "../../styles/Color";
-@import url('https://fonts.googleapis.com/css2?family=Lemon&display=swap');
 
 #navigation-menu {
   display: flex;
@@ -43,15 +42,11 @@
       height: 36px;
     }
 
-    .owner {
-      margin: 2rem auto 0;
-      display: flex;
-
-      .logo {
-        margin-left: .2rem;
-        width: 70px;
-        height: auto;
-      }
+    .version {
+      margin-bottom: 1rem;
+      text-align: center;
+      font-family: 'Signika', sans-serif;
+      font-weight: 300;
     }
   }
 }

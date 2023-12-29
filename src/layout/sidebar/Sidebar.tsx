@@ -17,7 +17,6 @@ import {
 import {Collections, KeyboardDoubleArrowLeft, Logout, Map} from "@mui/icons-material";
 import {CookieUtil} from "../../utils/CookieUtil";
 import {CookieKey} from "../../constants/Storage";
-import {Url} from "../../constants/Url";
 import {PathName} from "../../constants/Page";
 
 export default function Sidebar() {
@@ -91,8 +90,8 @@ export default function Sidebar() {
                             <ListItemText primary="Đăng xuất"/>
                         </ListItemButton>
                     </List>
-                    <div className="owner">
-                        Owned by <img className="logo" alt="chika" src={`${Url.IMAGE}/chika-logo.png`}/>
+                    <div className="version">
+                        Version β.1
                     </div>
                 </div>
             </div>

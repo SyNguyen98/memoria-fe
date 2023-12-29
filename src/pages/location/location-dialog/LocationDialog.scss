@@ -4,6 +4,7 @@
   text-align: center;
 
   .MuiDialog-paper {
+    min-width: 600px;
     background-color: $white !important;
   }
 
@@ -16,16 +17,6 @@
 
     .MuiTextField-root {
       margin: .5rem 0;
-    }
-
-    .email-list {
-      display: flex;
-      flex-direction: column;
-
-      .MuiChip-root {
-        width: fit-content;
-        margin-bottom: .5rem;
-      }
     }
   }
 
@@ -43,5 +34,13 @@
         background-color: $gray-300;
       }
     }
+  }
+}
+
+#menu-takenYear, #menu-takenMonth, #menu-takenDay {
+  .MuiMenu-list {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    max-height: 200px;
   }
 }

@@ -76,7 +76,6 @@ function MapComponent() {
     const handleOpenDialog = (location: Location) => {
         setLocationChose(location);
         setDialogOpened(true);
-        console.log(location)
     }
 
     const handleCloseDialog = () => {
@@ -124,7 +123,14 @@ function MapComponent() {
                                 <Marker key={location.id} position={[coordinate.latitude, coordinate.longitude]}
                                         ref={(ref: any) => {markerRefs.current[location.id!] = ref}}
                                         eventHandlers={{ click: () => handleOpenDialog(location) }}>
-                                    <Tooltip>{location.place}</Tooltip>
+                                    <Tooltip className="marker-tooltip">
+                                        <Typography variant="h6">
+                                            {location.place}
+                                        </Typography>
+                                        <Typography variant="body1">
+                                            {location.description}
+                                        </Typography>
+                                    </Tooltip>
                                 </Marker>
                             )
                         })}

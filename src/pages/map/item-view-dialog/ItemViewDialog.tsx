@@ -1,7 +1,7 @@
 import "./ItemViewDialog.scss";
 import React, {useEffect, useState} from "react";
-import {Dialog} from "@mui/material";
-import {KeyboardBackspace} from '@mui/icons-material';
+import {Dialog, DialogTitle, Divider, IconButton} from "@mui/material";
+import {Close, SkipNext, SkipPrevious} from '@mui/icons-material';
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {Item} from "../../../models/Item";
@@ -17,6 +17,7 @@ type Props = {
 export default function ImageDialog(props: Readonly<Props>) {
     const [items, setItems] = useState<Item[]>([]);
     const [itemChose, setItemChose] = useState<Item | null>(null);
+    const [index, setIndex] = useState(0);
 
     const dispatch = useAppDispatch();
 
@@ -30,6 +31,27 @@ export default function ImageDialog(props: Readonly<Props>) {
             })
         }
     }, [props.open, props.location, dispatch]);
+
+    const handlePrevious = () => {
+        if (index === 0) {
+            setIndex(items.length - 1);
+            setItemChose(items[items.length - 1]);
+        } else {
+            setIndex(index - 1);
+            setItemChose(items[index - 1]);
+        }
+    }
+
+    const handleNext = () => {
+        if (index === items.length - 1) {
+            setIndex(0);
+            setItemChose(items[0]);
+        } else {
+            setIndex(index + 1);
+            setItemChose(items[index + 1]);
+        }
+    }
+
 
     const handleChangeItem = (item: Item) => {
         setItemChose(item);
@@ -49,18 +71,40 @@ export default function ImageDialog(props: Readonly<Props>) {
     const onClose = () => {
         setItems([]);
         setItemChose(null);
+        setIndex(0);
         props.onClose();
     }
 
     return (
-        <Dialog id="image-viewer-dialog" fullScreen open={props.open} onClose={onClose}>
+        <Dialog className="map-item-view-dialog" fullScreen open={props.open} onClose={onClose}>
             {props.location && (
-                <div className="dialog-header">
-                    <span className="dialog-title">
-                        <KeyboardBackspace onClick={onClose}/>
-                        <p>{props.location.place}</p>
-                    </span>
-                </div>
+                <DialogTitle>
+                    <p className="location-place">
+                        {props.location.place}
+                    </p>
+                    <p className="item-name">
+                        {itemChose ? itemChose.name : ''}
+                    </p>
+                    <div className="btn-wrapper">
+                        <div className="image-index">
+                            <IconButton aria-label="previous"
+                                        onClick={() => handlePrevious()}>
+                                <SkipPrevious/>
+                            </IconButton>
+                            <span className="index">
+                            {index + 1} / {items.length}
+                        </span>
+                            <IconButton aria-label="next"
+                                        onClick={() => handleNext()}>
+                                <SkipNext/>
+                            </IconButton>
+                        </div>
+                        <Divider orientation="vertical"/>
+                        <IconButton onClick={onClose}>
+                            <Close/>
+                        </IconButton>
+                    </div>
+                </DialogTitle>
             )}
             <div className="dialog-body">
                 {itemChose ? (itemChose.mimeType.includes('image') ? (
