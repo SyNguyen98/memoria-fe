@@ -95,10 +95,39 @@ export default function HomeComponent() {
                         MEMORIA không chỉ lưu trữ những tấm ảnh mà còn cho bạn biết những tấm ảnh ấy được tạo ra ở
                         đâu. Với tính năng ghim địa điểm, bạn có thể ngắm lại những lần cùng nhau du lịch cùng bạn bè
                         hoặcngười thân. Bất cứ nơi nào bạn đặt chân qua và muốn lưu lại những kỷ niệm, MEMORIA đều sẽ
-                        giúp bạn
+                        giúp bạn.
                     </Typography>
                 </Grid>
             </Grid>
+
+            <div className="quote-wrapper-2">
+                <div className="quote">
+                    “Chúng ta chẳng thể biết được khi nào là lần cuối cùng gặp một ai đó.”
+                </div>
+            </div>
+
+            <div className="contact">
+                <Typography variant="h3">
+                    Liên Hệ
+                </Typography>
+                <Typography variant="body1">
+                    nguyen.nguyenhongsy@outlook.com.vn
+                </Typography>
+            </div>
+
+            <footer className="app-footer">
+                <div className="left-wrapper">
+                    <img src={`${Url.IMAGE}/app-logo.svg`} alt="App Logo" width={30} height={30}/>
+                    <Typography variant="body1">
+                        MEMORIA, 2024
+                    </Typography>
+                </div>
+                <div className="right-wrapper">
+                    <Typography variant="body1">
+                        Lưu trữ những khoảnh khắc
+                    </Typography>
+                </div>
+            </footer>
         </section>
     )
 }
