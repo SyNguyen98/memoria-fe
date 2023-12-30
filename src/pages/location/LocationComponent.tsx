@@ -30,6 +30,7 @@ import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Utils & Services
 import {LocationApi} from "../../api/LocationApi";
+import {DateUtil} from "../../utils/DateUtil";
 
 function LocationComponent() {
     const [isLoading, setLoading] = useState(false);
@@ -81,22 +82,6 @@ function LocationComponent() {
         sessionStorage.setItem(SessionKey.LOCATION_PLACE, location.place);
         sessionStorage.setItem(SessionKey.DRIVE_ITEM_ID, location.driveItemId!);
         navigate(PathName.ITEM);
-    }
-
-    const renderTime = (location: Location): string => {
-        let result = String(location.takenYear);
-        if (location.takenMonth) {
-            const month = location.takenMonth < 10 ? `0${location.takenMonth}` : String(location.takenMonth);
-            result = `${month}/${result}`;
-            if (location.takenDay) {
-                const day = location.takenDay < 10 ? `0${location.takenDay}` : String(location.takenDay);
-                result = `${day}/${result}`;
-                if (location.takenTime) {
-                    result = `${location.takenTime} ${result}`;
-                }
-            }
-        }
-        return result;
     }
 
     const handleOpenEditDialog = (location?: Location) => {
@@ -181,7 +166,7 @@ function LocationComponent() {
                                     {location.description}
                                 </TableCell>
                                 <TableCell>
-                                    {renderTime(location)}
+                                    {DateUtil.renderDate(location)}
                                 </TableCell>
                                 <TableCell align="center">
                                     <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(location)}>
