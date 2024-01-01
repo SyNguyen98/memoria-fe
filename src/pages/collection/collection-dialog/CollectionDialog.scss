@@ -18,6 +18,12 @@
       margin: .5rem 0;
     }
 
+    .MuiTypography-body1 {
+      margin-bottom: .5rem;
+      text-align: left;
+      font-family: 'Signika', sans-serif;
+    }
+
     .email-list {
       display: flex;
       flex-direction: column;
@@ -25,6 +31,7 @@
       .MuiChip-root {
         width: fit-content;
         margin-bottom: .5rem;
+        border-color: $blue-700 !important;
       }
     }
   }

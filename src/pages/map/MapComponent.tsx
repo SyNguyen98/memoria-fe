@@ -16,6 +16,7 @@ import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {LocationApi} from "../../api/LocationApi";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
+import {DateUtil} from "../../utils/DateUtil";
 
 function MapComponent() {
     const [isLoading, setLoading] = useState(false);
@@ -126,6 +127,9 @@ function MapComponent() {
                                     <Tooltip className="marker-tooltip">
                                         <Typography variant="h6">
                                             {location.place}
+                                        </Typography>
+                                        <Typography variant="subtitle1">
+                                            {DateUtil.renderDate(location)}
                                         </Typography>
                                         <Typography variant="body1">
                                             {location.description}

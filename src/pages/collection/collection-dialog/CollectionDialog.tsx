@@ -1,6 +1,6 @@
 import "./CollectionDialog.scss";
 import React, {useEffect, useState} from "react";
-import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
+import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography} from "@mui/material";
 // Redux
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
@@ -21,7 +21,7 @@ interface Input {
     userEmails: string[]
 }
 
-export default function CollectionDialog(props: Props) {
+export default function CollectionDialog(props: Readonly<Props>) {
     const [inputs, setInputs] = useState<Input>({name: '', description: '', userEmails: []});
 
     const dispatch = useAppDispatch();
@@ -36,7 +36,13 @@ export default function CollectionDialog(props: Props) {
         }
     }, [props]);
 
-    const onClose = () => {
+    const onClose = (_event: object, reason: string) => {
+        if (reason !== "backdropClick") {
+            handleClose();
+        }
+    }
+
+    const handleClose = () => {
         setInputs({name: '', description: '', userEmails: []});
         props.onClose();
     }
@@ -75,7 +81,7 @@ export default function CollectionDialog(props: Props) {
             CollectionApi.updateCollection(collection).then(() => {
                 dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
                 props.isSaved(true);
-                onClose();
+                handleClose();
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể lưu bộ sưu tập"}));
             })
@@ -83,7 +89,7 @@ export default function CollectionDialog(props: Props) {
             CollectionApi.createCollection(collection).then(() => {
                 dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
                 props.isSaved(true);
-                onClose();
+                handleClose();
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể lưu bộ sưu tập"}));
             })
@@ -92,7 +98,7 @@ export default function CollectionDialog(props: Props) {
 
     const handleCancel = () => {
         props.isSaved(false);
-        onClose();
+        handleClose();
     }
 
     return (
@@ -114,11 +120,14 @@ export default function CollectionDialog(props: Props) {
                            onChange={onInputChange}/>
                 <TextField autoComplete="off" fullWidth
                            name="email" label="Email"
-                           placeholder="Email của người được quyền truy cập"
+                           placeholder="Nhập Email rồi nhấn Enter↵"
                            onKeyDown={event => onEnterEmail(event)}/>
+                <Typography variant="body1">
+                    Email của người được quyền truy cập
+                </Typography>
                 <div className="email-list">
-                    {inputs.userEmails && inputs.userEmails.map((email, index) =>
-                        <Chip key={index} label={email} variant="outlined" onDelete={() => handleDeleteChip(email)} />
+                    {inputs.userEmails.map(email =>
+                        <Chip key={email} label={email} variant="outlined" onDelete={() => handleDeleteChip(email)} />
                     )}
                 </div>
             </DialogContent>

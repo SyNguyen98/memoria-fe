@@ -19,7 +19,7 @@ import {ItemApi} from "../../api/ItemApi";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 
 export default function ItemComponent() {
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [collectionName, setCollectionName] = useState('');
     const [locationPlace, setLocationPlace] = useState('');
     const [items, setItems] = useState<Item[]>([])
@@ -30,17 +30,17 @@ export default function ItemComponent() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) || '');
-        setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) || '');
+        setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
+        setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) ?? '');
         const driveItemId = sessionStorage.getItem(SessionKey.DRIVE_ITEM_ID);
         if (currentUser && driveItemId) {
-            setLoading(true);
+            setIsLoading(true);
             ItemApi.getAllItemsByDriveItemId(driveItemId).then(res => {
-                setItems(res);
-                setLoading(false);
+                setItems([...res].sort((a,b) => new Date(a.takenDateTime).getTime() - new Date(b.takenDateTime).getTime()));
+                setIsLoading(false);
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải các hình ảnh"}));
-                setLoading(false);
+                setIsLoading(false);
             });
         }
     }, [currentUser, dispatch]);
@@ -57,14 +57,6 @@ export default function ItemComponent() {
     const onCloseViewDialog = () => {
         setViewDialogOpened(false);
         setChoseIndex(-1);
-    }
-
-    const handleRightClickImage = (event: React.MouseEvent<HTMLImageElement>) => {
-        event.preventDefault();
-    }
-
-    const handleCloseContextMenu = () => {
-
     }
 
     return (
@@ -95,12 +87,11 @@ export default function ItemComponent() {
                     {items.map((item, index) =>
                         <Grid key={item.id} item lg={2} md={2.4} xs={3}>
                             {item.mimeType.includes('image') ? (
-                                <img key={index} alt={item.name} src={item.downloadUrl}
+                                <img alt={item.name} src={item.downloadUrl}
                                     // onContextMenu={(event) => handleRightClickImage(event)}
                                      onClick={() => handleOpenViewDialog(index)} />
                             ) : (
-                                <video key={index} src={item.downloadUrl}
-                                       onClick={() => handleOpenViewDialog(index)} />
+                                <video src={item.downloadUrl} onClick={() => handleOpenViewDialog(index)} />
                             )}
                             <p className="item-name">
                                 {item.name}

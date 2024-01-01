@@ -39,7 +39,7 @@ const initialInput: Input = {
     longitude: 0,
 }
 
-export default function LocationDialog(props: Props) {
+export default function LocationDialog(props: Readonly<Props>) {
     const [inputs, setInputs] = useState<Input>(initialInput);
     const [years, setYears] = useState<number[]>([]);
 
@@ -62,14 +62,20 @@ export default function LocationDialog(props: Props) {
                 takenYear: props.location.takenYear,
                 takenMonth: Number(props.location.takenMonth),
                 takenDay: Number(props.location.takenDay),
-                takenTime: props.location.takenTime || '',
+                takenTime: props.location.takenTime ?? '',
                 latitude: props.location.coordinate.latitude,
                 longitude: props.location.coordinate.longitude,
             });
         }
     }, [props]);
 
-    const onClose = () => {
+    const onClose = (_event: object, reason: string) => {
+        if (reason !== "backdropClick") {
+            handleClose();
+        }
+    }
+
+    const handleClose = () => {
         setInputs(initialInput);
         props.onClose();
     }
@@ -124,7 +130,7 @@ export default function LocationDialog(props: Props) {
             LocationApi.updateLocation(location).then(() => {
                 dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
                 props.isRefresh(true);
-                onClose();
+                handleClose();
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
             })
@@ -132,7 +138,7 @@ export default function LocationDialog(props: Props) {
             LocationApi.createLocation(location).then(() => {
                 dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
                 props.isRefresh(true);
-                onClose();
+                handleClose();
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
             })
@@ -141,7 +147,7 @@ export default function LocationDialog(props: Props) {
 
     const handleCancel = () => {
         props.isRefresh(false);
-        onClose();
+        handleClose();
     }
 
     return (
@@ -168,8 +174,8 @@ export default function LocationDialog(props: Props) {
                                    name="takenYear" label="Năm"
                                    value={inputs.takenYear}
                                    onChange={onInputChange}>
-                            {years.map((year, index) => (
-                                <MenuItem key={index} value={year}>
+                            {years.map(year => (
+                                <MenuItem key={year} value={year}>
                                     {year}
                                 </MenuItem>
                             ))}
@@ -182,8 +188,8 @@ export default function LocationDialog(props: Props) {
                                    disabled={inputs.takenYear === null}
                                    value={inputs.takenMonth}
                                    onChange={onInputChange}>
-                            {MONTHS.map((month, index) => (
-                                <MenuItem key={index} value={month}>
+                            {MONTHS.map(month => (
+                                <MenuItem key={month} value={month}>
                                     {month}
                                 </MenuItem>
                             ))}
@@ -196,8 +202,8 @@ export default function LocationDialog(props: Props) {
                                    disabled={inputs.takenYear === null && inputs.takenMonth === null}
                                    value={inputs.takenDay}
                                    onChange={onInputChange}>
-                            {DAYS.map((day, index) => (
-                                <MenuItem key={index} value={day}>
+                            {DAYS.map(day => (
+                                <MenuItem key={day} value={day}>
                                     {day}
                                 </MenuItem>
                             ))}
