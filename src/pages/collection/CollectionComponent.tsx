@@ -6,7 +6,7 @@ import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
     AppBar,
-    Button,
+    Button, Chip,
     Dialog,
     DialogActions,
     DialogContent,
@@ -32,12 +32,12 @@ import {PathName} from "../../constants/Page";
 import {CollectionApi} from "../../api/CollectionApi";
 
 function CollectionComponent() {
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [collections, setCollections] = useState<Collection[]>([]);
     const [choseCollection, setChoseCollection] = useState<Collection | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
-    const [isRefresh, setRefresh] = useState(false);
+    const [isRefresh, setIsRefresh] = useState(false);
 
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
@@ -45,28 +45,28 @@ function CollectionComponent() {
 
     useEffect(() => {
         if (currentUser) {
-            setLoading(true);
+            setIsLoading(true);
             CollectionApi.getAllCollectionsHavingAccess().then(res => {
                 if (res) {
                     setCollections(res);
-                    setLoading(false);
+                    setIsLoading(false);
                 }
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-                setLoading(false);
+                setIsLoading(false);
             });
         }
     }, [currentUser, dispatch]);
 
     useEffect(() => {
         if (isRefresh) {
-            setLoading(true);
+            setIsLoading(true);
             CollectionApi.getAllCollectionsHavingAccess().then(res => {
                 setCollections(res);
-                setLoading(false);
+                setIsLoading(false);
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-                setLoading(false);
+                setIsLoading(false);
             });
         }
     }, [dispatch, isRefresh]);
@@ -83,7 +83,7 @@ function CollectionComponent() {
 
     const handleOpenEditDialog = (collection?: Collection) => {
         setDialogOpened(true);
-        setChoseCollection(collection || null);
+        setChoseCollection(collection ?? null);
     }
 
     const onEditDialogClose = () => {
@@ -105,11 +105,11 @@ function CollectionComponent() {
         CollectionApi.deleteCollectionById(choseCollection!.id!).then(() => {
             onDeleteDialogClose();
             dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
-            setLoading(true);
-            setRefresh(true);
+            setIsLoading(true);
+            setIsRefresh(true);
         }).catch(() => {
             dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
-            setLoading(false);
+            setIsLoading(false);
         });
     }
 
@@ -160,7 +160,9 @@ function CollectionComponent() {
                                     {collection.description}
                                 </TableCell>
                                 <TableCell>
-                                    {collection.userEmails.toString()}
+                                    {collection.userEmails.map(email =>
+                                        <Chip key={email} variant="outlined" label={email} />
+                                    )}
                                 </TableCell>
                                 <TableCell align="center">
                                     <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(collection)}>
@@ -176,7 +178,7 @@ function CollectionComponent() {
                 </Table>
             )}
             {/* Edit dialog */}
-            <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection} isSaved={setRefresh}/>
+            <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection} isSaved={setIsRefresh}/>
             {/* Delete dialog */}
             {choseCollection && (
                 <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>

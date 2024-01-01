@@ -14,7 +14,7 @@ import {
     ListItemIcon,
     ListItemText
 } from "@mui/material";
-import {Collections, KeyboardDoubleArrowLeft, Logout, Map} from "@mui/icons-material";
+import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Logout, Map} from "@mui/icons-material";
 import {CookieUtil} from "../../utils/CookieUtil";
 import {CookieKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
@@ -35,6 +35,10 @@ export default function Sidebar() {
         setSelectedIndex(index);
         navigate(url);
     };
+
+    const handleOpenFeedback = () => {
+        window.open("https://forms.gle/K9b1Rr3TXEYYfx8p6", "_blank");
+    }
 
     const handleLogout = () => {
         CookieUtil.deleteCookie(CookieKey.ACCESS_TOKEN);
@@ -83,7 +87,13 @@ export default function Sidebar() {
                                 <ListItemText primary={currentUser.name}/>
                             </ListItemButton>
                         )}
-                        <ListItemButton onClick={() => handleLogout()}>
+                        <ListItemButton onClick={handleOpenFeedback}>
+                            <ListItemIcon>
+                                <FeedbackOutlined/>
+                            </ListItemIcon>
+                            <ListItemText primary="Phản hồi lỗi ↗"/>
+                        </ListItemButton>
+                        <ListItemButton onClick={handleLogout}>
                             <ListItemIcon>
                                 <Logout/>
                             </ListItemIcon>
