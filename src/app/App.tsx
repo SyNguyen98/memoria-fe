@@ -128,13 +128,7 @@ function OAuth2RedirectHandler() {
 
             UserApi.getCurrentUser().then((res: User) => {
                 dispatch(setUser(res));
-                AuthApi.getMicrosoftTokenAvailable().then((res: { status: number; }) => {
-                    if (res.status === 200) {
-                        navigate("/map");
-                    } else {
-                        window.location.href = MICROSOFT_AUTH_URL;
-                    }
-                });
+                navigate("/map");
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
             })
