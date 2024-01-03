@@ -101,7 +101,7 @@ export default function Sidebar() {
                         </ListItemButton>
                     </List>
                     <div className="version">
-                        Version β.1
+                        Version β.2
                     </div>
                 </div>
             </div>
