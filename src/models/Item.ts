@@ -6,4 +6,5 @@ export interface Item {
     name: string;
     mimeType: string;
     downloadUrl: string;
+    thumbnailUrl: string;
 }

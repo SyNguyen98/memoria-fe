@@ -45,8 +45,13 @@
       }
 
       .item-name {
+        width: 90%;
         margin: .5rem auto 0;
         font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
       }
     }
   }
