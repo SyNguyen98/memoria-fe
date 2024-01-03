@@ -35,7 +35,7 @@ export default function ItemComponent() {
         const driveItemId = sessionStorage.getItem(SessionKey.DRIVE_ITEM_ID);
         if (currentUser && driveItemId) {
             setIsLoading(true);
-            ItemApi.getAllItemsByDriveItemId(driveItemId).then(res => {
+            ItemApi.getAllItemsByDriveItemId(driveItemId, "medium").then(res => {
                 setItems([...res].sort((a,b) => new Date(a.takenDateTime).getTime() - new Date(b.takenDateTime).getTime()));
                 setIsLoading(false);
             }).catch(() => {
@@ -86,13 +86,9 @@ export default function ItemComponent() {
                 <Grid className="item-list" container spacing={2}>
                     {items.map((item, index) =>
                         <Grid key={item.id} item lg={2} md={2.4} xs={3}>
-                            {item.mimeType.includes('image') ? (
-                                <img alt={item.name} src={item.downloadUrl}
-                                    // onContextMenu={(event) => handleRightClickImage(event)}
-                                     onClick={() => handleOpenViewDialog(index)} />
-                            ) : (
-                                <video src={item.downloadUrl} onClick={() => handleOpenViewDialog(index)} />
-                            )}
+                            <img alt={item.name} src={item.thumbnailUrl}
+                                // onContextMenu={(event) => handleRightClickImage(event)}
+                                 onClick={() => handleOpenViewDialog(index)}/>
                             <p className="item-name">
                                 {item.name}
                             </p>
@@ -102,7 +98,7 @@ export default function ItemComponent() {
             )}
 
             {/* Dialogs */}
-            <ItemViewDialog open={viewDialogOpened} onClose={onCloseViewDialog} itemIndex={choseIndex} items={items} />
+            <ItemViewDialog open={viewDialogOpened} onClose={onCloseViewDialog} itemIndex={choseIndex} items={items}/>
         </section>
     )
 }

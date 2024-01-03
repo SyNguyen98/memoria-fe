@@ -23,7 +23,7 @@ export default function ImageDialog(props: Readonly<Props>) {
 
     useEffect(() => {
         if (props.location) {
-            ItemApi.getAllItemsByDriveItemId(props.location.driveItemId!).then(res => {
+            ItemApi.getAllItemsByDriveItemId(props.location.driveItemId!, "medium").then(res => {
                 setItems(res);
                 setItemChose(res[0]);
             }).catch(() => {
@@ -116,13 +116,8 @@ export default function ImageDialog(props: Readonly<Props>) {
             <div className="dialog-footer">
                 <div id="item-list" className="item-list" onWheel={event => onWheel(event, 'item-list')}>
                     {items.map((item, index) =>
-                        (item.mimeType.includes('image') ? (
-                            <img key={index} alt={item.name} src={item.downloadUrl}
-                                 onClick={() => handleChangeItem(item)}/>
-                        ) : (
-                            <video key={index} src={item.downloadUrl}
-                                   onClick={() => handleChangeItem(item)}/>
-                        ))
+                        <img key={item.id} alt={item.name} src={item.thumbnailUrl}
+                             onClick={() => handleChangeItem(item)}/>
                     )}
                 </div>
             </div>

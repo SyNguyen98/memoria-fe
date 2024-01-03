@@ -6,8 +6,8 @@ const API_URL = `${BACKEND_URL}/api/items`;
 
 export class ItemApi {
 
-    static async getAllItemsByDriveItemId(driveItemId: string): Promise<Item[]> {
-        const res = await appAxios.get(API_URL, {params: { driveItemId }});
+    static async getAllItemsByDriveItemId(driveItemId: string, thumbnailSize?: "large" | "medium" | "small"): Promise<Item[]> {
+        const res = await appAxios.get(API_URL, {params: { driveItemId, thumbnailSize }});
         return res.data;
     }
 
