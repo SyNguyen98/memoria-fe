@@ -87,16 +87,14 @@ export default function ImageDialog(props: Readonly<Props>) {
                         {itemChose ? itemChose.name : ''}
                     </p>
                     <div className="btn-wrapper">
-                        <div className="image-index">
-                            <IconButton aria-label="previous"
-                                        onClick={() => handlePrevious()}>
+                        <div className="item-index">
+                            <IconButton aria-label="previous" onClick={() => handlePrevious()}>
                                 <SkipPrevious/>
                             </IconButton>
-                            <span className="index">
+                        <span className="index">
                             {index + 1} / {items.length}
                         </span>
-                            <IconButton aria-label="next"
-                                        onClick={() => handleNext()}>
+                            <IconButton aria-label="next" onClick={() => handleNext()}>
                                 <SkipNext/>
                             </IconButton>
                         </div>
@@ -118,7 +116,7 @@ export default function ImageDialog(props: Readonly<Props>) {
                 <div id="item-list" className="item-list" onWheel={event => onWheel(event, 'item-list')}>
                     {items.map((item, index) =>
                         <Button key={item.id} onClick={() => handleChangeItem(item, index)}>
-                            <img alt={item.name} src={item.thumbnailUrl} />
+                            <img alt={item.name} src={item.thumbnailUrl}/>
                         </Button>
                     )}
                 </div>
