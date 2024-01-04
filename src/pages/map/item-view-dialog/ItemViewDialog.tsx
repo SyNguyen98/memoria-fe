@@ -1,6 +1,6 @@
 import "./ItemViewDialog.scss";
 import React, {useEffect, useState} from "react";
-import {Dialog, DialogTitle, Divider, IconButton} from "@mui/material";
+import {Button, Dialog, DialogTitle, Divider, IconButton} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from '@mui/icons-material';
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
@@ -53,8 +53,9 @@ export default function ImageDialog(props: Readonly<Props>) {
     }
 
 
-    const handleChangeItem = (item: Item) => {
+    const handleChangeItem = (item: Item, index: number) => {
         setItemChose(item);
+        setIndex(index);
     }
 
     const onWheel = (event: any, elementId: string) => {
@@ -107,17 +108,18 @@ export default function ImageDialog(props: Readonly<Props>) {
                 </DialogTitle>
             )}
             <div className="dialog-body">
-                {itemChose ? (itemChose.mimeType.includes('image') ? (
+                {itemChose && (itemChose.mimeType.includes('image') ? (
                     <img className="item-chose" alt={itemChose.name} src={itemChose.downloadUrl}/>
                 ) : (
                     <video className="item-chose" controls autoPlay src={itemChose.downloadUrl}/>
-                )) : null}
+                ))}
             </div>
             <div className="dialog-footer">
                 <div id="item-list" className="item-list" onWheel={event => onWheel(event, 'item-list')}>
                     {items.map((item, index) =>
-                        <img key={item.id} alt={item.name} src={item.thumbnailUrl}
-                             onClick={() => handleChangeItem(item)}/>
+                        <Button key={item.id} onClick={() => handleChangeItem(item, index)}>
+                            <img alt={item.name} src={item.thumbnailUrl} />
+                        </Button>
                     )}
                 </div>
             </div>
