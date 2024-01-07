@@ -1,5 +1,5 @@
 import "./ItemViewDialog.scss";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Button, Dialog, DialogTitle, Divider, IconButton} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from '@mui/icons-material';
 import {useAppDispatch} from "../../../app/hook";

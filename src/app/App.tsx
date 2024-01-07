@@ -19,7 +19,6 @@ import ProfileComponent from "../pages/profile/ProfileComponent";
 import {User} from "../models/User";
 import {CookieKey} from "../constants/Storage";
 import {PathName} from '../constants/Page';
-import {MICROSOFT_AUTH_URL} from '../constants/Url';
 // Services
 import {CookieUtil} from "../utils/CookieUtil";
 import {UserApi} from "../api/UserApi";
