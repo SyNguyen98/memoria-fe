@@ -145,7 +145,7 @@ export default function HomeComponent() {
                         <div className="left-wrapper">
                             <img src={appLogo} alt="App Logo" width={30} height={30}/>
                             <Typography variant="body1">
-                                MEMORIA vβ.2, 2024
+                                MEMORIA vβ.3, 2024
                             </Typography>
                         </div>
                         <div className="right-wrapper">
