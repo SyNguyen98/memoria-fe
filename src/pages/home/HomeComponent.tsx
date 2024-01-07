@@ -4,13 +4,13 @@ import {Button, Grid, Typography} from "@mui/material";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {OpenInNew} from "@mui/icons-material";
 // Images
-import scaraCatSad from '/images/scaracat-sad.webp';
-import appLogo from '/images/app-logo.svg';
-import googleLogo from '/images/google-logo.png';
-import introduction from '/images/introduction.svg';
-import manAndCamera from '/images/man-and-camera.svg';
-import album from '/images/album.svg';
-import manWithMap from '/images/man-with-map.svg';
+import scaraCatSad from '../../assets/images/scaracat-sad.webp';
+import appLogo from '../../assets/images/app-logo.svg';
+import googleLogo from '../../assets/images/google-logo.png';
+import introduction from '../../assets/images/introduction.svg';
+import manAndCamera from '../../assets/images/man-and-camera.svg';
+import album from '../../assets/images/album.svg';
+import manWithMap from '../../assets/images/man-with-map.svg';
 
 export default function HomeComponent() {
 
