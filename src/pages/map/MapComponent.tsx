@@ -1,5 +1,5 @@
 import "./MapComponent.scss";
-import React, {Fragment, useEffect, useRef, useState} from "react";
+import {Fragment, useEffect, useRef, useState} from "react";
 import {MapContainer, Marker, TileLayer, Tooltip, useMap} from 'react-leaflet';
 import {latLngBounds} from "leaflet";
 import {AppBar, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography} from "@mui/material";
@@ -19,7 +19,7 @@ import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {DateUtil} from "../../utils/DateUtil";
 
 function MapComponent() {
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [collections, setCollections] = useState<Collection[]>([]);
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
     const [locations, setLocations] = useState<Location[]>([]);
@@ -34,14 +34,14 @@ function MapComponent() {
     const markerRefs = useRef({} as any);
 
     useEffect(() => {
-        setLoading(true);
+        setIsLoading(true);
         if (currentUser) {
             CollectionApi.getAllCollectionsHavingAccess().then(res => {
                 setCollections(res);
-                setLoading(false);
+                setIsLoading(false);
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-                setLoading(false);
+                setIsLoading(false);
             });
         }
     }, [currentUser, dispatch]);
@@ -167,18 +167,5 @@ function ChangeView({center, locations}: ChangeViewProps) {
     }
     return null;
 }
-
-// function MyComponent() {
-//     const map = useMapEvents({
-//         click: (event: any) => {
-//             map.locate()
-//             console.log(event)
-//         },
-//         locationfound: (location) => {
-//             console.log('location found:', location)
-//         },
-//     })
-//     return null
-// }
 
 export default MapComponent;

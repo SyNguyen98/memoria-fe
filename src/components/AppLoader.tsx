@@ -1,5 +1,4 @@
 import {HashLoader} from "react-spinners";
-import React from "react";
 
 export default function AppLoader() {
     return (

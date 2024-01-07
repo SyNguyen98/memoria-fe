@@ -1,10 +1,10 @@
 import "./PositionDialog.scss";
-import React, {useState} from "react";
+import {useState} from "react";
 import {Button, Dialog, DialogContent, DialogTitle, Grid, TextField} from "@mui/material";
 import {PositionDialogProps} from "./PositionDialogProps";
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
 
-function PositionDialog(props: PositionDialogProps) {
+function PositionDialog(props: Readonly<PositionDialogProps>) {
     const [latitude, setLatitude] = useState(10.826567739464473);
     const [longitude, setLongitude] = useState(106.66679907558624);
 
