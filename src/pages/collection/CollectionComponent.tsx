@@ -1,5 +1,5 @@
 import './CollectionComponent.scss';
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
@@ -75,9 +75,17 @@ function CollectionComponent() {
         dispatch(openSidebar())
     }
 
+    const isCollectionOwner = (collection: Collection) => {
+        if (currentUser && collection.ownerEmail) {
+            return currentUser.email === collection.ownerEmail;
+        }
+        return false;
+    }
+
     const handleNavigateToLocation = (collection: Collection) => {
         sessionStorage.setItem(SessionKey.COLLECTION_ID, collection.id!);
         sessionStorage.setItem(SessionKey.COLLECTION_NAME, collection.name);
+        sessionStorage.setItem(SessionKey.COLLECTION_OWNER_EMAIL, collection.ownerEmail ?? '');
         navigate(PathName.LOCATION);
     }
 
@@ -141,7 +149,7 @@ function CollectionComponent() {
                             <TableCell>Tên</TableCell>
                             <TableCell>Mô Tả</TableCell>
                             <TableCell>Email Chia Sẻ</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell/>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -164,14 +172,16 @@ function CollectionComponent() {
                                         <Chip key={email} variant="outlined" label={email} />
                                     )}
                                 </TableCell>
-                                <TableCell align="center">
-                                    <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(collection)}>
-                                        <Edit/>
-                                    </IconButton>
-                                    <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(collection)}>
-                                        <Delete/>
-                                    </IconButton>
-                                </TableCell>
+                                {isCollectionOwner(collection) ? (
+                                    <TableCell align="center" width={80}>
+                                        <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(collection)}>
+                                            <Edit/>
+                                        </IconButton>
+                                        <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(collection)}>
+                                            <Delete/>
+                                        </IconButton>
+                                    </TableCell>
+                                ) : <TableCell/>}
                             </TableRow>
                         ))}
                     </TableBody>

@@ -1,5 +1,5 @@
 import './LocationComponent.scss';
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
@@ -33,13 +33,13 @@ import {LocationApi} from "../../api/LocationApi";
 import {DateUtil} from "../../utils/DateUtil";
 
 function LocationComponent() {
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [collectionName, setCollectionName] = useState('');
     const [locations, setLocations] = useState<Location[]>([]);
     const [choseLocation, setChoseLocation] = useState<Location | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
-    const [isRefresh, setRefresh] = useState(false);
+    const [isRefresh, setIsRefresh] = useState(false);
 
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
@@ -48,14 +48,14 @@ function LocationComponent() {
     useEffect(() => {
         const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
         if (currentUser && collectionId) {
-            setLoading(true);
-            setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) || '');
+            setIsLoading(true);
+            setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
             LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
                 setLocations(res);
-                setLoading(false);
+                setIsLoading(false);
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
-                setLoading(false);
+                setIsLoading(false);
             });
         }
     }, [currentUser, dispatch]);
@@ -63,19 +63,27 @@ function LocationComponent() {
     useEffect(() => {
         const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
         if (collectionId && isRefresh) {
-            setLoading(true);
+            setIsLoading(true);
             LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
                 setLocations(res);
-                setLoading(false);
+                setIsLoading(false);
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
-                setLoading(false);
+                setIsLoading(false);
             });
         }
     }, [dispatch, isRefresh]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
+    }
+
+    const isCollectionOwner = () => {
+        const ownerEmail = sessionStorage.getItem(SessionKey.COLLECTION_OWNER_EMAIL);
+        if (currentUser && ownerEmail) {
+            return currentUser.email === ownerEmail;
+        }
+        return false;
     }
 
     const handleNavigateToItem = (location: Location) => {
@@ -86,7 +94,7 @@ function LocationComponent() {
 
     const handleOpenEditDialog = (location?: Location) => {
         setDialogOpened(true);
-        setChoseLocation(location || null);
+        setChoseLocation(location ?? null);
     }
 
     const onEditDialogClose = () => {
@@ -105,15 +113,15 @@ function LocationComponent() {
     }
 
     const handleDeleteCollection = () => {
-        setLoading(true);
+        setIsLoading(true);
         LocationApi.deleteLocationById(choseLocation!.id!).then(() => {
             onDeleteDialogClose();
             dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
-            setLoading(false);
-            setRefresh(true);
+            setIsLoading(false);
+            setIsRefresh(true);
         }).catch(() => {
             dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
-            setLoading(false);
+            setIsLoading(false);
         });
     }
 
@@ -147,7 +155,7 @@ function LocationComponent() {
                             <TableCell>Địa Điểm</TableCell>
                             <TableCell>Mô Tả</TableCell>
                             <TableCell>Thời Gian</TableCell>
-                            <TableCell align="center"></TableCell>
+                            {isCollectionOwner() && <TableCell/>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -168,21 +176,23 @@ function LocationComponent() {
                                 <TableCell>
                                     {DateUtil.renderDate(location)}
                                 </TableCell>
-                                <TableCell align="center">
-                                    <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(location)}>
-                                        <Edit/>
-                                    </IconButton>
-                                    <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(location)}>
-                                        <Delete/>
-                                    </IconButton>
-                                </TableCell>
+                                {isCollectionOwner() && (
+                                    <TableCell align="center" width={80}>
+                                        <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(location)}>
+                                            <Edit/>
+                                        </IconButton>
+                                        <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(location)}>
+                                            <Delete/>
+                                        </IconButton>
+                                    </TableCell>
+                                )}
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             )}
             {/* Edit dialog */}
-            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation} isRefresh={setRefresh}/>
+            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation} isRefresh={setIsRefresh}/>
             {/* Delete dialog */}
             {choseLocation && (
                 <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>
