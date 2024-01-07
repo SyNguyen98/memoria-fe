@@ -1,5 +1,5 @@
 import "./Sidebar.scss";
-import React, {useState} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {closeSidebar} from "../../reducers/SidebarReducer";
@@ -101,7 +101,7 @@ export default function Sidebar() {
                         </ListItemButton>
                     </List>
                     <div className="version">
-                        Version β.2
+                        Version β.3
                     </div>
                 </div>
             </div>

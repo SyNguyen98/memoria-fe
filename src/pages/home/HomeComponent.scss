@@ -33,7 +33,7 @@
   .banner {
     padding: 1rem;
     height: 90vh;
-    background-image: url('../../../public/images/homepage-bg.jpg');
+    background-image: url('/images/homepage-bg.jpg');
     background-size: cover;
 
     .logo-app-name{
@@ -65,7 +65,6 @@
       .login-btn {
         margin-top: 1rem;
         background-color: $white;
-        color: $blue-700;
         border: 2px solid $blue-700;
         &:hover {
           background-color: $gray-200;
@@ -75,6 +74,11 @@
           margin-right: .5rem;
           width: 40px;
           height: 40px;
+        }
+
+        .MuiTypography-body1 {
+          color: $blue-700;
+          font-weight: 600;
         }
       }
     }
@@ -108,7 +112,7 @@
   .quote-wrapper {
     width: 100vw;
     height: 16vw;
-    background-image: url('../../../public/images/quote-bg.svg');
+    background-image: url('/images/quote-bg.svg');
     background-size: 100vw auto;
     background-repeat: no-repeat;
     display: flex;

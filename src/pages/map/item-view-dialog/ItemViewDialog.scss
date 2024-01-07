@@ -25,7 +25,7 @@
       .btn-wrapper {
         display: flex;
 
-        .image-index {
+        .item-index {
           margin: auto 0;
 
           .index {
@@ -78,20 +78,24 @@
         cursor: pointer;
       }
 
-      .item-list, .img-list, .video-list {
+      .item-list {
         margin-top: .5rem;
         max-width: 100%;
         overflow-x: scroll;
         overflow-y: hidden;
         display: flex;
 
-        img, video {
-          margin: .5rem;
-          height: 100px;
+        .MuiButtonBase-root {
+          padding-top: 0;
+          min-width: unset;
 
-          &:hover {
-            cursor: pointer;
-            transform: scale(1.05);
+          img, video {
+            height: 100px;
+
+            &:hover {
+              cursor: pointer;
+              transform: scale(1.05);
+            }
           }
         }
       }
