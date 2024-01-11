@@ -1,13 +1,13 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
 import {BrowserRouter, Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
-import {Alert, Snackbar} from "@mui/material";
 // Redux
 import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
-import {closeSnackbar, openSnackbar} from "../reducers/SnackbarReducer";
+import {openSnackbar} from "../reducers/SnackbarReducer";
 // Components
 import AppLoader from "../components/AppLoader";
+import AppSnackbar from "../components/AppSnackbar.tsx";
 import Sidebar from "../layout/sidebar/Sidebar";
 import HomeComponent from "../pages/home/HomeComponent";
 import MapComponent from "../pages/map/MapComponent";
@@ -27,7 +27,6 @@ import {appAxios} from "../api";
 
 export default function App() {
     const currentUser = useAppSelector(state => state.user.value);
-    const snackbar = useAppSelector(state => state.snackbar.value);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -49,6 +48,7 @@ export default function App() {
 
     return (
         <BrowserRouter>
+            <AppSnackbar />
             <div className="App">
                 {currentUser && <Sidebar/>}
                 <div className="main-container">
@@ -88,12 +88,6 @@ export default function App() {
                     </Routes>
                 </div>
             </div>
-            {/* Snackbar */}
-            <Snackbar open={snackbar.open} autoHideDuration={3000}
-                      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-                      onClose={() => dispatch(closeSnackbar())}>
-                <Alert severity={snackbar.type}>{snackbar.message}</Alert>
-            </Snackbar>
         </BrowserRouter>
     );
 }
