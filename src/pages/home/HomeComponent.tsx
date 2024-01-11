@@ -3,6 +3,7 @@ import {Fragment} from "react";
 import {Button, Grid, Typography} from "@mui/material";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {OpenInNew} from "@mui/icons-material";
+import {VERSION} from "../../constants";
 
 export default function HomeComponent() {
 
@@ -144,7 +145,7 @@ export default function HomeComponent() {
                             <img alt="App Logo" width={30} height={30}
                                  src="https://public.DM.files.1drv.com/y4mDt6P_Dobieg1FZpN32-QvCzPmPdJ-ePPZwE72S3BINOhHSNVtaZyG0MSKls0SliOC702kbxVK7ZOCxyT6pCplAxNS1y8Ttmut9ikKMYRS6PksbWlNnPNdIM6jpRJwSymQSHEvf8Gms-x6gd00vgv3CQ7hrJl-l3ZAkYrduhRCH8R4XRXLPqTnTTX8P-KHfeiOrdFQmmiTLIqaFt4kmRI4gUcVc-ELT4jjKZC6hKeuSir97EZRpllpy_SNvfnOfDkpGr96273eeko8G4f90W2eQ"/>
                             <Typography variant="body1">
-                                MEMORIA vβ.3, 2024
+                                MEMORIA {VERSION}, 2024
                             </Typography>
                         </div>
                         <div className="right-wrapper">
