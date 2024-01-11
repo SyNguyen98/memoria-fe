@@ -1,8 +1,7 @@
 import {appAxios} from "./index";
-import {BACKEND_URL} from "../constants/Url";
 import {Location} from "../models/Location";
 
-const API_URL = `${BACKEND_URL}/api/locations`;
+const API_URL = '/api/locations';
 
 export class LocationApi {
 

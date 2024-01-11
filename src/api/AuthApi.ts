@@ -1,7 +1,6 @@
 import {appAxios} from "./index";
-import {BACKEND_URL} from "../constants/Url";
 
-const API_URL = `${BACKEND_URL}/memoria/microsoft`;
+const API_URL = '/memoria/microsoft';
 
 export class AuthApi {
 

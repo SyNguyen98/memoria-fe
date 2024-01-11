@@ -1,8 +1,7 @@
 import {appAxios} from "./index";
-import {BACKEND_URL} from "../constants/Url";
 import {Collection} from "../models/Collection";
 
-const API_URL = `${BACKEND_URL}/api/collections`;
+const API_URL = '/api/collections';
 
 export class CollectionApi {
 
