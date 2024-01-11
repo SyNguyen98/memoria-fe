@@ -1,6 +1,5 @@
-@import "../../styles/Breakpoint";
-@import "../../styles/Color";
-@import url('https://fonts.googleapis.com/css2?family=Lemon&family=Rosario:ital,wght@1,300&family=Signika:wght@300;600&display=swap');
+@import "../../assets/styles/Breakpoint";
+@import "../../assets/styles/Color";
 
 .home-container {
   @include respond(tablet) {
