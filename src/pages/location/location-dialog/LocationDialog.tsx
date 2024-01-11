@@ -103,8 +103,8 @@ export default function LocationDialog(props: Readonly<Props>) {
 
     const getTime = () => {
         if (inputs.takenTime !== '') {
-            const hour = inputs.takenTime.split(":").at(0);
-            const minute = inputs.takenTime.split(":").at(1);
+            const hour = inputs.takenTime.split(":")[0];
+            const minute = inputs.takenTime.split(":")[1];
             return new Date(2000, 0, 1, Number(hour), Number(minute));
         }
         return null;
