@@ -1,6 +1,5 @@
-@import "../../styles/Breakpoint";
-@import "../../styles/Color";
-@import url('https://fonts.googleapis.com/css2?family=Lemon&family=Rosario:ital,wght@1,300&family=Signika:wght@300;600&display=swap');
+@import "../../assets/styles/Breakpoint";
+@import "../../assets/styles/Color";
 
 .home-container {
   @include respond(tablet) {
@@ -33,7 +32,7 @@
   .banner {
     padding: 1rem;
     height: 90vh;
-    background-image: url('https://public.DM.files.1drv.com/y4mCmvIHv4s5Sf9Cy0DqF-8bqJSU0wDKX4dL3W4-rkzm5rlpiUFOSrSnoYadKOgiaB_lAA2V61r8TsvYnXA-i08-Zsc2_ZTugduTYMGM2RHRJHddezBabGzQf9ktYrt90L_LZE-KDTQf8Sc_1z68dVFr3gyFHtbXofTFlON60mNqMNJfAwnH-H6Om9iuXl4bNb41sBRayZqA5IXTFpjDpmLUWDU3yhboDgJ8fCuaQzkprw3JG8n8mxTOIgCui99ghH1s9AJknyi5bWqkNbA4A4NmQ');
+    background-image: url('https://i.ibb.co/wwFR9V6/homepage-bg.jpg');
     background-size: cover;
 
     .logo-app-name{
@@ -112,7 +111,7 @@
   .quote-wrapper {
     width: 100vw;
     height: 16vw;
-    background-image: url('https://public.DM.files.1drv.com/y4mf-9vGN6s2vEJmxhPnPYSvRgfJWbHFMIR6oJGiqMqgovY92cSSq8LBfu9k-XfkoyIadADeSs-nqEU8aHJ7djZ1yh3SEoNxF8y1aCSQq7XIT-H7EhLBLdQrFM-4HZ2vJ2ZH7e6FsQbs4F97fR0gCZB81RQoHgegak0OVOmSD1n_e0NrHbWmhrN1Nmr14bo45Rmy3FHLEN-tlEgs1EQzDnm8yJnhrX5ho8V1Ab-qYG-QqNE2DcMwv7031n4Wto5v0whiMMCLJJ9Gh1jbdCEglS6JQ');
+    background-image: url('https://i.ibb.co/ph9KCN0/quote-bg.png');
     background-size: 100vw auto;
     background-repeat: no-repeat;
     display: flex;

@@ -1,8 +1,7 @@
 import {appAxios} from "./index";
-import {BACKEND_URL} from "../constants/Url";
 import {Item} from "../models/Item";
 
-const API_URL = `${BACKEND_URL}/api/items`;
+const API_URL = '/api/items';
 
 export class ItemApi {
 

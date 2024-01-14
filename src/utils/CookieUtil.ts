@@ -3,12 +3,12 @@ export class CookieUtil {
     static setCookie(name: string, value: string, expiredDays: number) {
         const date = new Date();
         date.setTime(date.getTime() + (expiredDays * 24 * 60 * 60 * 1000));
-        let expires = "expires=" + date.toUTCString();
+        const expires = "expires=" + date.toUTCString();
         document.cookie = name + "=" + value + ";" + expires + ";path=/";
     }
 
     static getCookie(name: string): string {
-        let _name = name + "=";
+        const _name = name + "=";
         const cookies = document.cookie.split(';');
         for (const element of cookies) {
             let c = element;

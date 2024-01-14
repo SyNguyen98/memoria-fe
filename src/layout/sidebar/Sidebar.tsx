@@ -18,6 +18,7 @@ import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Logout, Map} fro
 import {CookieUtil} from "../../utils/CookieUtil";
 import {CookieKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
+import {VERSION} from "../../constants";
 
 export default function Sidebar() {
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -101,7 +102,7 @@ export default function Sidebar() {
                         </ListItemButton>
                     </List>
                     <div className="version">
-                        Version β.3
+                        {VERSION}
                     </div>
                 </div>
             </div>

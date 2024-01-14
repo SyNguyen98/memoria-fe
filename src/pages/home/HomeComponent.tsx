@@ -3,6 +3,7 @@ import {Fragment} from "react";
 import {Button, Grid, Typography} from "@mui/material";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {OpenInNew} from "@mui/icons-material";
+import {VERSION} from "../../constants";
 
 export default function HomeComponent() {
 
@@ -19,7 +20,7 @@ export default function HomeComponent() {
             {isTableOrPhone() ? (
                 <Fragment>
                     <img className="sorry-img" alt="cry-icon"
-                         src="https://public.DM.files.1drv.com/y4m4do_ND5toF0Zgd835QEkV52d54GCPJvBuwAjoB3YnIJaUxDaDZNddfWt_VEQa58G2AByblMebxCuY2Ok8AMBscVFwcBqfcTIGJRTs2X17U7_MmjsxlrPJELAUaJq9IE2CFXMJp6oDnAW5MSbpvO4svtKW57_pTFafg0oMHjXhWLjhbO0cYvG4HBSHuk_ks2HP3nk8rRExehTv4AT_h0-GjVcedWP8KA_EYYgWRV1rCTtQKMNn8ukyyNWyHPX7uqMOumWC2xISo5SdlMkUvtBSw"/>
+                         src="https://i.ibb.co/Dtb9SXV/scaracat-sad.webp"/>
                     <Typography className="sorry-text" variant="body1">
                         Sorry we did not support phone screen yet.<br/>
                         Please try again with desktop screen.
@@ -30,7 +31,7 @@ export default function HomeComponent() {
                     <div className="banner">
                         <div className="logo-app-name">
                             <img alt="App Logo" width={50} height={50}
-                                 src="https://public.DM.files.1drv.com/y4mDt6P_Dobieg1FZpN32-QvCzPmPdJ-ePPZwE72S3BINOhHSNVtaZyG0MSKls0SliOC702kbxVK7ZOCxyT6pCplAxNS1y8Ttmut9ikKMYRS6PksbWlNnPNdIM6jpRJwSymQSHEvf8Gms-x6gd00vgv3CQ7hrJl-l3ZAkYrduhRCH8R4XRXLPqTnTTX8P-KHfeiOrdFQmmiTLIqaFt4kmRI4gUcVc-ELT4jjKZC6hKeuSir97EZRpllpy_SNvfnOfDkpGr96273eeko8G4f90W2eQ"/>
+                                 src="https://i.ibb.co/khS54Vr/app-logo.png"/>
                             <div className="app-name">
                                 ME<span>MO</span>RIA
                             </div>
@@ -43,7 +44,7 @@ export default function HomeComponent() {
                             <Button className="login-btn" variant="outlined"
                                     onClick={handleLoginWithGoogle}>
                                 <img className="google-icon" alt="Google"
-                                     src="https://public.DM.files.1drv.com/y4mZh7ygU50_4UDINKHx407F3rfXYABbPr0YKgqP2OrsNhTDkxLA5RqOGYyzcgzOVXFdOXorEoESzmaJ7-dwZB1E1Dli5KuDvzJIneH6nGOEDzdiAk2gUeISJ3iF1f8Ui-JT_jzxf5tOx6MIP_UfGGwh5PGqzGsNwqp_cbRLjqQivyw0Y5rILMtdzKBcrxE_JcKrVNmbyn9a5PNQz1O4DGCCV0t8WyQYQf1x0a5qFelBsf4GrFJzCvNmDhb733cieLO-H3-zRjMw8-DB6xJvotgVg"/>
+                                     src="https://i.ibb.co/82K2Hhy/google-logo.png"/>
                                 <Typography variant="body1">
                                     Đăng Nhập với Google
                                 </Typography>
@@ -58,7 +59,7 @@ export default function HomeComponent() {
                         <Grid container className="introduce-content">
                             <Grid item xs={5}>
                                 <img alt="introduction" width={350} height={350}
-                                     src="https://public.DM.files.1drv.com/y4mtdXgjM4x5WyYN0rp9In8QvJddGb-6UnU3EryI90Qx7Vk0kJOxO8UtHR4YD-QIB2osQ51lo0D-yGxHWeh7cQKZeVPtNbwbtuyTYqxmLFhYQD3msu5Aurrn7n3PJFy7QZnp-xYDbHb4g1J8milGij8o5GUyN6Yk48yENlXdV10jixizZ67qmN18Xv7mA-Wmvv6AjCf97QHoG9tX-ffX8h9IUb0Gn9uTB1W7C6ZnQkPxJWzpsj4KxrViVMaawF94S3kNbiDFerNP8LTuuEac-gvCQ"/>
+                                     src="https://i.ibb.co/DCpBHrF/introduction.png"/>
                             </Grid>
                             <Grid item xs={7} className="introduce-text">
                                 MEMORIA là ứng dụng giúp cho bạn lưu trữ những kỷ niệm đáng nhớ thông qua những bức ảnh
@@ -79,7 +80,7 @@ export default function HomeComponent() {
                         {/* Row 1 */}
                         <Grid item xs={6}>
                             <img alt="man-and-camera" width={350} height={350}
-                                 src="https://public.DM.files.1drv.com/y4m6j1V9dZQXydOMlf79Rxo6_-0-Bbn2v1ev7yIsA-Wof3GlxooVIBUOw77WXBQkNs3rE14N9EDw4Wh59HvWQM09o224kW3M08B9ZlRB1flnF5wT9JzCA6jEGr1hg3iJ7yvEMEO1aFgoU3MSRM6Y8chAV_pIrx0CKI6EU4pmWMaFVjt5Hd0P-xGWAATESPK01KN_Qp5gK14jMWt1rMtEqUHqsuimw7G9F8MhOtcHvdsKoxSCsISHwksNkpx9RuSLDPslxpu4sRFFZh_5-TRiiDNOA"/>
+                                 src="https://i.ibb.co/SwtJTRB/man-and-camera.png"/>
                         </Grid>
                         <Grid item xs={6} className="text-wrapper">
                             <Typography variant="h3">
@@ -104,12 +105,12 @@ export default function HomeComponent() {
                         </Grid>
                         <Grid item xs={6} className="img-wrapper">
                             <img className="float-right" alt="album" width={400} height={400}
-                                 src="https://public.DM.files.1drv.com/y4mIezNcS6bb3S9egKXC4OofYjj3wHgI2J0ThWk9_IA2o51MT5Yq3LwzlUGy7DrNdLr-XEcnyupyHdztTnz5vfGPtCdFGnBSLHPGTRmjjDmJpsaAxU8QdqzG2zIHOrNQd015nY4KpErL4FBP3rEaR7U55Sm4wrENVWPmFmIKiRo4jakIK9XenIQ3zF1ywNG4VAsnfGFtzfz4VwVpIYdtxV5eNfe3zmUvfzUM09J7dE-FdZfemnVq2tu3a2ykFgKpmebKLji27sAHWsFL2Co7ZLtVg"/>
+                                 src="https://i.ibb.co/vJrxxSF/album.png"/>
                         </Grid>
                         {/* Row 3 */}
                         <Grid item xs={6}>
                             <img alt="man-with-map" width={450} height={450}
-                                 src="https://public.DM.files.1drv.com/y4m9-C1pUSW-3FYKQGCAjxEVsp8dtNuGkjcj4NzTLugoXx0zfC3PdK9t3h9LTDoBvwdL50db9EWywek8g2x2r1AGoa5Im1M5kjXngfNJAzdVk8aUhoRSoPbEcuh_1CEbMFXzSjUkTLd258oPQ_bw0x8UbpebjRwdt43vaGIsRw-un3Ne61LG67VSVSDpqeW3UWHd6Q2oZH7f00JVv7Z3XAhpo1fUDDscTRNdb0j6qz3AjZl9AfnQVkb2VVj635YJgIfYEvBGFbNzF_Oi8EUuUzQrg"/>
+                                 src="https://i.ibb.co/2KVcj2B/man-with-map.png"/>
                         </Grid>
                         <Grid item xs={6} className="text-wrapper">
                             <Typography variant="h3">
@@ -142,9 +143,9 @@ export default function HomeComponent() {
                     <footer className="app-footer">
                         <div className="left-wrapper">
                             <img alt="App Logo" width={30} height={30}
-                                 src="https://public.DM.files.1drv.com/y4mDt6P_Dobieg1FZpN32-QvCzPmPdJ-ePPZwE72S3BINOhHSNVtaZyG0MSKls0SliOC702kbxVK7ZOCxyT6pCplAxNS1y8Ttmut9ikKMYRS6PksbWlNnPNdIM6jpRJwSymQSHEvf8Gms-x6gd00vgv3CQ7hrJl-l3ZAkYrduhRCH8R4XRXLPqTnTTX8P-KHfeiOrdFQmmiTLIqaFt4kmRI4gUcVc-ELT4jjKZC6hKeuSir97EZRpllpy_SNvfnOfDkpGr96273eeko8G4f90W2eQ"/>
+                                 src="https://i.ibb.co/khS54Vr/app-logo.png"/>
                             <Typography variant="body1">
-                                MEMORIA vβ.3, 2024
+                                MEMORIA {VERSION}, 2024
                             </Typography>
                         </div>
                         <div className="right-wrapper">
