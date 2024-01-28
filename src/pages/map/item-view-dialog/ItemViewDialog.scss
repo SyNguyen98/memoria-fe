@@ -51,10 +51,23 @@
       height: calc(100% - 200px);
       display: flex;
 
-      .item-chose, .img-chose, .video-chose {
-        margin: auto;
-        max-height: 100%;
-        max-width: 100%;
+      .item-wrapper {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .item-loading {
+          position: absolute;
+        }
+
+        .item-chose {
+          position: absolute;
+          max-height: 100%;
+          max-width: 100%;
+        }
       }
     }
 
