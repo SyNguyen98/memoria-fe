@@ -40,10 +40,23 @@
   .MuiDialogContent-root {
     display: flex;
 
-    .item {
-      max-height: 99%;
-      width: auto;
-      margin: auto;
+    .item-wrapper {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .loading {
+        position: absolute;
+      }
+
+      .item {
+        position: absolute;
+        max-height: 99%;
+        width: auto;
+      }
     }
   }
 }

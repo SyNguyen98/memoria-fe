@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from "@mui/icons-material";
 import {Item} from "../../../models/Item";
+import {HashLoader} from "react-spinners";
 
 type Props = {
     open: boolean;
@@ -11,11 +12,13 @@ type Props = {
     itemIndex: number;
 }
 
-export default function ItemViewDialog(props: Props) {
+export default function ItemViewDialog(props: Readonly<Props>) {
     const [item, setItem] = useState<Item | null>(null);
     const [index, setIndex] = useState(-1);
+    const [itemLoading, setItemLoading] = useState(true);
 
     useEffect(() => {
+        setItemLoading(true)
         setIndex(props.itemIndex);
         setItem(props.items[props.itemIndex]);
     }, [props]);
@@ -35,6 +38,7 @@ export default function ItemViewDialog(props: Props) {
     }
 
     const handlePrevious = () => {
+        setItemLoading(true);
         if (index === 0) {
             setIndex(props.items.length - 1);
             setItem(props.items[props.items.length - 1]);
@@ -45,6 +49,7 @@ export default function ItemViewDialog(props: Props) {
     }
 
     const handleNext = () => {
+        setItemLoading(true);
         if (index === props.items.length - 1) {
             setIndex(0);
             setItem(props.items[0]);
@@ -91,12 +96,22 @@ export default function ItemViewDialog(props: Props) {
                 </div>
             </Toolbar>
             <DialogContent>
-                {item ? item.mimeType.includes('image') ? (
-                    <img className="item" alt={item.name} src={item.downloadUrl}/>
-                ) : (
-                    <video className="item" controls autoPlay src={item.downloadUrl}/>
-                ) : null}
+                <div className="item-wrapper">
+                    {itemLoading && (<HashLoader className="loading" color="#2196F3" size={80}/>)}
+                    {item && (item.mimeType.includes('image') ? (
+                        <img className="item"
+                             style={{display: `${itemLoading ? 'none' : 'block'}`}}
+                             alt={item.name} src={item.downloadUrl}
+                             onLoadCapture={() => {setItemLoading(false)}}/>
+                    ) : (
+                        <video className="item" controls autoPlay
+                               style={{display: `${itemLoading ? 'none' : 'block'}`}}
+                               src={item.downloadUrl}
+                               onLoadedData={() => {setItemLoading(false)}}/>
+                    ))}
+                </div>
+
             </DialogContent>
         </Dialog>
-    )
+)
 }
