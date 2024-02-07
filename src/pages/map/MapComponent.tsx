@@ -129,7 +129,7 @@ function MapComponent() {
                                             {location.place}
                                         </Typography>
                                         <Typography variant="subtitle1">
-                                            {DateUtil.renderDate(location)}
+                                            {DateUtil.renderDateTime(location)}
                                         </Typography>
                                         <Typography variant="body1">
                                             {location.description}
