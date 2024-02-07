@@ -10,13 +10,13 @@ import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 // Component
 import AppLoader from "../../components/AppLoader";
+import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 // Models / Constants
 import {Item} from "../../models/Item";
 import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Services / Utils
 import {ItemApi} from "../../api/ItemApi";
-import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 
 export default function ItemComponent() {
     const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +81,7 @@ export default function ItemComponent() {
                     </Typography>
                 </Toolbar>
             </AppBar>
-             {/*Image/Video List */}
+             {/* Image/Video List */}
             {isLoading ? <AppLoader /> : (
                 <Grid className="item-list" container spacing={2}>
                     {items.map((item, index) =>
@@ -89,9 +89,6 @@ export default function ItemComponent() {
                             <img alt={item.name} src={item.thumbnailUrl}
                                 // onContextMenu={(event) => handleRightClickImage(event)}
                                  onClick={() => handleOpenViewDialog(index)}/>
-                            <p className="item-name">
-                                {item.name}
-                            </p>
                         </Grid>
                     )}
                 </Grid>
