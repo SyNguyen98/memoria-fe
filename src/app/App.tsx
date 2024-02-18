@@ -1,6 +1,6 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
-import {BrowserRouter, Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
+import {Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
 // Redux
 import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
@@ -51,7 +51,7 @@ export default function App() {
     }, [dispatch]);
 
     return (
-        <BrowserRouter>
+        <Fragment>
             <AppSnackbar />
             <div className="App">
                 {currentUser && <Sidebar/>}
@@ -97,7 +97,7 @@ export default function App() {
                     </Routes>
                 </div>
             </div>
-        </BrowserRouter>
+        </Fragment>
     );
 }
 
