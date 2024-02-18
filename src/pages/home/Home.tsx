@@ -1,11 +1,11 @@
-import "./HomeComponent.scss";
+import "./Home.scss";
 import {Fragment} from "react";
 import {Button, Grid, Typography} from "@mui/material";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {OpenInNew} from "@mui/icons-material";
 import {VERSION} from "../../constants";
 
-export default function HomeComponent() {
+export default function Home() {
 
     const handleLoginWithGoogle = () => {
         window.location.href = GOOGLE_AUTH_URL;
@@ -29,17 +29,9 @@ export default function HomeComponent() {
             ) : (
                 <Fragment>
                     <div className="banner">
-                        <div className="logo-app-name">
-                            <img alt="App Logo" width={50} height={50}
-                                 src="https://i.ibb.co/khS54Vr/app-logo.png"/>
-                            <div className="app-name">
-                                ME<span>MO</span>RIA
-                            </div>
-                        </div>
                         <div className="slogan-button">
                             <h1 className="slogan">
-                                Sau cùng thì,<br/>
-                                tất cả chỉ còn là kỷ niệm
+                                Sau cùng thì, tất cả chỉ còn là kỷ niệm
                             </h1>
                             <Button className="login-btn" variant="outlined"
                                     onClick={handleLoginWithGoogle}>
@@ -158,11 +150,6 @@ export default function HomeComponent() {
                                 </a>
                                 <OpenInNew/>
                             </Typography>
-                            {/*<Typography variant="body2">*/}
-                            {/*    <Link to="">*/}
-                            {/*        Về tôi*/}
-                            {/*    </Link>*/}
-                            {/*</Typography>*/}
                         </div>
                     </footer>
                 </Fragment>
