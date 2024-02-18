@@ -9,8 +9,12 @@ import {openSnackbar} from "../reducers/SnackbarReducer";
 import AppLoader from "../components/AppLoader";
 import AppSnackbar from "../components/AppSnackbar.tsx";
 import Sidebar from "../layout/sidebar/Sidebar";
-import HomeComponent from "../pages/home/HomeComponent";
-import MapComponent from "../pages/map/MapComponent";
+import Header from "../layout/header/Header.tsx";
+import Home from "../pages/home/Home.tsx";
+import AboutMemoria from "../pages/about-memoria/AboutMemoria.tsx";
+import AboutMe from "../pages/about-me/AboutMe.tsx";
+import Faq from "../pages/faq/Faq.tsx";
+import MapAndLocation from "../pages/map/MapAndLocation.tsx";
 import CollectionComponent from "../pages/collection/CollectionComponent";
 import LocationComponent from "../pages/location/LocationComponent";
 import ItemComponent from "../pages/item/ItemComponent";
@@ -51,12 +55,17 @@ export default function App() {
             <AppSnackbar />
             <div className="App">
                 {currentUser && <Sidebar/>}
+                <Header/>
+
                 <div className="main-container">
                     <Routes>
-                        <Route path="/" element={<HomeComponent/>}/>
+                        <Route path="/" element={<Home/>}/>
+                        <Route path="/memoria" element={<AboutMemoria/>}/>
+                        <Route path="/about-me" element={<AboutMe/>}/>
+                        <Route path="/faq" element={<Faq/>}/>
                         <Route path={PathName.MAP} element={
                             <Protected>
-                                <MapComponent/>
+                                <MapAndLocation/>
                             </Protected>
                         }/>
                         <Route path={PathName.COLLECTION}>
