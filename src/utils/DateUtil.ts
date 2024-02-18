@@ -2,7 +2,7 @@ import {Location} from "../models/Location";
 
 export class DateUtil {
 
-    static renderDate(location: Location): string {
+    static renderDateTime(location: Location): string {
         let result = String(location.takenYear);
         if (location.takenMonth) {
             const month = location.takenMonth < 10 ? `0${location.takenMonth}` : String(location.takenMonth);

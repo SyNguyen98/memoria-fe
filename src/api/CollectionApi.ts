@@ -10,11 +10,11 @@ export class CollectionApi {
     }
 
     static async getAllCollectionsByOwner(): Promise<Collection[]> {
-        return appAxios.get(API_URL).then(res => res.data);
+        return appAxios.get(`${API_URL}/owned`).then(res => res.data);
     }
 
     static async getAllCollectionsHavingAccess(): Promise<Collection[]> {
-        const res = await appAxios.get(`${API_URL}/all`);
+        const res = await appAxios.get(API_URL);
         return res.data;
     }
 

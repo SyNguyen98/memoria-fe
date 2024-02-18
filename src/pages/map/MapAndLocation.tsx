@@ -1,24 +1,24 @@
-import "./MapComponent.scss";
+import "./MapAndLocation.scss";
 import {Fragment, useEffect, useRef, useState} from "react";
 import {MapContainer, Marker, TileLayer, Tooltip, useMap} from 'react-leaflet';
 import {latLngBounds} from "leaflet";
 import {AppBar, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
+import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
 // Components
 import AppLoader from "../../components/AppLoader";
+import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 // Models & Services
 import {Collection} from "../../models/Collection";
 import {Location} from "../../models/Location";
 import {CollectionApi} from "../../api/CollectionApi";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {LocationApi} from "../../api/LocationApi";
-import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {DateUtil} from "../../utils/DateUtil";
 
-function MapComponent() {
+export default function MapAndLocation() {
     const [isLoading, setIsLoading] = useState(false);
     const [collections, setCollections] = useState<Collection[]>([]);
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
@@ -129,7 +129,7 @@ function MapComponent() {
                                             {location.place}
                                         </Typography>
                                         <Typography variant="subtitle1">
-                                            {DateUtil.renderDate(location)}
+                                            {DateUtil.renderDateTime(location)}
                                         </Typography>
                                         <Typography variant="body1">
                                             {location.description}
@@ -167,5 +167,3 @@ function ChangeView({center, locations}: ChangeViewProps) {
     }
     return null;
 }
-
-export default MapComponent;

@@ -161,10 +161,10 @@ function LocationComponent() {
                     <TableBody>
                         {locations.map((location, index) => (
                             <TableRow key={location.id}>
-                                <TableCell align="center">
+                                <TableCell align="center" width={50}>
                                     {index + 1}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell width={300}>
                                     <Typography variant="body1" className="location-name"
                                                 onClick={() => handleNavigateToItem(location)}>
                                         {location.place}
@@ -173,8 +173,8 @@ function LocationComponent() {
                                 <TableCell>
                                     {location.description}
                                 </TableCell>
-                                <TableCell>
-                                    {DateUtil.renderDate(location)}
+                                <TableCell width={130}>
+                                    {DateUtil.renderDateTime(location)}
                                 </TableCell>
                                 {isCollectionOwner() && (
                                     <TableCell align="center" width={80}>
