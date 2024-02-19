@@ -55,7 +55,7 @@ export default function App() {
             <AppSnackbar />
             <div className="App">
                 {currentUser && <Sidebar/>}
-                <Header/>
+                {!currentUser && <Header/>}
 
                 <div className="main-container">
                     <Routes>
@@ -92,8 +92,8 @@ export default function App() {
                                 <ProfileComponent/>
                             </Protected>
                         }/>
-                        <Route path="oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
-                        <Route path="login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
+                        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
+                        <Route path="/login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
                     </Routes>
                 </div>
             </div>

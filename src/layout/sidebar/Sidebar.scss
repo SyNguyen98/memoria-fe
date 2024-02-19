@@ -1,4 +1,4 @@
-@import "../../assets/styles/Color";
+@import "src/assets/styles/Color";
 
 #navigation-menu {
   display: flex;
@@ -15,10 +15,10 @@
       font-family: 'Lemon', serif;
       font-size: 30px;
       font-weight: 500;
-      color: #0873B7;
+      color: $blue-a400;
 
       .green {
-        color: #7BC143;
+        color: $green-a400;
       }
     }
 
