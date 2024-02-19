@@ -32,6 +32,7 @@ import {appAxios} from "../api";
 export default function App() {
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (CookieUtil.getCookie(CookieKey.ACCESS_TOKEN)) {
@@ -44,6 +45,9 @@ export default function App() {
 
             UserApi.getCurrentUser().then((res: User) => {
                 dispatch(setUser(res));
+                if (window.location.pathname === '/') {
+                    navigate(PathName.MAP);
+                }
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
             })
