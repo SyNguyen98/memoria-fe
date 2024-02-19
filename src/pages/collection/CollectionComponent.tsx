@@ -1,12 +1,14 @@
 import './CollectionComponent.scss';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useQueryClient} from "@tanstack/react-query";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
     AppBar,
-    Button, Chip,
+    Button,
+    Chip,
     Dialog,
     DialogActions,
     DialogContent,
@@ -29,47 +31,36 @@ import {Collection} from "../../models/Collection";
 import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Utils & Services
-import {CollectionApi} from "../../api/CollectionApi";
+import {useCollectionQuery, useDeleteCollectionMutation} from "../../custom-query/CollectionQueryHook.ts";
 
 function CollectionComponent() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [collections, setCollections] = useState<Collection[]>([]);
     const [choseCollection, setChoseCollection] = useState<Collection | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
-    const [isRefresh, setIsRefresh] = useState(false);
+
+    const dispatch = useAppDispatch();
+    const queryClient = useQueryClient();
+    const onSuccess = () => {
+        onDeleteDialogClose();
+        dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
+        queryClient.invalidateQueries({ queryKey: ['getAllCollectionsHavingAccess'] })
+    }
+    const onError = () => {
+        dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
+    }
+
+    const collectionQuery = useCollectionQuery();
+
+    const deleteMutation  = useDeleteCollectionMutation(onSuccess, onError);
 
     const currentUser = useAppSelector(state => state.user.value);
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (currentUser) {
-            setIsLoading(true);
-            CollectionApi.getAllCollectionsHavingAccess().then(res => {
-                if (res) {
-                    setCollections(res);
-                    setIsLoading(false);
-                }
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-                setIsLoading(false);
-            });
+        if (collectionQuery.isError) {
+            dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
         }
-    }, [currentUser, dispatch]);
-
-    useEffect(() => {
-        if (isRefresh) {
-            setIsLoading(true);
-            CollectionApi.getAllCollectionsHavingAccess().then(res => {
-                setCollections(res);
-                setIsLoading(false);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-                setIsLoading(false);
-            });
-        }
-    }, [dispatch, isRefresh]);
+    }, [collectionQuery.isError, dispatch]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -110,15 +101,7 @@ function CollectionComponent() {
     }
 
     const handleDeleteCollection = () => {
-        CollectionApi.deleteCollectionById(choseCollection!.id!).then(() => {
-            onDeleteDialogClose();
-            dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
-            setIsLoading(true);
-            setIsRefresh(true);
-        }).catch(() => {
-            dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
-            setIsLoading(false);
-        });
+        deleteMutation.mutate(choseCollection!.id!);
     }
 
     return (
@@ -141,7 +124,7 @@ function CollectionComponent() {
                 </Toolbar>
             </AppBar>
             {/* Collection List */}
-            {isLoading ? <AppLoader /> : (
+            {collectionQuery.isLoading ? <AppLoader /> : (
                 <Table className="collection-table">
                     <TableHead>
                         <TableRow>
@@ -153,7 +136,7 @@ function CollectionComponent() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {collections.map((collection, index) => (
+                        {collectionQuery.data?.map((collection, index) => (
                             <TableRow key={collection.id}>
                                 <TableCell align="center">
                                     {index + 1}
@@ -188,7 +171,7 @@ function CollectionComponent() {
                 </Table>
             )}
             {/* Edit dialog */}
-            <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection} isSaved={setIsRefresh}/>
+            <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection}/>
             {/* Delete dialog */}
             {choseCollection && (
                 <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>
