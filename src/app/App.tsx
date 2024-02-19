@@ -55,7 +55,7 @@ export default function App() {
             <AppSnackbar />
             <div className="App">
                 {currentUser && <Sidebar/>}
-                <Header/>
+                {!currentUser && <Header/>}
 
                 <div className="main-container">
                     <Routes>

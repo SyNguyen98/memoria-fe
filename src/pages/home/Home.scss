@@ -43,10 +43,10 @@
 
       .slogan {
         color: $blue-a400;
-        font-size: 72px;
+        font-size: 64px;
         text-shadow: 0 0 0 $shadow, 0 4px 6px $shadow, 0 6px 8px white, 0 4px 6px $shadow;
         @include respond(laptop) {
-          font-size: 64px;
+          font-size: 48px;
         }
       }
 

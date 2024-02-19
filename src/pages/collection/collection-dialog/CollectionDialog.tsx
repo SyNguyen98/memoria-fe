@@ -1,18 +1,18 @@
 import "./CollectionDialog.scss";
 import React, {useEffect, useState} from "react";
+import {useQueryClient} from "@tanstack/react-query";
+import {useCreateCollectionMutation, useUpdateCollectionMutation} from "../../../custom-query/CollectionQueryHook.ts";
 import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography} from "@mui/material";
 // Redux
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 // Models
 import {Collection} from "../../../models/Collection";
-import {CollectionApi} from "../../../api/CollectionApi";
 
 type Props = {
     open: boolean;
     onClose: () => void;
     collection: Collection | null;
-    isSaved: (saved: boolean) => void;
 }
 
 interface Input {
@@ -23,8 +23,18 @@ interface Input {
 
 export default function CollectionDialog(props: Readonly<Props>) {
     const [inputs, setInputs] = useState<Input>({name: '', description: '', userEmails: []});
-
     const dispatch = useAppDispatch();
+    const queryClient = useQueryClient();
+    const onSuccess = () => {
+        dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
+        handleClose();
+        queryClient.invalidateQueries({ queryKey: ['getAllCollectionsHavingAccess'] })
+    }
+    const onError = () => {
+        dispatch(openSnackbar({type: "error", message: "Không thể lưu bộ sưu tập"}));
+    }
+    const createMutation  = useCreateCollectionMutation(onSuccess, onError);
+    const updateMutation  = useUpdateCollectionMutation(onSuccess, onError);
 
     useEffect(() => {
         if (props.collection) {
@@ -53,7 +63,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
 
     const onEnterEmail = (event: any) => {
         if (event.key === 'Enter') {
-            let emails = inputs.userEmails ? [...inputs.userEmails] : [];
+            const emails = inputs.userEmails ? [...inputs.userEmails] : [];
             emails.push(event.target.value);
             event.target.value = "";
             setInputs(state => ({...state, userEmails: emails}));
@@ -61,7 +71,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
     }
 
     const handleDeleteChip = (email: string) => {
-        let emails = [...inputs.userEmails];
+        const emails = [...inputs.userEmails];
         const index = emails.indexOf(email);
         if (index > -1) {
             emails.splice(index, 1);
@@ -78,26 +88,13 @@ export default function CollectionDialog(props: Readonly<Props>) {
         if (props.collection) {
             collection.id = props.collection.id;
             collection.ownerEmail = props.collection.ownerEmail;
-            CollectionApi.updateCollection(collection).then(() => {
-                dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
-                props.isSaved(true);
-                handleClose();
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể lưu bộ sưu tập"}));
-            })
+            updateMutation.mutate(collection);
         } else {
-            CollectionApi.createCollection(collection).then(() => {
-                dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
-                props.isSaved(true);
-                handleClose();
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể lưu bộ sưu tập"}));
-            })
+            createMutation.mutate(collection);
         }
     }
 
     const handleCancel = () => {
-        props.isSaved(false);
         handleClose();
     }
 

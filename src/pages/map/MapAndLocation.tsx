@@ -5,7 +5,7 @@ import {latLngBounds} from "leaflet";
 import {AppBar, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
-import {useAppDispatch, useAppSelector} from "../../app/hook";
+import {useAppDispatch} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
 // Components
 import AppLoader from "../../components/AppLoader";
@@ -13,14 +13,12 @@ import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 // Models & Services
 import {Collection} from "../../models/Collection";
 import {Location} from "../../models/Location";
-import {CollectionApi} from "../../api/CollectionApi";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {LocationApi} from "../../api/LocationApi";
 import {DateUtil} from "../../utils/DateUtil";
+import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
 
 export default function MapAndLocation() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [collections, setCollections] = useState<Collection[]>([]);
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
     const [locations, setLocations] = useState<Location[]>([]);
     const [locationChose, setLocationChose] = useState<Location | null>(null);
@@ -28,23 +26,11 @@ export default function MapAndLocation() {
     const [lngCenter, setLngCenter] = useState(0);
     const [dialogOpened, setDialogOpened] = useState(false);
 
-    const currentUser = useAppSelector(state => state.user.value);
+    const collectionQuery = useCollectionQuery();
+
     const dispatch = useAppDispatch();
 
     const markerRefs = useRef({} as any);
-
-    useEffect(() => {
-        setIsLoading(true);
-        if (currentUser) {
-            CollectionApi.getAllCollectionsHavingAccess().then(res => {
-                setCollections(res);
-                setIsLoading(false);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
-                setIsLoading(false);
-            });
-        }
-    }, [currentUser, dispatch]);
 
     useEffect(() => {
         let lat = 0, lng = 0;
@@ -63,7 +49,7 @@ export default function MapAndLocation() {
     }
 
     const handleChangeCollection = (event: SelectChangeEvent) => {
-        const collection = collections.find(c => c.id === event.target.value);
+        const collection = collectionQuery.data?.find(c => c.id === event.target.value);
         if (collection) {
             setCollectionChose(collection);
             LocationApi.getAllLocationsByCollectionId(collection.id!).then(res => {
@@ -86,7 +72,7 @@ export default function MapAndLocation() {
 
     return (
         <section id="map-container" className="map-container">
-            {isLoading ? <AppLoader/> : (
+            {collectionQuery.isLoading ? <AppLoader/> : (
                 <Fragment>
                     {/* App Bar*/}
                     <AppBar position="static">
@@ -105,7 +91,7 @@ export default function MapAndLocation() {
                                 </InputLabel>
                                 <Select labelId="collection-select" value={collectionChose?.id}
                                         onChange={handleChangeCollection}>
-                                    {collections.length > 0 && collections.map(collection =>
+                                    {collectionQuery.data?.map(collection =>
                                         <MenuItem key={collection.id} value={collection.id}>
                                             {collection.name}
                                         </MenuItem>
