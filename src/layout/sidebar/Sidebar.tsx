@@ -19,6 +19,7 @@ import {CookieUtil} from "../../utils/CookieUtil";
 import {CookieKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 import {VERSION} from "../../constants";
+import {clearUser} from "../../reducers/UserReducer.ts";
 
 export default function Sidebar() {
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -43,7 +44,7 @@ export default function Sidebar() {
 
     const handleLogout = () => {
         CookieUtil.deleteCookie(CookieKey.ACCESS_TOKEN);
-        navigate('/');
+        dispatch(clearUser());
         window.location.reload();
     }
 
