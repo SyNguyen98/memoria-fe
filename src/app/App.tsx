@@ -52,7 +52,7 @@ export default function App() {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
             })
         }
-    }, [dispatch]);
+    }, [dispatch, navigate]);
 
     return (
         <Fragment>
@@ -64,9 +64,9 @@ export default function App() {
                 <div className="main-container">
                     <Routes>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/memoria" element={<AboutMemoria/>}/>
-                        <Route path="/about-me" element={<AboutMe/>}/>
-                        <Route path="/faq" element={<Faq/>}/>
+                        <Route path={PathName.ABOUT_MEMORIA} element={<AboutMemoria/>}/>
+                        <Route path={PathName.ABOUT_ME} element={<AboutMe/>}/>
+                        <Route path={PathName.FAQ} element={<Faq/>}/>
                         <Route path={PathName.MAP} element={
                             <Protected>
                                 <MapAndLocation/>
