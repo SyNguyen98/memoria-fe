@@ -28,11 +28,17 @@ import {CookieUtil} from "../utils/CookieUtil";
 import {UserApi} from "../api/UserApi";
 import {AuthApi} from "../api/AuthApi";
 import {appAxios} from "../api";
+import i18n from "../translation/i18n.tsx";
 
 export default function App() {
+    const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        i18n.changeLanguage(currentLanguage);
+    }, [currentLanguage]);
 
     useEffect(() => {
         if (CookieUtil.getCookie(CookieKey.ACCESS_TOKEN)) {
@@ -52,7 +58,7 @@ export default function App() {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
             })
         }
-    }, [dispatch]);
+    }, [dispatch, navigate]);
 
     return (
         <Fragment>
@@ -64,9 +70,9 @@ export default function App() {
                 <div className="main-container">
                     <Routes>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/memoria" element={<AboutMemoria/>}/>
-                        <Route path="/about-me" element={<AboutMe/>}/>
-                        <Route path="/faq" element={<Faq/>}/>
+                        <Route path={PathName.ABOUT_MEMORIA} element={<AboutMemoria/>}/>
+                        <Route path={PathName.ABOUT_ME} element={<AboutMe/>}/>
+                        <Route path={PathName.FAQ} element={<Faq/>}/>
                         <Route path={PathName.MAP} element={
                             <Protected>
                                 <MapAndLocation/>

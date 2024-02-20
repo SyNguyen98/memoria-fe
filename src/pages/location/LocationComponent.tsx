@@ -1,6 +1,8 @@
 import './LocationComponent.scss';
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import {useQueryClient} from "@tanstack/react-query";
+import {useDeleteLocationMutation, useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
@@ -29,50 +31,40 @@ import {Location} from "../../models/Location";
 import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Utils & Services
-import {LocationApi} from "../../api/LocationApi";
 import {DateUtil} from "../../utils/DateUtil";
 
 function LocationComponent() {
-    const [isLoading, setIsLoading] = useState(false);
     const [collectionName, setCollectionName] = useState('');
-    const [locations, setLocations] = useState<Location[]>([]);
     const [choseLocation, setChoseLocation] = useState<Location | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
-    const [isRefresh, setIsRefresh] = useState(false);
 
+    const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
-        if (currentUser && collectionId) {
-            setIsLoading(true);
-            setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
-            LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
-                setLocations(res);
-                setIsLoading(false);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
-                setIsLoading(false);
-            });
-        }
-    }, [currentUser, dispatch]);
+    const queryClient = useQueryClient();
+    const onSuccess = () => {
+        onDeleteDialogClose();
+        dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
+        queryClient.invalidateQueries({ queryKey: ['getAllLocationsByCollectionId', collectionId] }).catch(() => {
+            dispatch(openSnackbar({type: "error", message: "Không thể tải địa điểm"}));
+        });
+    }
+    const onError = () => {
+        dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
+    }
+
+    const locationQuery = useLocationQuery(collectionId!);
+    const deleteMutation = useDeleteLocationMutation(onSuccess, onError);
 
     useEffect(() => {
-        const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
-        if (collectionId && isRefresh) {
-            setIsLoading(true);
-            LocationApi.getAllLocationsByCollectionId(collectionId).then(res => {
-                setLocations(res);
-                setIsLoading(false);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
-                setIsLoading(false);
-            });
+        setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
+        if (locationQuery.isError) {
+            dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
         }
-    }, [dispatch, isRefresh]);
+    }, [dispatch, locationQuery.isError]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -113,16 +105,7 @@ function LocationComponent() {
     }
 
     const handleDeleteCollection = () => {
-        setIsLoading(true);
-        LocationApi.deleteLocationById(choseLocation!.id!).then(() => {
-            onDeleteDialogClose();
-            dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
-            setIsLoading(false);
-            setIsRefresh(true);
-        }).catch(() => {
-            dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
-            setIsLoading(false);
-        });
+        deleteMutation.mutate(choseLocation!.id!);
     }
 
     return (
@@ -147,7 +130,7 @@ function LocationComponent() {
                 </Toolbar>
             </AppBar>
             {/* Collection List */}
-            {isLoading ? <AppLoader /> : (
+            {locationQuery.isLoading ? <AppLoader /> : (
                 <Table className="location-table">
                     <TableHead>
                         <TableRow>
@@ -159,7 +142,7 @@ function LocationComponent() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {locations.map((location, index) => (
+                        {locationQuery.data?.map((location, index) => (
                             <TableRow key={location.id}>
                                 <TableCell align="center" width={50}>
                                     {index + 1}
@@ -192,7 +175,7 @@ function LocationComponent() {
                 </Table>
             )}
             {/* Edit dialog */}
-            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation} isRefresh={setIsRefresh}/>
+            <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation}/>
             {/* Delete dialog */}
             {choseLocation && (
                 <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>
