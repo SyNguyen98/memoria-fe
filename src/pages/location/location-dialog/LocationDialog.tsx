@@ -1,12 +1,13 @@
 import "./LocationDialog.scss";
 import React, {useEffect, useState} from "react";
+import {useQueryClient} from "@tanstack/react-query";
+import {useCreateLocationMutation, useUpdateLocationMutation} from "../../../custom-query/LocationQueryHook.ts";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField} from "@mui/material";
 import {LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 // Redux
 import {useAppDispatch} from "../../../app/hook";
 import {Location} from "../../../models/Location";
-import {LocationApi} from "../../../api/LocationApi";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {SessionKey} from "../../../constants/Storage";
 
@@ -14,7 +15,6 @@ type Props = {
     open: boolean;
     onClose: () => void;
     location: Location | null;
-    isRefresh: (refresh: boolean) => void;
 }
 
 interface Input {
@@ -44,6 +44,17 @@ export default function LocationDialog(props: Readonly<Props>) {
     const [years, setYears] = useState<number[]>([]);
 
     const dispatch = useAppDispatch();
+    const queryClient = useQueryClient();
+    const onSuccess = () => {
+        dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
+        handleClose();
+        queryClient.invalidateQueries({ queryKey: ['getAllLocationsByCollectionId'] })
+    }
+    const onError = () => {
+        dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
+    }
+    const createMutation  = useCreateLocationMutation(onSuccess, onError);
+    const updateMutation  = useUpdateLocationMutation(onSuccess, onError);
 
     const MONTHS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     const DAYS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
@@ -127,26 +138,13 @@ export default function LocationDialog(props: Readonly<Props>) {
         if (props.location) {
             location.id = props.location.id;
             location.driveItemId = props.location.driveItemId;
-            LocationApi.updateLocation(location).then(() => {
-                dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
-                props.isRefresh(true);
-                handleClose();
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
-            })
+            updateMutation.mutate(location);
         } else {
-            LocationApi.createLocation(location).then(() => {
-                dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
-                props.isRefresh(true);
-                handleClose();
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
-            })
+            createMutation.mutate(location);
         }
     }
 
     const handleCancel = () => {
-        props.isRefresh(false);
         handleClose();
     }
 

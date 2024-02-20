@@ -14,19 +14,21 @@ import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {Collection} from "../../models/Collection";
 import {Location} from "../../models/Location";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {LocationApi} from "../../api/LocationApi";
 import {DateUtil} from "../../utils/DateUtil";
 import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {useQueryClient} from "@tanstack/react-query";
+import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 
 export default function MapAndLocation() {
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
-    const [locations, setLocations] = useState<Location[]>([]);
     const [locationChose, setLocationChose] = useState<Location | null>(null);
     const [latCenter, setLatCenter] = useState(0);
     const [lngCenter, setLngCenter] = useState(0);
     const [dialogOpened, setDialogOpened] = useState(false);
 
+    const queryClient = useQueryClient();
     const collectionQuery = useCollectionQuery();
+    const locationQuery = useLocationQuery(collectionChose?.id);
 
     const dispatch = useAppDispatch();
 
@@ -34,15 +36,15 @@ export default function MapAndLocation() {
 
     useEffect(() => {
         let lat = 0, lng = 0;
-        if (locations.length > 0) {
-            locations.forEach(location => {
+        if (locationQuery.data && locationQuery.data.length > 0) {
+            locationQuery.data.forEach(location => {
                 lat += location.coordinate.latitude;
                 lng += location.coordinate.longitude;
             });
-            setLatCenter(lat / locations.length);
-            setLngCenter(lng / locations.length);
+            setLatCenter(lat / locationQuery.data.length);
+            setLngCenter(lng / locationQuery.data.length);
         }
-    }, [locations, latCenter, lngCenter]);
+    }, [latCenter, lngCenter, locationQuery.data]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -52,9 +54,7 @@ export default function MapAndLocation() {
         const collection = collectionQuery.data?.find(c => c.id === event.target.value);
         if (collection) {
             setCollectionChose(collection);
-            LocationApi.getAllLocationsByCollectionId(collection.id!).then(res => {
-                setLocations(res);
-            }).catch(() => {
+            queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collection.id]}).catch(() => {
                 dispatch(openSnackbar({type: "error", message: "Không thể tải địa điểm"}));
             });
         }
@@ -101,15 +101,18 @@ export default function MapAndLocation() {
                         </Toolbar>
                     </AppBar>
                     <MapContainer className="map" center={[latCenter, lngCenter]}>
-                        <ChangeView center={[latCenter, lngCenter]} locations={locations}/>
-                        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                        {locations.map(location => {
+                        <ChangeView center={[latCenter, lngCenter]} locations={locationQuery.data ?? []}/>
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                        {locationQuery.data?.map(location => {
                             const coordinate = location.coordinate;
                             return (
                                 <Marker key={location.id} position={[coordinate.latitude, coordinate.longitude]}
-                                        ref={(ref: any) => {markerRefs.current[location.id!] = ref}}
-                                        eventHandlers={{ click: () => handleOpenDialog(location) }}>
+                                        ref={(ref: any) => {
+                                            markerRefs.current[location.id!] = ref
+                                        }}
+                                        eventHandlers={{click: () => handleOpenDialog(location)}}>
                                     <Tooltip className="marker-tooltip">
                                         <Typography variant="h6">
                                             {location.place}
