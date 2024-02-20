@@ -28,11 +28,17 @@ import {CookieUtil} from "../utils/CookieUtil";
 import {UserApi} from "../api/UserApi";
 import {AuthApi} from "../api/AuthApi";
 import {appAxios} from "../api";
+import i18n from "../translation/i18n.tsx";
 
 export default function App() {
+    const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        i18n.changeLanguage(currentLanguage);
+    }, [currentLanguage]);
 
     useEffect(() => {
         if (CookieUtil.getCookie(CookieKey.ACCESS_TOKEN)) {

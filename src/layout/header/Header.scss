@@ -30,10 +30,10 @@
     }
 
     .header-menu {
-      margin: auto 0;
+      display: flex;
 
       a {
-        margin-left: 2rem;
+        margin: auto 0 auto 2rem;
         font-size: 16px;
         font-weight: 600;
         color: $blue-700;
@@ -41,6 +41,19 @@
 
         &:hover {
           color: $blue-500;
+        }
+      }
+
+      .language-select {
+        margin: auto 0 auto 2rem;
+        font-size: 16px;
+
+        .MuiSelect-select {
+          padding: 8px 32px 8px 4px;
+        }
+
+        .MuiOutlinedInput-notchedOutline {
+          border: unset !important;
         }
       }
     }

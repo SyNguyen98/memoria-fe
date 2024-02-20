@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../reducers/UserReducer';
 import sidebarReducer from '../reducers/SidebarReducer';
 import snackbarReducer from '../reducers/SnackbarReducer';
+import languageReducer from '../reducers/LanguageReducer';
 
 const store = configureStore({
     reducer: {
         user: userReducer,
         sidebar: sidebarReducer,
-        snackbar: snackbarReducer
+        snackbar: snackbarReducer,
+        language: languageReducer
     },
 })
 
