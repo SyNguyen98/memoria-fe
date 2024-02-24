@@ -33,13 +33,13 @@ export default function Header() {
                 </div>
                 <div className="header-menu">
                     <Link to="/">
-                        {t('homepage')}
+                        {t('header_menu.homepage')}
                     </Link>
                     <Link to={`/${PathName.ABOUT_MEMORIA}`}>
-                        {t('about_memoria')}
+                        {t('header_menu.about_memoria')}
                     </Link>
                     <Link to={`/${PathName.ABOUT_ME}`}>
-                        {t('about_me')}
+                        {t('header_menu.about_me')}
                     </Link>
                     <Link to={`/${PathName.FAQ}`}>
                         FAQ

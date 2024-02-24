@@ -4,8 +4,10 @@ import {Button, Grid, Typography} from "@mui/material";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {OpenInNew} from "@mui/icons-material";
 import {VERSION} from "../../constants";
+import {useTranslation} from "react-i18next";
 
 export default function Home() {
+    const {t} = useTranslation();
 
     const handleLoginWithGoogle = () => {
         window.location.href = GOOGLE_AUTH_URL;
@@ -31,14 +33,14 @@ export default function Home() {
                     <div className="banner">
                         <div className="slogan-button">
                             <h1 className="slogan">
-                                Sau cùng thì, tất cả chỉ còn là kỷ niệm
+                                {t('homepage.banner_quote')}
                             </h1>
                             <Button className="login-btn" variant="outlined"
                                     onClick={handleLoginWithGoogle}>
                                 <img className="google-icon" alt="Google"
                                      src="https://i.ibb.co/82K2Hhy/google-logo.png"/>
                                 <Typography variant="body1">
-                                    Đăng Nhập với Google
+                                    {t('homepage.banner_login')}
                                 </Typography>
                             </Button>
                         </div>
@@ -46,7 +48,7 @@ export default function Home() {
 
                     <div className="introduction">
                         <Typography variant="h3">
-                            MEMORIA là gì?
+                            {t('homepage.what_is_memoria')}
                         </Typography>
                         <Grid container className="introduce-content">
                             <Grid item xs={5}>
@@ -54,17 +56,14 @@ export default function Home() {
                                      src="https://i.ibb.co/DCpBHrF/introduction.png"/>
                             </Grid>
                             <Grid item xs={7} className="introduce-text">
-                                MEMORIA là ứng dụng giúp cho bạn lưu trữ những kỷ niệm đáng nhớ thông qua những bức ảnh
-                                về bạn bè, gia đình. Những nơi bạn đã đi qua, những kỷ niệm bạn đã cùng trải qua cùng
-                                với những người thân thương, MEMORIA sẽ giúp bạn ghi dấu lại tất cả. MEMORIA vẫn sẽ ở
-                                đó, nhắc lại cho bạn những năm tháng mà bạn đã lỡ quên.
+                                {t('homepage.memoria_introduction')}
                             </Grid>
                         </Grid>
                     </div>
 
                     <div className="quote-wrapper">
                         <div className="quote">
-                            “Khi một câu chuyện sắp kết thúc, chúng ta luôn nhớ tới khi nó bắt đầu.”
+                            "{t('homepage.quote_1')}"
                         </div>
                     </div>
 
@@ -76,23 +75,19 @@ export default function Home() {
                         </Grid>
                         <Grid item xs={6} className="text-wrapper">
                             <Typography variant="h3">
-                                Lưu giữ những tấm ảnh thú vị
+                                {t('homepage.features.1.title')}
                             </Typography>
                             <Typography variant="body1">
-                                Những tấm hình luôn chứa bên trong nó những câu chuyện. Mỗi bức ảnh của bạn sẽ kể lại
-                                những câu chuyện mà bạn đã trải qua. Để rồi khi nhìn lại, bạn sẽ bật cười nhớ về nó.
-                                MEMORIA ở đây là để tạo ra những nụ cười đó.
+                                {t('homepage.features.1.description')}
                             </Typography>
                         </Grid>
                         {/* Row 2 */}
                         <Grid item xs={6} className="text-wrapper">
                             <Typography variant="h3">
-                                Lưu giữ khoảnh khắc bên<br/>người thân và bạn bè
+                                {t('homepage.features.2.title')}
                             </Typography>
                             <Typography variant="body1">
-                                Những khoảnh khắc bên người thân, bạn bè luôn là những giây phút đáng quý nhất. Cùng họ
-                                tạo nên những tấm ảnh tràn ngập kỷ niệm thì thật hạnh phúc biết bao. Để mai này nếu
-                                chẳng còn sát cánh bên nhau, ta có thể ngắm lại và hồi tưởng về những khoảnh khắc đó.
+                                {t('homepage.features.2.description')}
                             </Typography>
                         </Grid>
                         <Grid item xs={6} className="img-wrapper">
@@ -106,26 +101,23 @@ export default function Home() {
                         </Grid>
                         <Grid item xs={6} className="text-wrapper">
                             <Typography variant="h3">
-                                Định vị những địa điểm<br/>mang lại kỷ niệm
+                                {t('homepage.features.3.title')}
                             </Typography>
                             <Typography variant="body1">
-                                MEMORIA không chỉ lưu trữ những tấm ảnh mà còn cho bạn biết những tấm ảnh ấy được tạo ra
-                                ở đâu. Với tính năng ghim địa điểm, bạn có thể ngắm lại những lần cùng nhau du lịch cùng
-                                bạn bè hoặc người thân. Bất cứ nơi nào bạn đặt chân qua và muốn lưu lại những kỷ niệm,
-                                MEMORIA đều sẽ giúp bạn.
+                                {t('homepage.features.3.description')}
                             </Typography>
                         </Grid>
                     </Grid>
 
                     <div className="quote-wrapper-2">
                         <div className="quote">
-                            “Chúng ta chẳng thể biết được khi nào là lần cuối cùng gặp một ai đó.”
+                            “{t('homepage.quote_2')}”
                         </div>
                     </div>
 
                     <div className="contact">
                         <Typography variant="h3">
-                            Liên Hệ
+                            {t('homepage.contact')}
                         </Typography>
                         <Typography variant="body1">
                             nguyen.nguyenhongsy@outlook.com.vn
@@ -142,11 +134,11 @@ export default function Home() {
                         </div>
                         <div className="right-wrapper">
                             <Typography variant="body1">
-                                Lưu trữ những khoảnh khắc
+                                {t('homepage.slogan')}
                             </Typography>
                             <Typography variant="body2">
                                 <a href="https://forms.gle/K9b1Rr3TXEYYfx8p6" rel="noreferrer" target="_blank">
-                                    Phản hồi lỗi
+                                    {t('homepage.feedback')}
                                 </a>
                                 <OpenInNew/>
                             </Typography>

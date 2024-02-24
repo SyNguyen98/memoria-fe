@@ -1,24 +1,16 @@
 import i18n from "i18next";
 import {initReactI18next} from "react-i18next";
+import EN_TRANSLATION from "./en.json";
+import VI_TRANSLATION from "./vi.json";
 
-i18n.use(initReactI18next) // passes i18n down to react-i18next
+i18n.use(initReactI18next)
     .init({
         resources: {
             en: {
-                translation: {
-                    language: "Language",
-                    homepage: "Homepage",
-                    about_memoria: "About MEMORIA",
-                    about_me: "About Me",
-                }
+                translation: EN_TRANSLATION
             },
             vn: {
-                translation: {
-                    language: "Ngôn ngữ",
-                    homepage: "Trang Chủ",
-                    about_memoria: "Về MEMORIA",
-                    about_me: "Về Tôi",
-                }
+                translation: VI_TRANSLATION
             }
         },
         lng: "en",

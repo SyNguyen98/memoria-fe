@@ -1,0 +1,33 @@
+{
+  "header_menu": {
+    "language": "Language",
+    "homepage": "Homepage",
+    "about_memoria": "About MEMORIA",
+    "about_me": "About Me"
+  },
+  "homepage": {
+    "banner_quote": "In the end, there is only memories",
+    "banner_login": "Login with Google",
+    "what_is_memoria": "What is MEMORIA?",
+    "memoria_introduction": "MEMORIA is an application that helps you preserve memorable moments through photos of friends and family. From the places you've been to the memories shared with loved ones, MEMORIA will help you capture it all. MEMORIA will be there, reminding you of the years you might have forgotten.",
+    "quote_1": "When a story is about to end, we'll always think of its beginning.",
+    "features": {
+      "1": {
+        "title": "Capture interesting photos",
+        "description": "Every picture always contains within it a story. Each of your photos will narrate the stories you've experienced. So that when you look back, you'll smile and reminisce about them. MEMORIA is here to create those smiles."
+      },
+      "2": {
+        "title": "Capture moments with\nloved ones and friends",
+        "description": "The moments spent with family and friends are always the most precious. Creating memories with them through photos brings immense happiness. So that in the future, even if we're not side by side, we can look back and reminisce about those cherished moments."
+      },
+      "3": {
+        "title": "Locate places that\nbring back memories.",
+        "description": "MEMORIA not only stores photos but also lets you know where those photos were taken. With the location pinning feature, you can revisit the times you traveled together with friends or loved ones. Wherever you go and want to preserve memories, MEMORIA will assist you."
+      }
+    },
+    "quote_2": "We can never know when it will be the last time we meet someone.",
+    "contact": "Contact",
+    "slogan": "Store the memorable moments",
+    "feedback": "Error feedback"
+  }
+}
