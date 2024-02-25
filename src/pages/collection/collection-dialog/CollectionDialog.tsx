@@ -1,5 +1,6 @@
 import "./CollectionDialog.scss";
 import React, {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
 import {useCreateCollectionMutation, useUpdateCollectionMutation} from "../../../custom-query/CollectionQueryHook.ts";
 import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography} from "@mui/material";
@@ -23,15 +24,17 @@ interface Input {
 
 export default function CollectionDialog(props: Readonly<Props>) {
     const [inputs, setInputs] = useState<Input>({name: '', description: '', userEmails: []});
+
+    const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const queryClient = useQueryClient();
     const onSuccess = () => {
-        dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
+        dispatch(openSnackbar({type: "success", message: t("collection.save_success")}));
         handleClose();
         queryClient.invalidateQueries({ queryKey: ['getAllCollectionsHavingAccess'] })
     }
     const onError = () => {
-        dispatch(openSnackbar({type: "error", message: "Không thể lưu bộ sưu tập"}));
+        dispatch(openSnackbar({type: "error", message: t("collection.save_error")}));
     }
     const createMutation  = useCreateCollectionMutation(onSuccess, onError);
     const updateMutation  = useUpdateCollectionMutation(onSuccess, onError);
@@ -43,6 +46,8 @@ export default function CollectionDialog(props: Readonly<Props>) {
                 description: props.collection.description,
                 userEmails: props.collection.userEmails
             });
+        } else {
+            setInputs({name: '', description: '', userEmails: []})
         }
     }, [props]);
 
@@ -102,25 +107,25 @@ export default function CollectionDialog(props: Readonly<Props>) {
         <Dialog className="collection-dialog" maxWidth='md'
                 open={props.open} onClose={onClose}>
             <DialogTitle>
-                {props.collection ? "Chỉnh Sửa " : "Thêm "} Bộ Sưu Tập
+                {props.collection ? t("collection.edit") : t("collection.add")}
             </DialogTitle>
             <DialogContent>
                 {/* Name */}
                 <TextField autoComplete="off" required fullWidth
-                           name="name" label="Tên"
+                           name="name" label={t("collection.name")}
                            value={inputs.name}
                            onChange={onInputChange}/>
                 {/* Description */}
                 <TextField autoComplete="off" fullWidth multiline maxRows={3}
-                           name="description" label="Mô tả"
+                           name="description" label={t("collection.description")}
                            value={inputs.description}
                            onChange={onInputChange}/>
                 <TextField autoComplete="off" fullWidth
-                           name="email" label="Email"
-                           placeholder="Nhập Email rồi nhấn Enter↵"
+                           name="email" label={t("collection.shared_email")}
+                           placeholder={t("collection.email_placeholder")}
                            onKeyDown={event => onEnterEmail(event)}/>
                 <Typography variant="body1">
-                    Email của người được quyền truy cập
+                    {t("collection.email_description")}
                 </Typography>
                 <div className="email-list">
                     {inputs.userEmails.map(email =>
@@ -130,10 +135,10 @@ export default function CollectionDialog(props: Readonly<Props>) {
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" color="primary" onClick={handleSave}>
-                    Lưu
+                    {t("button.save")}
                 </Button>
                 <Button variant="contained" color="inherit" onClick={handleCancel}>
-                    Hủy
+                    {t("button.cancel")}
                 </Button>
             </DialogActions>
         </Dialog>

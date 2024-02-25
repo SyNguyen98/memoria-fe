@@ -18,6 +18,7 @@ import {DateUtil} from "../../utils/DateUtil";
 import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
+import {useTranslation} from "react-i18next";
 
 export default function MapAndLocation() {
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
@@ -31,8 +32,9 @@ export default function MapAndLocation() {
     const locationQuery = useLocationQuery(collectionChose?.id);
 
     const dispatch = useAppDispatch();
+    const {t} = useTranslation();
 
-    const markerRefs = useRef({} as any);
+    const markerRefs = useRef({} as never);
 
     useEffect(() => {
         let lat = 0, lng = 0;
@@ -83,7 +85,7 @@ export default function MapAndLocation() {
                                 <Menu/>
                             </IconButton>
                             <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                                Bản Đồ
+                                {t("page.map")}
                             </Typography>
                             <FormControl className="collection-select" size="small" variant="filled">
                                 <InputLabel id="collection-select">
@@ -109,7 +111,7 @@ export default function MapAndLocation() {
                             const coordinate = location.coordinate;
                             return (
                                 <Marker key={location.id} position={[coordinate.latitude, coordinate.longitude]}
-                                        ref={(ref: any) => {
+                                        ref={(ref: never) => {
                                             markerRefs.current[location.id!] = ref
                                         }}
                                         eventHandlers={{click: () => handleOpenDialog(location)}}>
@@ -137,7 +139,7 @@ export default function MapAndLocation() {
 }
 
 type ChangeViewProps = {
-    center: any;
+    center: [latCenter: number, lngCenter: number];
     locations: Location[];
 }
 

@@ -1,0 +1,22 @@
+@import "src/assets/styles/Color";
+
+#delete-collection-dialog {
+  text-align: center;
+
+  .MuiDialog-paper {
+    background-color: $white !important;
+  }
+
+  .MuiDialogTitle-root {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .MuiDialogActions-root {
+    justify-content: center;
+
+    .MuiButton-root {
+      width: 100px;
+    }
+  }
+}

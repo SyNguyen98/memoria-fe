@@ -1,6 +1,7 @@
 import "./Sidebar.scss";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {closeSidebar} from "../../reducers/SidebarReducer";
 import {
@@ -12,31 +13,51 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemIcon,
-    ListItemText
+    ListItemText,
+    Menu,
+    MenuItem,
+    Tooltip
 } from "@mui/material";
-import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Logout, Map} from "@mui/icons-material";
+import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Language, Logout, Map} from "@mui/icons-material";
 import {CookieUtil} from "../../utils/CookieUtil";
 import {CookieKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 import {VERSION} from "../../constants";
 import {clearUser} from "../../reducers/UserReducer.ts";
+import {setLanguage} from "../../reducers/LanguageReducer.ts";
 
 export default function Sidebar() {
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+    const openMenu = Boolean(menuAnchorEl);
 
     const currentUser = useAppSelector(state => state.user.value);
     const sidebarOpened = useAppSelector(state => state.sidebar.opened);
+    const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {pathname} = useLocation();
+    const {t} = useTranslation();
 
     const handleClose = () => {
         dispatch(closeSidebar())
     }
 
-    const handleListItemClick = (index: number, url: string) => {
-        setSelectedIndex(index);
+    const handleListItemClick = (url: string) => {
         navigate(url);
     };
+
+    const handleOpenLanguageMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setMenuAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseLanguageMenu = () => {
+        setMenuAnchorEl(null);
+    };
+
+    const handleChangeLanguage = (value: 'vn' | 'en') => {
+        dispatch(setLanguage(value));
+        setMenuAnchorEl(null);
+    }
 
     const handleOpenFeedback = () => {
         window.open("https://forms.gle/K9b1Rr3TXEYYfx8p6", "_blank");
@@ -61,45 +82,53 @@ export default function Sidebar() {
                 </div>
                 <Divider/>
                 <div className="menu-body">
-                    <List component="nav" aria-label="menu map collections">
-                        <ListItemButton selected={selectedIndex === 0}
-                                        onClick={() => handleListItemClick(0, PathName.MAP)}>
+                    <List>
+                        <ListItemButton selected={pathname === `/${PathName.MAP}`}
+                                        onClick={() => handleListItemClick(PathName.MAP)}>
                             <ListItemIcon>
                                 <Map/>
                             </ListItemIcon>
-                            <ListItemText primary="Bản Đồ"/>
+                            <ListItemText primary={t("page.map")}/>
                         </ListItemButton>
-                        <ListItemButton selected={selectedIndex === 1}
-                                        onClick={() => handleListItemClick(1, PathName.COLLECTION)}>
+                        <ListItemButton selected={pathname === `/${PathName.COLLECTION}`}
+                                        onClick={() => handleListItemClick(PathName.COLLECTION)}>
                             <ListItemIcon>
                                 <Collections/>
                             </ListItemIcon>
-                            <ListItemText primary="Bộ Sưu Tập"/>
+                            <ListItemText primary={t("page.collection")}/>
                         </ListItemButton>
                     </List>
                 </div>
                 <div className="menu-footer">
                     <Divider/>
-                    <List component="nav" aria-label="menu map collections">
+                    <List>
                         {currentUser && (
-                            <ListItemButton onClick={() => handleListItemClick(2, PathName.PROFILE)}>
+                            <ListItemButton onClick={() => handleListItemClick(PathName.PROFILE)}>
                                 <ListItemAvatar>
                                     <Avatar alt={currentUser.name} src={currentUser.avatarUrl}/>
                                 </ListItemAvatar>
                                 <ListItemText primary={currentUser.name}/>
                             </ListItemButton>
                         )}
+                        <ListItemButton onClick={handleOpenLanguageMenu}>
+                            <ListItemIcon>
+                                <Language/>
+                            </ListItemIcon>
+                            <Tooltip title={t("language")}>
+                                <ListItemText primary={currentLanguage === 'vn' ? "Tiếng Việt" : "English"}/>
+                            </Tooltip>
+                        </ListItemButton>
                         <ListItemButton onClick={handleOpenFeedback}>
                             <ListItemIcon>
                                 <FeedbackOutlined/>
                             </ListItemIcon>
-                            <ListItemText primary="Phản hồi lỗi ↗"/>
+                            <ListItemText primary={t("feedback")}/>
                         </ListItemButton>
                         <ListItemButton onClick={handleLogout}>
                             <ListItemIcon>
                                 <Logout/>
                             </ListItemIcon>
-                            <ListItemText primary="Đăng xuất"/>
+                            <ListItemText primary={t("logout")}/>
                         </ListItemButton>
                     </List>
                     <div className="version">
@@ -107,6 +136,25 @@ export default function Sidebar() {
                     </div>
                 </div>
             </div>
+            <Menu id="language-menu"
+                  anchorEl={menuAnchorEl}
+                  open={openMenu}
+                  onClose={handleCloseLanguageMenu}
+                  anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                  }}>
+                <MenuItem onClick={() => handleChangeLanguage('vn')}>
+                    Tiếng Việt
+                </MenuItem>
+                <MenuItem onClick={() => handleChangeLanguage('en')}>
+                    English
+                </MenuItem>
+            </Menu>
         </Drawer>
     )
 }

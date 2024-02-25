@@ -1,7 +1,7 @@
 import './CollectionComponent.scss';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useQueryClient} from "@tanstack/react-query";
+import {useTranslation} from "react-i18next";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
@@ -9,10 +9,6 @@ import {
     AppBar,
     Button,
     Chip,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
     IconButton,
     Table,
     TableBody,
@@ -26,12 +22,14 @@ import {Add, Delete, Edit, Menu} from "@mui/icons-material";
 // Components
 import AppLoader from "../../components/AppLoader";
 import CollectionDialog from "./collection-dialog/CollectionDialog";
+import DeleteCollectionDialog from "./delete-collection-dialog/DeleteCollectionDialog.tsx";
 // Models & Constants
 import {Collection} from "../../models/Collection";
 import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Utils & Services
-import {useCollectionQuery, useDeleteCollectionMutation} from "../../custom-query/CollectionQueryHook.ts";
+import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {DateUtil} from "../../utils/DateUtil.ts";
 
 function CollectionComponent() {
     const [choseCollection, setChoseCollection] = useState<Collection | null>(null);
@@ -39,28 +37,18 @@ function CollectionComponent() {
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
 
     const dispatch = useAppDispatch();
-    const queryClient = useQueryClient();
-    const onSuccess = () => {
-        onDeleteDialogClose();
-        dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
-        queryClient.invalidateQueries({ queryKey: ['getAllCollectionsHavingAccess'] })
-    }
-    const onError = () => {
-        dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
-    }
+    const {t} = useTranslation();
 
     const collectionQuery = useCollectionQuery();
-
-    const deleteMutation  = useDeleteCollectionMutation(onSuccess, onError);
 
     const currentUser = useAppSelector(state => state.user.value);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (collectionQuery.isError) {
-            dispatch(openSnackbar({type: "error", message: "Không thể tải bộ sưu tập"}));
+            dispatch(openSnackbar({type: "error", message: t("collection.cannot_load")}));
         }
-    }, [collectionQuery.isError, dispatch]);
+    }, [collectionQuery.isError, dispatch, t]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -100,10 +88,6 @@ function CollectionComponent() {
         setChoseCollection(null);
     }
 
-    const handleDeleteCollection = () => {
-        deleteMutation.mutate(choseCollection!.id!);
-    }
-
     return (
         <section className="collection-container">
             {/* App Bar */}
@@ -115,11 +99,11 @@ function CollectionComponent() {
                         <Menu/>
                     </IconButton>
                     <Typography variant="h6" sx={{flexGrow: 1}}>
-                        Bộ Sưu Tập
+                        {t("page.collection")}
                     </Typography>
                     <Button className="add-btn" variant="outlined" startIcon={<Add/>}
                             onClick={() => handleOpenEditDialog()}>
-                        Thêm
+                        {t("button.add")}
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -129,9 +113,18 @@ function CollectionComponent() {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">#</TableCell>
-                            <TableCell>Tên</TableCell>
-                            <TableCell>Mô Tả</TableCell>
-                            <TableCell>Email Chia Sẻ</TableCell>
+                            <TableCell>
+                                {t("collection.name")}
+                            </TableCell>
+                            <TableCell>
+                                {t("collection.description")}
+                            </TableCell>
+                            <TableCell>
+                                {t("collection.modified_date")}
+                            </TableCell>
+                            <TableCell>
+                                {t("collection.shared_email")}
+                            </TableCell>
                             <TableCell/>
                         </TableRow>
                     </TableHead>
@@ -141,7 +134,7 @@ function CollectionComponent() {
                                 <TableCell align="center">
                                     {index + 1}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell width={200}>
                                     <Typography variant="body1" className="collection-name"
                                                 onClick={() => handleNavigateToLocation(collection)}>
                                         {collection.name}
@@ -149,6 +142,9 @@ function CollectionComponent() {
                                 </TableCell>
                                 <TableCell>
                                     {collection.description}
+                                </TableCell>
+                                <TableCell width={100}>
+                                    {collection.lastModifiedDate ? DateUtil.renderDate(collection.lastModifiedDate) : ''}
                                 </TableCell>
                                 <TableCell>
                                     {collection.userEmails.map(email =>
@@ -173,22 +169,7 @@ function CollectionComponent() {
             {/* Edit dialog */}
             <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection}/>
             {/* Delete dialog */}
-            {choseCollection && (
-                <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>
-                    <DialogTitle>Xóa bộ sưu tập</DialogTitle>
-                    <DialogContent>
-                        Bạn có chắc là muốn xóa bộ sưu tập <b><i>{choseCollection.name}</i></b>?
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="contained" color="error" onClick={handleDeleteCollection}>
-                            Xóa
-                        </Button>
-                        <Button variant="contained" color="inherit" onClick={onDeleteDialogClose}>
-                            Hủy
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            )}
+            {choseCollection && <DeleteCollectionDialog open={dltDialogOpened} onClose={onDeleteDialogClose} collection={choseCollection}/>}
         </section>
     )
 }

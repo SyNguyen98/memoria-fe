@@ -4,4 +4,5 @@ export interface Collection {
     description: string;
     ownerEmail?: string;
     userEmails: string[];
+    lastModifiedDate?: Date;
 }

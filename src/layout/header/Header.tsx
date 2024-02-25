@@ -2,6 +2,7 @@ import "./Header.scss";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {InputAdornment, MenuItem, Select} from "@mui/material";
+import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {Language} from "@mui/icons-material";
 import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
 import {setLanguage} from "../../reducers/LanguageReducer.ts";
@@ -13,12 +14,8 @@ export default function Header() {
     const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const dispatch = useAppDispatch();
 
-    const handleChangeLanguage = () => {
-        if (currentLanguage === 'en') {
-            dispatch(setLanguage('vn'));
-        } else {
-            dispatch(setLanguage('en'));
-        }
+    const handleChangeLanguage = (event: SelectChangeEvent) => {
+        dispatch(setLanguage(event.target.value));
     }
 
     return (
@@ -33,13 +30,13 @@ export default function Header() {
                 </div>
                 <div className="header-menu">
                     <Link to="/">
-                        {t('homepage')}
+                        {t('header_menu.homepage')}
                     </Link>
                     <Link to={`/${PathName.ABOUT_MEMORIA}`}>
-                        {t('about_memoria')}
+                        {t('header_menu.about_memoria')}
                     </Link>
                     <Link to={`/${PathName.ABOUT_ME}`}>
-                        {t('about_me')}
+                        {t('header_menu.about_me')}
                     </Link>
                     <Link to={`/${PathName.FAQ}`}>
                         FAQ

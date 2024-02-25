@@ -1,0 +1,61 @@
+{
+  "language": "Ngôn ngữ",
+  "feedback": "Phản hồi lỗi ↗",
+  "logout": "Đăng xuất",
+  "header_menu": {
+    "homepage": "Trang Chủ",
+    "about_memoria": "Về MEMORIA",
+    "about_me": "Về Tôi"
+  },
+  "page": {
+    "map": "Bản Đồ",
+    "collection": "Bộ Sưu Tập"
+  },
+  "button": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "add": "Thêm",
+    "delete": "Xóa"
+  },
+  "homepage": {
+    "banner_quote": "Sau cùng thì, tất cả chỉ còn là kỷ niệm",
+    "banner_login": "Đăng Nhập với Google",
+    "what_is_memoria": "MEMORIA là gì?",
+    "memoria_introduction": "MEMORIA là ứng dụng giúp cho bạn lưu trữ những kỷ niệm đáng nhớ thông qua những bức ảnh về bạn bè, gia đình. Những nơi bạn đã đi qua, những kỷ niệm bạn đã cùng trải qua cùng với những người thân thương, MEMORIA sẽ giúp bạn ghi dấu lại tất cả. MEMORIA vẫn sẽ ở đó, nhắc lại cho bạn những năm tháng mà bạn đã lỡ quên.",
+    "quote_1": "Khi một câu chuyện sắp kết thúc, chúng ta luôn nhớ tới khi nó bắt đầu.",
+    "features": {
+      "1": {
+        "title": "Lưu giữ những tấm ảnh thú vị",
+        "description": "Những tấm hình luôn chứa bên trong nó những câu chuyện. Mỗi bức ảnh của bạn sẽ kể lại những câu chuyện mà bạn đã trải qua. Để rồi khi nhìn lại, bạn sẽ bật cười nhớ về nó. MEMORIA ở đây là để tạo ra những nụ cười đó."
+      },
+      "2": {
+        "title": "Lưu giữ khoảnh khắc bên\nngười thân và bạn bè",
+        "description": "Những khoảnh khắc bên người thân, bạn bè luôn là những giây phút đáng quý nhất. Cùng họ tạo nên những tấm ảnh tràn ngập kỷ niệm thì thật hạnh phúc biết bao. Để mai này nếu chẳng còn sát cánh bên nhau, ta có thể ngắm lại và hồi tưởng về những khoảnh khắc đó."
+      },
+      "3": {
+        "title": "Định vị những địa điểm\nmang lại kỷ niệm",
+        "description": "MEMORIA không chỉ lưu trữ những tấm ảnh mà còn cho bạn biết những tấm ảnh ấy được tạo ra ở đâu. Với tính năng ghim địa điểm, bạn có thể ngắm lại những lần cùng nhau du lịch cùng bạn bè hoặc người thân. Bất cứ nơi nào bạn đặt chân qua và muốn lưu lại những kỷ niệm, MEMORIA đều sẽ giúp bạn."
+      }
+    },
+    "quote_2": "Chúng ta chẳng thể biết được khi nào là lần cuối cùng gặp một ai đó.",
+    "contact": "Liên Hệ",
+    "slogan": "Lưu trữ những khoảnh khắc"
+  },
+  "collection": {
+    "name": "Tên",
+    "description": "Mô Tả",
+    "modified_date": "Ngày Cập Nhật",
+    "shared_email": "Email Chia Sẻ",
+    "email_placeholder": "Nhập Email rồi nhấn Enter↵",
+    "email_description": "Email của người được quyền truy cập",
+    "cannot_load": "Không thể tải bộ sưu tập",
+    "save_success": "Lưu thành công",
+    "save_error": "Không thể lưu bộ sưu tập",
+    "delete_success": "Xóa thành công",
+    "delete_error": "Không thể xóa bộ sưu tập",
+    "add": "Thêm Bộ Sưu Tập",
+    "edit": "Chỉnh Sửa Bộ Sưu Tập",
+    "delete": "Xóa Bộ Sưu Tập",
+    "confirm_delete": "Bạn có chắc là muốn xóa bộ sưu tập "
+  }
+}
