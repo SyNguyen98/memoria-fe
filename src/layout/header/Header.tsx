@@ -2,6 +2,7 @@ import "./Header.scss";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {InputAdornment, MenuItem, Select} from "@mui/material";
+import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {Language} from "@mui/icons-material";
 import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
 import {setLanguage} from "../../reducers/LanguageReducer.ts";
@@ -13,12 +14,8 @@ export default function Header() {
     const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const dispatch = useAppDispatch();
 
-    const handleChangeLanguage = () => {
-        if (currentLanguage === 'en') {
-            dispatch(setLanguage('vn'));
-        } else {
-            dispatch(setLanguage('en'));
-        }
+    const handleChangeLanguage = (event: SelectChangeEvent) => {
+        dispatch(setLanguage(event.target.value));
     }
 
     return (

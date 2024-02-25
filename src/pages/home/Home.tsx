@@ -138,7 +138,7 @@ export default function Home() {
                             </Typography>
                             <Typography variant="body2">
                                 <a href="https://forms.gle/K9b1Rr3TXEYYfx8p6" rel="noreferrer" target="_blank">
-                                    {t('homepage.feedback')}
+                                    {t('feedback')}
                                 </a>
                                 <OpenInNew/>
                             </Typography>

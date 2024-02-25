@@ -17,4 +17,11 @@ export class DateUtil {
         }
         return result;
     }
+
+    static renderDate(date: Date): string {
+        const result = new Date(date);
+        const utcDate = result.getUTCDate() < 10 ? `0${result.getUTCDate()}` : String(result.getUTCDate());
+        const utcMonth = result.getUTCMonth() < 9 ? `0${result.getUTCMonth() + 1}` : String(result.getUTCMonth() + 1);
+        return `${utcDate}/${utcMonth}/${result.getUTCFullYear()}`;
+    }
 }

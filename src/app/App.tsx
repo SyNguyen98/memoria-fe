@@ -64,8 +64,7 @@ export default function App() {
         <Fragment>
             <AppSnackbar />
             <div className="App">
-                {currentUser && <Sidebar/>}
-                {!currentUser && <Header/>}
+                {currentUser ? <Sidebar/> : <Header/>}
 
                 <div className="main-container">
                     <Routes>

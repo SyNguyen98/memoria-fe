@@ -1,9 +1,21 @@
 {
+  "language": "Ngôn ngữ",
+  "feedback": "Phản hồi lỗi ↗",
+  "logout": "Đăng xuất",
   "header_menu": {
-    "language": "Ngôn ngữ",
     "homepage": "Trang Chủ",
     "about_memoria": "Về MEMORIA",
     "about_me": "Về Tôi"
+  },
+  "page": {
+    "map": "Bản Đồ",
+    "collection": "Bộ Sưu Tập"
+  },
+  "button": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "add": "Thêm",
+    "delete": "Xóa"
   },
   "homepage": {
     "banner_quote": "Sau cùng thì, tất cả chỉ còn là kỷ niệm",
@@ -27,7 +39,23 @@
     },
     "quote_2": "Chúng ta chẳng thể biết được khi nào là lần cuối cùng gặp một ai đó.",
     "contact": "Liên Hệ",
-    "slogan": "Lưu trữ những khoảnh khắc",
-    "feedback": "Phản hồi lỗi"
+    "slogan": "Lưu trữ những khoảnh khắc"
+  },
+  "collection": {
+    "name": "Tên",
+    "description": "Mô Tả",
+    "modified_date": "Ngày Cập Nhật",
+    "shared_email": "Email Chia Sẻ",
+    "email_placeholder": "Nhập Email rồi nhấn Enter↵",
+    "email_description": "Email của người được quyền truy cập",
+    "cannot_load": "Không thể tải bộ sưu tập",
+    "save_success": "Lưu thành công",
+    "save_error": "Không thể lưu bộ sưu tập",
+    "delete_success": "Xóa thành công",
+    "delete_error": "Không thể xóa bộ sưu tập",
+    "add": "Thêm Bộ Sưu Tập",
+    "edit": "Chỉnh Sửa Bộ Sưu Tập",
+    "delete": "Xóa Bộ Sưu Tập",
+    "confirm_delete": "Bạn có chắc là muốn xóa bộ sưu tập "
   }
 }

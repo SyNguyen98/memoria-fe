@@ -1,9 +1,21 @@
 {
+  "language": "Language",
+  "feedback": "Error feedback ↗",
+  "logout": "Logout",
   "header_menu": {
-    "language": "Language",
     "homepage": "Homepage",
     "about_memoria": "About MEMORIA",
     "about_me": "About Me"
+  },
+  "page": {
+    "map": "Map",
+    "collection": "Collection"
+  },
+  "button": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "delete": "Delete"
   },
   "homepage": {
     "banner_quote": "In the end, there is only memories",
@@ -27,7 +39,23 @@
     },
     "quote_2": "We can never know when it will be the last time we meet someone.",
     "contact": "Contact",
-    "slogan": "Store the memorable moments",
-    "feedback": "Error feedback"
+    "slogan": "Store the memorable moments"
+  },
+  "collection": {
+    "name": "Name",
+    "description": "Description",
+    "modified_date": "Modified Date",
+    "shared_email": "Shared Emails",
+    "email_placeholder": "Input Email then press Enter↵",
+    "email_description": "Email of people have permission to access",
+    "cannot_load": "Cannot load collections",
+    "save_success": "Save successfully",
+    "save_error": "Cannot save the collection",
+    "delete_success": "Delete successfully",
+    "delete_error": "Cannot delete the collection",
+    "add": "Add Collection",
+    "edit": "Edit Collection",
+    "delete": "Delete Collection",
+    "confirm_delete": "Are you sure want to delete this collection "
   }
 }
