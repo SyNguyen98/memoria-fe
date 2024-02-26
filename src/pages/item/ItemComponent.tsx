@@ -1,13 +1,15 @@
 import "./ItemComponent.scss";
 import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {AppBar, Grid, IconButton, Toolbar, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {KeyboardArrowRight} from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu';
 // Hook
-import {useAppDispatch, useAppSelector} from "../../app/hook";
+import {useAppDispatch} from "../../app/hook";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
+import {useItemQuery} from "../../custom-query/ItemQueryHook.ts";
 // Component
 import AppLoader from "../../components/AppLoader";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
@@ -15,35 +17,36 @@ import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {Item} from "../../models/Item";
 import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
-// Services / Utils
-import {ItemApi} from "../../api/ItemApi";
 
 export default function ItemComponent() {
-    const [isLoading, setIsLoading] = useState(false);
     const [collectionName, setCollectionName] = useState('');
     const [locationPlace, setLocationPlace] = useState('');
     const [items, setItems] = useState<Item[]>([])
     const [choseIndex, setChoseIndex] = useState(-1);
     const [viewDialogOpened, setViewDialogOpened] = useState(false);
 
-    const currentUser = useAppSelector(state => state.user.value);
+    const {t} = useTranslation();
     const dispatch = useAppDispatch();
+
+    const driveItemId = sessionStorage.getItem(SessionKey.DRIVE_ITEM_ID);
+    const itemQuery = useItemQuery(driveItemId!, "medium")
 
     useEffect(() => {
         setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
         setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) ?? '');
-        const driveItemId = sessionStorage.getItem(SessionKey.DRIVE_ITEM_ID);
-        if (currentUser && driveItemId) {
-            setIsLoading(true);
-            ItemApi.getAllItemsByDriveItemId(driveItemId, "medium").then(res => {
-                setItems([...res].sort((a,b) => new Date(a.takenDateTime).getTime() - new Date(b.takenDateTime).getTime()));
-                setIsLoading(false);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải các hình ảnh"}));
-                setIsLoading(false);
-            });
+    }, []);
+
+    useEffect(() => {
+        if (itemQuery.isError) {
+            dispatch(openSnackbar({type: "error", message: t("item.cannot_load")}));
         }
-    }, [currentUser, dispatch]);
+    }, [dispatch, itemQuery.isError, t]);
+
+    useEffect(() => {
+        if (itemQuery.data) {
+            setItems([...itemQuery.data].sort((a,b) => new Date(a.takenDateTime).getTime() - new Date(b.takenDateTime).getTime()));
+        }
+    }, [itemQuery.data]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -70,7 +73,7 @@ export default function ItemComponent() {
                     </IconButton>
                     <Typography className="page-title" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link className="location-title" to={`/${PathName.COLLECTION}`}>
-                            Bộ Sưu Tập
+                            {t("page.collection")}
                         </Link>
                         <KeyboardArrowRight />
                         <Link className="location-title" to={`/${PathName.COLLECTION}/${PathName.LOCATION}`}>
@@ -82,7 +85,7 @@ export default function ItemComponent() {
                 </Toolbar>
             </AppBar>
              {/* Image/Video List */}
-            {isLoading ? <AppLoader /> : (
+            {itemQuery.isLoading ? <AppLoader /> : (
                 <Grid className="item-list" container spacing={2}>
                     {items.map((item, index) =>
                         <Grid key={item.id} item lg={2} md={2.4} xs={3}>
