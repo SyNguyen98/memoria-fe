@@ -57,5 +57,11 @@
     "edit": "Edit Collection",
     "delete": "Delete Collection",
     "confirm_delete": "Are you sure want to delete this collection "
+  },
+  "location": {
+    "cannot_load": "Cannot load locations"
+  },
+  "item": {
+    "cannot_load": "Cannot load images"
   }
 }

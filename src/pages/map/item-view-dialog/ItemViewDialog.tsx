@@ -4,15 +4,16 @@ import {Button, Dialog, DialogTitle, Divider, IconButton} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from '@mui/icons-material';
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
+import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
 import {Item} from "../../../models/Item";
-import {ItemApi} from "../../../api/ItemApi";
 import {Location} from "../../../models/Location";
 import {HashLoader} from "react-spinners";
+import {useTranslation} from "react-i18next";
 
 type Props = {
     open: boolean;
     onClose: () => void;
-    location: Location | null;
+    location: Location;
 }
 
 export default function ImageDialog(props: Readonly<Props>) {
@@ -21,18 +22,23 @@ export default function ImageDialog(props: Readonly<Props>) {
     const [index, setIndex] = useState(0);
     const [itemLoading, setItemLoading] = useState(true);
 
+    const {t} = useTranslation();
     const dispatch = useAppDispatch();
 
+    const itemQuery = useItemQuery(props.location.driveItemId!, "medium")
+
     useEffect(() => {
-        if (props.location) {
-            ItemApi.getAllItemsByDriveItemId(props.location.driveItemId!, "medium").then(res => {
-                setItems(res);
-                setItemChose(res[0]);
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải hình ảnh"}));
-            })
+        if (itemQuery.isError) {
+            dispatch(openSnackbar({type: "error", message: t("item.cannot_load")}));
         }
-    }, [props.open, props.location, dispatch]);
+    }, [dispatch, itemQuery.isError, t]);
+
+    useEffect(() => {
+        if (itemQuery.data) {
+            setItems(itemQuery.data);
+            setItemChose(itemQuery.data[0]);
+        }
+    }, [itemQuery.data]);
 
     const handlePrevious = () => {
         setItemLoading(true);

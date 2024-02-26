@@ -1,5 +1,6 @@
 import "./MapAndLocation.scss";
 import {Fragment, useEffect, useRef, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {MapContainer, Marker, TileLayer, Tooltip, useMap} from 'react-leaflet';
 import {latLngBounds} from "leaflet";
 import {AppBar, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography} from "@mui/material";
@@ -7,18 +8,17 @@ import {Menu} from "@mui/icons-material";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {useAppDispatch} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
+import {openSnackbar} from "../../reducers/SnackbarReducer";
+import {useQueryClient} from "@tanstack/react-query";
+import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 // Components
 import AppLoader from "../../components/AppLoader";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 // Models & Services
 import {Collection} from "../../models/Collection";
 import {Location} from "../../models/Location";
-import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {DateUtil} from "../../utils/DateUtil";
-import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
-import {useQueryClient} from "@tanstack/react-query";
-import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
-import {useTranslation} from "react-i18next";
 
 export default function MapAndLocation() {
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
@@ -57,7 +57,7 @@ export default function MapAndLocation() {
         if (collection) {
             setCollectionChose(collection);
             queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collection.id]}).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải địa điểm"}));
+                dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
             });
         }
     }
@@ -131,7 +131,7 @@ export default function MapAndLocation() {
                         })}
                     </MapContainer>
 
-                    <ItemViewDialog open={dialogOpened} onClose={handleCloseDialog} location={locationChose}/>
+                    {locationChose && <ItemViewDialog open={dialogOpened} onClose={handleCloseDialog} location={locationChose}/>}
                 </Fragment>
             )}
         </section>

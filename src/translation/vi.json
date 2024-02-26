@@ -57,5 +57,11 @@
     "edit": "Chỉnh Sửa Bộ Sưu Tập",
     "delete": "Xóa Bộ Sưu Tập",
     "confirm_delete": "Bạn có chắc là muốn xóa bộ sưu tập "
+  },
+  "location": {
+    "cannot_load": "Không thể tải địa điểm"
+  },
+  "item": {
+    "cannot_load": "Không thể tải hình ảnh"
   }
 }
