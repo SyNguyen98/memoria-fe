@@ -1,6 +1,10 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
 import {Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
+import {useTranslation} from "react-i18next";
+import i18n from "../translation/i18n.tsx";
+import {useQueryClient} from "@tanstack/react-query";
+import {useUserQuery} from "../custom-query/UserQueryHook.ts";
 // Redux
 import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
@@ -20,25 +24,20 @@ import LocationComponent from "../pages/location/LocationComponent";
 import ItemComponent from "../pages/item/ItemComponent";
 import ProfileComponent from "../pages/profile/ProfileComponent";
 // Models
-import {User} from "../models/User";
 import {CookieKey} from "../constants/Storage";
 import {PathName} from '../constants/Page';
 // Services
 import {CookieUtil} from "../utils/CookieUtil";
-import {UserApi} from "../api/UserApi";
 import {AuthApi} from "../api/AuthApi";
 import {appAxios} from "../api";
-import i18n from "../translation/i18n.tsx";
 
 export default function App() {
     const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        i18n.changeLanguage(currentLanguage);
-    }, [currentLanguage]);
+    const {t} = useTranslation();
+    const userQuery = useUserQuery();
 
     useEffect(() => {
         if (CookieUtil.getCookie(CookieKey.ACCESS_TOKEN)) {
@@ -48,21 +47,31 @@ export default function App() {
             }, (error) => {
                 return Promise.reject(error);
             });
-
-            UserApi.getCurrentUser().then((res: User) => {
-                dispatch(setUser(res));
-                if (window.location.pathname === '/') {
-                    navigate(PathName.MAP);
-                }
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
-            })
         }
-    }, [dispatch, navigate]);
+    }, []);
+
+    useEffect(() => {
+        i18n.changeLanguage(currentLanguage);
+    }, [currentLanguage]);
+
+    useEffect(() => {
+        if (userQuery.data) {
+            dispatch(setUser(userQuery.data));
+            if (window.location.pathname === '/') {
+                navigate(PathName.MAP);
+            }
+        }
+    }, [dispatch, navigate, userQuery.data]);
+
+    useEffect(() => {
+        if (userQuery.error) {
+            dispatch(openSnackbar({type: "error", message: t("user.cannot_load")}));
+        }
+    }, [dispatch, t, userQuery.error]);
 
     return (
         <Fragment>
-            <AppSnackbar />
+            <AppSnackbar/>
             <div className="App">
                 {currentUser ? <Sidebar/> : <Header/>}
 
@@ -123,6 +132,8 @@ function OAuth2RedirectHandler() {
     const [searchParams] = useSearchParams();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {t} = useTranslation();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const token = searchParams.get('token');
@@ -137,16 +148,15 @@ function OAuth2RedirectHandler() {
                 return Promise.reject(error);
             });
 
-            UserApi.getCurrentUser().then((res: User) => {
-                dispatch(setUser(res));
+            queryClient.invalidateQueries({queryKey: ["getCurrentUser"]}).then(() => {
                 navigate("/map");
             }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: "Không thể tải thông tin người dùng"}));
+                dispatch(openSnackbar({type: "error", message: t("user.cannot_load")}));
             })
         }
-    }, [dispatch, navigate, searchParams]);
+    }, [dispatch, navigate, queryClient, searchParams, t]);
 
-    return <AppLoader />;
+    return <AppLoader/>;
 }
 
 function OAuth2MicrosoftRedirectHandler() {

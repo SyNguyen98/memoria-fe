@@ -63,5 +63,8 @@
   },
   "item": {
     "cannot_load": "Không thể tải hình ảnh"
+  },
+  "user": {
+    "cannot_load": "Không thể tải thông tin người dùng"
   }
 }

@@ -63,5 +63,8 @@
   },
   "item": {
     "cannot_load": "Cannot load images"
+  },
+  "user": {
+    "cannot_load": "Cannot load user's information"
   }
 }
