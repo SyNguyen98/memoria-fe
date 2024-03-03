@@ -1,5 +1,5 @@
 @import "src/assets/styles/Breakpoint";
-@import "src/assets/styles/Color";
+@import "../../assets/styles/color";
 
 .home-container {
   @include respond(tablet) {

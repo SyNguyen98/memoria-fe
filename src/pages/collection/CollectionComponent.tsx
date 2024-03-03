@@ -88,6 +88,19 @@ function CollectionComponent() {
         setChoseCollection(null);
     }
 
+    const getLabelTag = (tagName: string): string => {
+        switch (tagName) {
+            case "FAMILY":
+                return t("tags.family");
+            case "FRIENDS":
+                return t("tags.friends");
+            case "COLLEAGUES":
+                return t("tags.colleagues");
+            default:
+                return "";
+        }
+    }
+
     return (
         <section className="collection-container">
             {/* App Bar */}
@@ -120,6 +133,9 @@ function CollectionComponent() {
                                 {t("collection.description")}
                             </TableCell>
                             <TableCell>
+                                {t("collection.tags")}
+                            </TableCell>
+                            <TableCell>
                                 {t("collection.modified_date")}
                             </TableCell>
                             <TableCell>
@@ -142,6 +158,11 @@ function CollectionComponent() {
                                 </TableCell>
                                 <TableCell>
                                     {collection.description}
+                                </TableCell>
+                                <TableCell>
+                                    {collection.tags && collection.tags.map(tag =>
+                                        <Chip key={tag} label={getLabelTag(tag)}/>
+                                    )}
                                 </TableCell>
                                 <TableCell width={100}>
                                     {collection.lastModifiedDate ? DateUtil.renderDate(collection.lastModifiedDate) : ''}

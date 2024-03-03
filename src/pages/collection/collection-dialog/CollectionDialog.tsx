@@ -3,7 +3,17 @@ import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
 import {useCreateCollectionMutation, useUpdateCollectionMutation} from "../../../custom-query/CollectionQueryHook.ts";
-import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography} from "@mui/material";
+import {
+    Autocomplete,
+    Button,
+    Chip,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    TextField,
+    Typography
+} from "@mui/material";
 // Redux
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
@@ -16,14 +26,20 @@ type Props = {
     collection: Collection | null;
 }
 
-interface Input {
+type Input = {
     name: string;
     description: string;
-    userEmails: string[]
+    userEmails: string[];
+}
+
+type TagOption = {
+    label: string;
+    value: string;
 }
 
 export default function CollectionDialog(props: Readonly<Props>) {
     const [inputs, setInputs] = useState<Input>({name: '', description: '', userEmails: []});
+    const [tags, setTags] = useState<string[]>([]);
 
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
@@ -31,13 +47,29 @@ export default function CollectionDialog(props: Readonly<Props>) {
     const onSuccess = () => {
         dispatch(openSnackbar({type: "success", message: t("collection.save_success")}));
         handleClose();
-        queryClient.invalidateQueries({ queryKey: ['getAllCollectionsHavingAccess'] })
+        queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess']})
     }
     const onError = () => {
         dispatch(openSnackbar({type: "error", message: t("collection.save_error")}));
     }
-    const createMutation  = useCreateCollectionMutation(onSuccess, onError);
-    const updateMutation  = useUpdateCollectionMutation(onSuccess, onError);
+    const createMutation = useCreateCollectionMutation(onSuccess, onError);
+    const updateMutation = useUpdateCollectionMutation(onSuccess, onError);
+
+    const TAG_OPTIONS: TagOption[] = [
+        {
+            label: t("tags.family"),
+            value: "FAMILY"
+        },
+        {
+            label: t("tags.friends"),
+            value: "FRIENDS"
+        },
+        {
+            label: t("tags.colleagues"),
+            value: "COLLEAGUES"
+        }
+
+    ]
 
     useEffect(() => {
         if (props.collection) {
@@ -46,6 +78,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
                 description: props.collection.description,
                 userEmails: props.collection.userEmails
             });
+            setTags(props.collection.tags || []);
         } else {
             setInputs({name: '', description: '', userEmails: []})
         }
@@ -62,9 +95,13 @@ export default function CollectionDialog(props: Readonly<Props>) {
         props.onClose();
     }
 
-    const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleOnInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setInputs(state => ({...state, [event.target.name]: event.target.value}))
     }
+
+    const handleOnChangeTags = (value: TagOption[]) => {
+        setTags(value.map(option => option.value));
+    };
 
     const onEnterEmail = (event: any) => {
         if (event.key === 'Enter') {
@@ -88,6 +125,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
         const collection: Collection = {
             name: inputs.name,
             description: inputs.description,
+            tags,
             userEmails: inputs.userEmails,
         }
         if (props.collection) {
@@ -114,12 +152,23 @@ export default function CollectionDialog(props: Readonly<Props>) {
                 <TextField autoComplete="off" required fullWidth
                            name="name" label={t("collection.name")}
                            value={inputs.name}
-                           onChange={onInputChange}/>
+                           onChange={handleOnInputChange}/>
                 {/* Description */}
                 <TextField autoComplete="off" fullWidth multiline maxRows={3}
                            name="description" label={t("collection.description")}
                            value={inputs.description}
-                           onChange={onInputChange}/>
+                           onChange={handleOnInputChange}/>
+                {/* Tags */}
+                <Autocomplete multiple
+                              options={TAG_OPTIONS.filter(option => !tags.includes(option.value))}
+                              getOptionLabel={option => option.label}
+                              value={TAG_OPTIONS.filter(option => tags.includes(option.value))}
+                              onChange={(_event, value) => handleOnChangeTags(value)}
+                              renderInput={(params) => (
+                                  <TextField {...params} label={t("collection.tags")}/>
+                              )}
+                />
+                {/* Emails */}
                 <TextField autoComplete="off" fullWidth
                            name="email" label={t("collection.shared_email")}
                            placeholder={t("collection.email_placeholder")}
@@ -129,7 +178,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
                 </Typography>
                 <div className="email-list">
                     {inputs.userEmails.map(email =>
-                        <Chip key={email} label={email} variant="outlined" onDelete={() => handleDeleteChip(email)} />
+                        <Chip key={email} label={email} variant="outlined" onDelete={() => handleDeleteChip(email)}/>
                     )}
                 </div>
             </DialogContent>

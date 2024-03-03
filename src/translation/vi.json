@@ -44,6 +44,7 @@
   "collection": {
     "name": "Tên",
     "description": "Mô Tả",
+    "tags": "Nhãn",
     "modified_date": "Ngày Cập Nhật",
     "shared_email": "Email Chia Sẻ",
     "email_placeholder": "Nhập Email rồi nhấn Enter↵",
@@ -66,5 +67,10 @@
   },
   "user": {
     "cannot_load": "Không thể tải thông tin người dùng"
+  },
+  "tags": {
+    "family": "Gia đình",
+    "friends": "Bạn bè",
+    "colleagues": "Đồng nghiệp"
   }
 }
