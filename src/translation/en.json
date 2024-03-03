@@ -44,6 +44,7 @@
   "collection": {
     "name": "Name",
     "description": "Description",
+    "tags": "Tags",
     "modified_date": "Modified Date",
     "shared_email": "Shared Emails",
     "email_placeholder": "Input Email then press Enter↵",
@@ -63,5 +64,13 @@
   },
   "item": {
     "cannot_load": "Cannot load images"
+  },
+  "user": {
+    "cannot_load": "Cannot load user's information"
+  },
+  "tags": {
+    "family": "Family",
+    "friends": "Friends",
+    "colleagues": "Colleagues"
   }
 }
