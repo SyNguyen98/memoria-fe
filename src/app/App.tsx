@@ -1,6 +1,7 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
 import {Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
+import {Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import i18n from "../translation/i18n.tsx";
 import {useQueryClient} from "@tanstack/react-query";
@@ -69,51 +70,68 @@ export default function App() {
         }
     }, [dispatch, t, userQuery.error]);
 
+    const isTabletOrPhone = () => {
+        return window.innerWidth < 901;
+    }
+
     return (
         <Fragment>
             <AppSnackbar/>
             <div className="App">
-                {currentUser ? <Sidebar/> : <Header/>}
+                {isTabletOrPhone() ? (
+                    <Fragment>
+                        <img className="sorry-img" alt="cry-icon"
+                             src="https://i.ibb.co/Dtb9SXV/scaracat-sad.webp"/>
+                        <Typography className="sorry-text" variant="body1">
+                            Sorry we did not support phone screen yet.<br/>
+                            Please try again with desktop screen.
+                        </Typography>
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        {currentUser ? <Sidebar/> : <Header/>}
 
-                <div className="main-container">
-                    <Routes>
-                        <Route path="/" element={<Home/>}/>
-                        <Route path={PathName.ABOUT_MEMORIA} element={<AboutMemoria/>}/>
-                        <Route path={PathName.ABOUT_ME} element={<AboutMe/>}/>
-                        <Route path={PathName.FAQ} element={<Faq/>}/>
-                        <Route path={PathName.MAP} element={
-                            <Protected>
-                                <MapAndLocation/>
-                            </Protected>
-                        }/>
-                        <Route path={PathName.COLLECTION}>
-                            <Route index element={
-                                <Protected>
-                                    <CollectionComponent/>
-                                </Protected>
-                            }/>
-                            <Route path={PathName.LOCATION}>
-                                <Route index element={
+                        <div className="main-container">
+                            <Routes>
+                                <Route path="/" element={<Home/>}/>
+                                <Route path={PathName.ABOUT_MEMORIA} element={<AboutMemoria/>}/>
+                                <Route path={PathName.ABOUT_ME} element={<AboutMe/>}/>
+                                <Route path={PathName.FAQ} element={<Faq/>}/>
+                                <Route path={PathName.MAP} element={
                                     <Protected>
-                                        <LocationComponent/>
+                                        <MapAndLocation/>
                                     </Protected>
                                 }/>
-                                <Route path={PathName.ITEM} element={
+                                <Route path={PathName.COLLECTION}>
+                                    <Route index element={
+                                        <Protected>
+                                            <CollectionComponent/>
+                                        </Protected>
+                                    }/>
+                                    <Route path={PathName.LOCATION}>
+                                        <Route index element={
+                                            <Protected>
+                                                <LocationComponent/>
+                                            </Protected>
+                                        }/>
+                                        <Route path={PathName.ITEM} element={
+                                            <Protected>
+                                                <ItemComponent/>
+                                            </Protected>
+                                        }/>
+                                    </Route>
+                                </Route>
+                                <Route path={PathName.PROFILE} element={
                                     <Protected>
-                                        <ItemComponent/>
+                                        <ProfileComponent/>
                                     </Protected>
                                 }/>
-                            </Route>
-                        </Route>
-                        <Route path={PathName.PROFILE} element={
-                            <Protected>
-                                <ProfileComponent/>
-                            </Protected>
-                        }/>
-                        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
-                        <Route path="/login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
-                    </Routes>
-                </div>
+                                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
+                                <Route path="/login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
+                            </Routes>
+                        </div>
+                    </Fragment>
+                )}
             </div>
         </Fragment>
     );
