@@ -2,32 +2,6 @@
 @import "../../assets/styles/color";
 
 .home-container {
-  @include respond(tablet) {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  @include respond(phone) {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-
-  .sorry-img {
-    margin: auto auto .5rem;
-    width: 200px;
-    @include respond(phone) {
-      width: 150px;
-    }
-  }
-  .sorry-text {
-    margin: .5rem auto auto;
-    font-family: 'Signika', sans-serif;
-    font-size: 18px;
-    @include respond(phone) {
-      font-size: 16px;
-    }
-  }
 
   .banner {
     display: flex;
