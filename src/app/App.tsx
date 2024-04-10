@@ -37,7 +37,6 @@ export default function App() {
     const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const {t} = useTranslation();
     const userQuery = useUserQuery();
 
     useEffect(() => {
@@ -63,12 +62,6 @@ export default function App() {
             }
         }
     }, [dispatch, navigate, userQuery.data]);
-
-    useEffect(() => {
-        if (userQuery.error) {
-            dispatch(openSnackbar({type: "error", message: t("user.cannot_load")}));
-        }
-    }, [dispatch, t, userQuery.error]);
 
     const isTabletOrPhone = () => {
         return window.innerWidth < 901;
