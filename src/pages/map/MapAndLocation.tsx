@@ -16,25 +16,36 @@ import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import AppLoader from "../../components/AppLoader";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 // Models & Services
-import {Collection} from "../../models/Collection";
 import {Location} from "../../models/Location";
 import {DateUtil} from "../../utils/DateUtil";
+import {useSearchParams} from "react-router-dom";
 
 export default function MapAndLocation() {
-    const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
+    const [collectionId, setCollectionId] = useState("");
     const [locationChose, setLocationChose] = useState<Location | null>(null);
     const [latCenter, setLatCenter] = useState(0);
     const [lngCenter, setLngCenter] = useState(0);
     const [dialogOpened, setDialogOpened] = useState(false);
 
+    const [searchParams, setSearchParams] = useSearchParams();
     const queryClient = useQueryClient();
     const collectionQuery = useCollectionQuery();
-    const locationQuery = useLocationQuery(collectionChose?.id);
+    const locationQuery = useLocationQuery(collectionId);
 
     const dispatch = useAppDispatch();
     const {t} = useTranslation();
 
     const markerRefs = useRef({} as never);
+
+    useEffect(() => {
+        const id = searchParams.get("collection");
+        if (id) {
+            setCollectionId(id);
+            queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', id]}).catch(() => {
+                dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
+            });
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         let lat = 0, lng = 0;
@@ -55,7 +66,7 @@ export default function MapAndLocation() {
     const handleChangeCollection = (event: SelectChangeEvent) => {
         const collection = collectionQuery.data?.find(c => c.id === event.target.value);
         if (collection) {
-            setCollectionChose(collection);
+            setSearchParams({ collection: collection.id ?? "" });
             queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collection.id]}).catch(() => {
                 dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
             });
@@ -80,7 +91,6 @@ export default function MapAndLocation() {
                     <AppBar position="static">
                         <Toolbar>
                             <IconButton size="large" edge="start" color="inherit"
-                                        aria-label="menu" sx={{mr: 2}}
                                         onClick={handleOpenMenu}>
                                 <Menu/>
                             </IconButton>
@@ -91,7 +101,7 @@ export default function MapAndLocation() {
                                 <InputLabel id="collection-select">
                                     Bộ sưu tập
                                 </InputLabel>
-                                <Select labelId="collection-select" value={collectionChose?.id}
+                                <Select labelId="collection-select" value={collectionId}
                                         onChange={handleChangeCollection}>
                                     {collectionQuery.data?.map(collection =>
                                         <MenuItem key={collection.id} value={collection.id}>
@@ -131,7 +141,8 @@ export default function MapAndLocation() {
                         })}
                     </MapContainer>
 
-                    {locationChose && <ItemViewDialog open={dialogOpened} onClose={handleCloseDialog} location={locationChose}/>}
+                    {locationChose &&
+                        <ItemViewDialog open={dialogOpened} onClose={handleCloseDialog} location={locationChose}/>}
                 </Fragment>
             )}
         </section>
