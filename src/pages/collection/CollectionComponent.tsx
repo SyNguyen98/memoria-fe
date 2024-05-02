@@ -65,7 +65,7 @@ function CollectionComponent() {
         sessionStorage.setItem(SessionKey.COLLECTION_ID, collection.id!);
         sessionStorage.setItem(SessionKey.COLLECTION_NAME, collection.name);
         sessionStorage.setItem(SessionKey.COLLECTION_OWNER_EMAIL, collection.ownerEmail ?? '');
-        navigate(PathName.LOCATION);
+        navigate(`/${PathName.LOCATION}?collectionId=${collection.id}`);
     }
 
     const handleOpenEditDialog = (collection?: Collection) => {

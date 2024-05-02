@@ -95,25 +95,21 @@ export default function App() {
                                         <MapAndLocation/>
                                     </Protected>
                                 }/>
-                                <Route path={PathName.COLLECTION}>
-                                    <Route index element={
-                                        <Protected>
-                                            <CollectionComponent/>
-                                        </Protected>
-                                    }/>
-                                    <Route path={PathName.LOCATION}>
-                                        <Route index element={
-                                            <Protected>
-                                                <LocationComponent/>
-                                            </Protected>
-                                        }/>
-                                        <Route path={PathName.ITEM} element={
-                                            <Protected>
-                                                <ItemComponent/>
-                                            </Protected>
-                                        }/>
-                                    </Route>
-                                </Route>
+                                <Route path={PathName.COLLECTION} element={
+                                    <Protected>
+                                        <CollectionComponent/>
+                                    </Protected>
+                                }/>
+                                <Route path={PathName.LOCATION} element={
+                                    <Protected>
+                                        <LocationComponent/>
+                                    </Protected>
+                                }/>
+                                <Route path={PathName.ITEM} element={
+                                    <Protected>
+                                        <ItemComponent/>
+                                    </Protected>
+                                }/>
                                 <Route path={PathName.PROFILE} element={
                                     <Protected>
                                         <ProfileComponent/>
@@ -185,5 +181,5 @@ function OAuth2MicrosoftRedirectHandler() {
         }
     }, [currentUser, dispatch, navigate, searchParams]);
 
-    return <AppLoader />;
+    return <AppLoader/>;
 }
