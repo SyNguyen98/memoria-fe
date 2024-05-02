@@ -2,7 +2,7 @@ import "./ItemComponent.scss";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AppBar, Grid, IconButton, Toolbar, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import {KeyboardArrowRight} from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu';
 // Hook
@@ -19,22 +19,25 @@ import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 
 export default function ItemComponent() {
+    const [driveItemId, setDriveItemId] = useState('');
     const [collectionName, setCollectionName] = useState('');
     const [locationPlace, setLocationPlace] = useState('');
     const [items, setItems] = useState<Item[]>([])
     const [choseIndex, setChoseIndex] = useState(-1);
     const [viewDialogOpened, setViewDialogOpened] = useState(false);
 
+    const [searchParams] = useSearchParams();
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-
-    const driveItemId = sessionStorage.getItem(SessionKey.DRIVE_ITEM_ID);
-    const itemQuery = useItemQuery(driveItemId!, "medium")
+    const itemQuery = useItemQuery(driveItemId, "medium")
 
     useEffect(() => {
         setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
         setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) ?? '');
-    }, []);
+        if (searchParams.has('locationId')) {
+            setDriveItemId(searchParams.get('locationId') as string);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         if (itemQuery.isError) {
@@ -76,7 +79,7 @@ export default function ItemComponent() {
                             {t("page.collection")}
                         </Link>
                         <KeyboardArrowRight />
-                        <Link className="location-title" to={`/${PathName.COLLECTION}/${PathName.LOCATION}`}>
+                        <Link className="location-title" to={`/${PathName.LOCATION}?collectionId=${sessionStorage.getItem(SessionKey.COLLECTION_ID)}`}>
                             {collectionName}
                         </Link>
                         <KeyboardArrowRight />

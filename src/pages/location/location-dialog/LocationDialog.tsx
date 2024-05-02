@@ -1,5 +1,7 @@
 import "./LocationDialog.scss";
 import React, {useEffect, useState} from "react";
+import {useSearchParams} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
 import {useCreateLocationMutation, useUpdateLocationMutation} from "../../../custom-query/LocationQueryHook.ts";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField} from "@mui/material";
@@ -9,7 +11,6 @@ import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {useAppDispatch} from "../../../app/hook";
 import {Location} from "../../../models/Location";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
-import {SessionKey} from "../../../constants/Storage";
 
 type Props = {
     open: boolean;
@@ -40,21 +41,24 @@ const initialInput: Input = {
 }
 
 export default function LocationDialog(props: Readonly<Props>) {
+    const [collectionId, setCollectionId] = useState('');
     const [inputs, setInputs] = useState<Input>(initialInput);
     const [years, setYears] = useState<number[]>([]);
 
+    const [searchParams] = useSearchParams();
+    const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const queryClient = useQueryClient();
     const onSuccess = () => {
-        dispatch(openSnackbar({type: "success", message: "Lưu thành công"}));
+        dispatch(openSnackbar({type: "success", message: t('location.save_success')}));
         handleClose();
-        queryClient.invalidateQueries({ queryKey: ['getAllLocationsByCollectionId'] })
+        queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId']})
     }
     const onError = () => {
-        dispatch(openSnackbar({type: "error", message: "Không thể lưu địa điểm"}));
+        dispatch(openSnackbar({type: "error", message: t('location.save_error')}));
     }
-    const createMutation  = useCreateLocationMutation(onSuccess, onError);
-    const updateMutation  = useUpdateLocationMutation(onSuccess, onError);
+    const createMutation = useCreateLocationMutation(onSuccess, onError);
+    const updateMutation = useUpdateLocationMutation(onSuccess, onError);
 
     const MONTHS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     const DAYS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
@@ -62,7 +66,7 @@ export default function LocationDialog(props: Readonly<Props>) {
     useEffect(() => {
         const _years = []
         const currentYear = new Date().getFullYear();
-        for (let i = 1990; i <= currentYear; i++) {
+        for (let i = currentYear; i >= 1990; i--) {
             _years.push(i);
         }
         setYears(_years);
@@ -78,7 +82,11 @@ export default function LocationDialog(props: Readonly<Props>) {
                 longitude: props.location.coordinate.longitude,
             });
         }
-    }, [props]);
+        const collectionId = searchParams.get("collectionId");
+        if (collectionId) {
+            setCollectionId(collectionId);
+        }
+    }, [props, searchParams]);
 
     const onClose = (_event: object, reason: string) => {
         if (reason !== "backdropClick") {
@@ -92,15 +100,16 @@ export default function LocationDialog(props: Readonly<Props>) {
     }
 
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setInputs(state => ({...state, [event.target.name]: event.target.value}))
+        setInputs(state => ({...state, [event.target.name]: event.target.value}));
     }
 
     const onInputTime = (value: Date | null) => {
-        if (value) {
-            const hour = value.getHours() < 10 ? `0${value.getHours()}` : String(value.getHours());
-            const minute = value.getMinutes() < 10 ? `0${value.getMinutes()}` : String(value.getMinutes());
-            setInputs(state => ({...state, takenTime: `${hour}:${minute}`}))
-        }
+        setInputs(state => ({
+            ...state,
+            takenTime: value
+                ? `${value.getHours().toString().padStart(2, '0')}:${value.getMinutes().toString().padStart(2, '0')}`
+                : ''
+        }));
     }
 
     const onInputCoordinate = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,12 +122,9 @@ export default function LocationDialog(props: Readonly<Props>) {
     }
 
     const getTime = () => {
-        if (inputs.takenTime !== '') {
-            const hour = inputs.takenTime.split(":")[0];
-            const minute = inputs.takenTime.split(":")[1];
-            return new Date(2000, 0, 1, Number(hour), Number(minute));
-        }
-        return null;
+        return inputs.takenTime !== ''
+            ? new Date(2000, 0, 1, ...inputs.takenTime.split(":").map(Number))
+            : null;
     }
 
     const handleSave = () => {
@@ -133,7 +139,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                 latitude: inputs.latitude,
                 longitude: inputs.longitude
             },
-            collectionId: sessionStorage.getItem(SessionKey.COLLECTION_ID)!
+            collectionId: collectionId
         }
         if (props.location) {
             location.id = props.location.id;

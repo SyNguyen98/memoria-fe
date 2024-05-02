@@ -60,6 +60,8 @@
     "confirm_delete": "Are you sure want to delete this collection "
   },
   "location": {
+    "save_success": "Save location successfully",
+    "save_error": "Cannot save the collection",
     "cannot_load": "Cannot load locations"
   },
   "item": {

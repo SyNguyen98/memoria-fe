@@ -1,6 +1,6 @@
 import './LocationComponent.scss';
 import {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {useQueryClient} from "@tanstack/react-query";
 import {useDeleteLocationMutation, useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
@@ -32,17 +32,20 @@ import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Utils & Services
 import {DateUtil} from "../../utils/DateUtil";
+import {useTranslation} from "react-i18next";
 
 function LocationComponent() {
+    const [collectionId, setCollectionId] = useState('');
     const [collectionName, setCollectionName] = useState('');
     const [choseLocation, setChoseLocation] = useState<Location | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
 
-    const collectionId = sessionStorage.getItem(SessionKey.COLLECTION_ID);
     const currentUser = useAppSelector(state => state.user.value);
+    const [searchParams] = useSearchParams();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     const queryClient = useQueryClient();
     const onSuccess = () => {
@@ -60,11 +63,16 @@ function LocationComponent() {
     const deleteMutation = useDeleteLocationMutation(onSuccess, onError);
 
     useEffect(() => {
-        setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
-        if (locationQuery.isError) {
-            dispatch(openSnackbar({type: "error", message: "Không thể tải các địa điểm"}));
+        const collectionId = searchParams.get("collectionId");
+        if (collectionId) {
+            setCollectionId(collectionId);
+            sessionStorage.setItem(SessionKey.COLLECTION_ID, collectionId);
+            setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
+            queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collectionId]}).catch(() => {
+                dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
+            });
         }
-    }, [dispatch, locationQuery.isError]);
+    }, [searchParams]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -80,8 +88,7 @@ function LocationComponent() {
 
     const handleNavigateToItem = (location: Location) => {
         sessionStorage.setItem(SessionKey.LOCATION_PLACE, location.place);
-        sessionStorage.setItem(SessionKey.DRIVE_ITEM_ID, location.driveItemId!);
-        navigate(PathName.ITEM);
+        navigate(`/${PathName.ITEM}?locationId=${location.driveItemId}`);
     }
 
     const handleOpenEditDialog = (location?: Location) => {
@@ -117,15 +124,15 @@ function LocationComponent() {
                         <Menu/>
                     </IconButton>
                     <Typography className="page-title" variant="h6" component="div" sx={{flexGrow: 1}}>
-                        <Link className="collection-title" to="/collection">
-                            Bộ Sưu Tập
+                        <Link className="collection-title" to={`/${PathName.COLLECTION}`}>
+                            {t("page.collection")}
                         </Link>
                         <KeyboardArrowRight />
                         {collectionName}
                     </Typography>
                     <Button className="add-btn" variant="outlined" startIcon={<Add/>}
                             onClick={() => handleOpenEditDialog()}>
-                        Thêm
+                        {t("button.add")}
                     </Button>
                 </Toolbar>
             </AppBar>
