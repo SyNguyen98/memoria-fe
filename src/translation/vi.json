@@ -19,10 +19,12 @@
   },
   "homepage": {
     "banner_quote": "Sau cùng thì, tất cả chỉ còn là kỷ niệm",
+    "banner_quote_phone": "Sau cùng thì,\ntất cả chỉ còn là\nkỷ niệm",
     "banner_login": "Đăng Nhập với Google",
     "what_is_memoria": "MEMORIA là gì?",
     "memoria_introduction": "MEMORIA là ứng dụng giúp cho bạn lưu trữ những kỷ niệm đáng nhớ thông qua những bức ảnh về bạn bè, gia đình. Những nơi bạn đã đi qua, những kỷ niệm bạn đã cùng trải qua cùng với những người thân thương, MEMORIA sẽ giúp bạn ghi dấu lại tất cả. MEMORIA vẫn sẽ ở đó, nhắc lại cho bạn những năm tháng mà bạn đã lỡ quên.",
     "quote_1": "Khi một câu chuyện sắp kết thúc, chúng ta luôn nhớ tới khi nó bắt đầu.",
+    "quote_1_phone": "Khi một câu chuyện sắp kết thúc,\nchúng ta luôn nhớ tới khi nó bắt đầu.",
     "features": {
       "1": {
         "title": "Lưu giữ những tấm ảnh thú vị",

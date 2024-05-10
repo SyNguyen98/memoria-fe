@@ -1,7 +1,6 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
 import {Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
-import {Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import i18n from "../translation/i18n.tsx";
 import {useQueryClient} from "@tanstack/react-query";
@@ -13,8 +12,8 @@ import {openSnackbar} from "../reducers/SnackbarReducer";
 // Components
 import AppLoader from "../components/AppLoader";
 import AppSnackbar from "../components/AppSnackbar.tsx";
-import Sidebar from "../layout/sidebar/Sidebar";
-import Header from "../layout/header/Header.tsx";
+import Sidebar from "../components/sidebar/Sidebar";
+import Header from "../components/header/Header.tsx";
 import Home from "../pages/home/Home.tsx";
 import AboutMemoria from "../pages/about-memoria/AboutMemoria.tsx";
 import AboutMe from "../pages/about-me/AboutMe.tsx";
@@ -45,7 +44,7 @@ export default function App() {
                 config.headers.Authorization = CookieUtil.getCookie(CookieKey.ACCESS_TOKEN);
                 return config;
             }, (error) => {
-                return Promise.reject(error);
+                throw new Error(error);
             });
         }
     }, []);
@@ -63,64 +62,47 @@ export default function App() {
         }
     }, [dispatch, navigate, userQuery.data]);
 
-    const isTabletOrPhone = () => {
-        return window.innerWidth < 901;
-    }
-
     return (
         <Fragment>
             <AppSnackbar/>
             <div className="App">
-                {isTabletOrPhone() ? (
-                    <Fragment>
-                        <img className="sorry-img" alt="cry-icon"
-                             src="https://i.ibb.co/Dtb9SXV/scaracat-sad.webp"/>
-                        <Typography className="sorry-text" variant="body1">
-                            Sorry we did not support phone screen yet.<br/>
-                            Please try again with desktop screen.
-                        </Typography>
-                    </Fragment>
-                ) : (
-                    <Fragment>
-                        {currentUser ? <Sidebar/> : <Header/>}
+                {currentUser ? <Sidebar/> : <Header/>}
 
-                        <div className="main-container">
-                            <Routes>
-                                <Route path="/" element={<Home/>}/>
-                                <Route path={PathName.ABOUT_MEMORIA} element={<AboutMemoria/>}/>
-                                <Route path={PathName.ABOUT_ME} element={<AboutMe/>}/>
-                                <Route path={PathName.FAQ} element={<Faq/>}/>
-                                <Route path={PathName.MAP} element={
-                                    <Protected>
-                                        <MapAndLocation/>
-                                    </Protected>
-                                }/>
-                                <Route path={PathName.COLLECTION} element={
-                                    <Protected>
-                                        <CollectionComponent/>
-                                    </Protected>
-                                }/>
-                                <Route path={PathName.LOCATION} element={
-                                    <Protected>
-                                        <LocationComponent/>
-                                    </Protected>
-                                }/>
-                                <Route path={PathName.ITEM} element={
-                                    <Protected>
-                                        <ItemComponent/>
-                                    </Protected>
-                                }/>
-                                <Route path={PathName.PROFILE} element={
-                                    <Protected>
-                                        <ProfileComponent/>
-                                    </Protected>
-                                }/>
-                                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
-                                <Route path="/login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
-                            </Routes>
-                        </div>
-                    </Fragment>
-                )}
+                <div className="main-container">
+                    <Routes>
+                        <Route path="/" element={<Home/>}/>
+                        <Route path={PathName.ABOUT_MEMORIA} element={<AboutMemoria/>}/>
+                        <Route path={PathName.ABOUT_ME} element={<AboutMe/>}/>
+                        <Route path={PathName.FAQ} element={<Faq/>}/>
+                        <Route path={PathName.MAP} element={
+                            <Protected>
+                                <MapAndLocation/>
+                            </Protected>
+                        }/>
+                        <Route path={PathName.COLLECTION} element={
+                            <Protected>
+                                <CollectionComponent/>
+                            </Protected>
+                        }/>
+                        <Route path={PathName.LOCATION} element={
+                            <Protected>
+                                <LocationComponent/>
+                            </Protected>
+                        }/>
+                        <Route path={PathName.ITEM} element={
+                            <Protected>
+                                <ItemComponent/>
+                            </Protected>
+                        }/>
+                        <Route path={PathName.PROFILE} element={
+                            <Protected>
+                                <ProfileComponent/>
+                            </Protected>
+                        }/>
+                        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
+                        <Route path="/login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
+                    </Routes>
+                </div>
             </div>
         </Fragment>
     );
@@ -152,7 +134,7 @@ function OAuth2RedirectHandler() {
                 config.headers.Authorization = `Bearer ${token}`;
                 return config;
             }, (error) => {
-                return Promise.reject(error);
+                throw new Error(error);
             });
 
             queryClient.invalidateQueries({queryKey: ["getCurrentUser"]}).then(() => {
