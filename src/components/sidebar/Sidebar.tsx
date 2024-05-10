@@ -2,8 +2,8 @@ import "./Sidebar.scss";
 import React, {useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {useAppDispatch, useAppSelector} from "../../app/hook";
-import {closeSidebar} from "../../reducers/SidebarReducer";
+import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
+import {closeSidebar} from "../../reducers/SidebarReducer.ts";
 import {
     Avatar,
     Divider,
@@ -19,9 +19,9 @@ import {
     Tooltip
 } from "@mui/material";
 import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Language, Logout, Map} from "@mui/icons-material";
-import {CookieUtil} from "../../utils/CookieUtil";
-import {CookieKey} from "../../constants/Storage";
-import {PathName} from "../../constants/Page";
+import {CookieUtil} from "../../utils/CookieUtil.ts";
+import {CookieKey} from "../../constants/Storage.ts";
+import {PathName} from "../../constants/Page.ts";
 import {VERSION} from "../../constants";
 import {clearUser} from "../../reducers/UserReducer.ts";
 import {setLanguage} from "../../reducers/LanguageReducer.ts";
