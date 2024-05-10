@@ -1,3 +1,4 @@
+@import "../../assets/styles/breakpoint";
 @import "../../assets/styles/color";
 
 .header-container {
@@ -11,9 +12,23 @@
     padding: 1rem;
     display: flex;
     justify-content: space-between;
+    @include respond(tablet) {
+      padding: .5rem 1rem;
+    }
 
     .logo-app-name {
+      margin: auto 0;
       display: flex;
+      text-decoration: unset;
+
+      .app-logo {
+        width: 50px;
+        height: 50px;
+        @include respond(tablet) {
+          width: 30px;
+          height: 30px;
+        }
+      }
 
       .app-name {
         margin-left: .5rem;
@@ -22,11 +37,18 @@
         font-weight: bold;
         color: $blue-a400;
         text-shadow: 0 0 0 rgba($shadow, .25), 0 2px 2px rgba($shadow, .25), 0 4px 4px rgba($shadow, .25);
+        @include respond(tablet) {
+          font-size: 24px;
+        }
 
         span {
           color: $green-a400;
         }
       }
+    }
+
+    .MuiIconButton-root {
+      padding: 12px 0;
     }
 
     .header-menu {
@@ -57,5 +79,27 @@
         }
       }
     }
+  }
+}
+
+#header-nav-menu {
+  .MuiMenu-paper {
+    left: 0 !important;
+    max-width: 100svw !important;
+    width: 100svw !important
+  }
+
+  a {
+    font-size: 16px;
+    color: $blue-700;
+    text-decoration: unset;
+  }
+
+  li {
+    font-weight: 600 !important;
+  }
+
+  .MuiInputBase-root {
+    margin-left: 1rem;
   }
 }
