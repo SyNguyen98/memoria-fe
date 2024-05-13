@@ -1,4 +1,5 @@
-@import "../../../assets/styles/color";
+@import "src/assets/styles/breakpoint";
+@import "src/assets/styles/color";
 
 .map-item-view-dialog {
 
@@ -15,15 +16,29 @@
         margin: auto 1rem;
         font-size: 24px;
         font-weight: 600;
+        @include respond(tablet) {
+          margin: auto;
+          font-size: 20px;
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
 
       .item-name {
         margin: auto 0;
         font-size: 16px;
+        @include respond(tablet) {
+          display: none;
+        }
       }
 
       .btn-wrapper {
         display: flex;
+        @include respond(tablet) {
+          display: none;
+        }
 
         .item-index {
           margin: auto 0;

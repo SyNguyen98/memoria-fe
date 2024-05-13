@@ -34,8 +34,8 @@ export default function ItemComponent() {
     useEffect(() => {
         setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
         setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) ?? '');
-        if (searchParams.has('locationId')) {
-            setDriveItemId(searchParams.get('locationId') as string);
+        if (searchParams.has('id')) {
+            setDriveItemId(searchParams.get('id') as string);
         }
     }, [searchParams]);
 

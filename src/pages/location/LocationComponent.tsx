@@ -59,7 +59,7 @@ function LocationComponent() {
         dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
     }
 
-    const locationQuery = useLocationQuery(collectionId!);
+    const locationQuery = useLocationQuery(collectionId);
     const deleteMutation = useDeleteLocationMutation(onSuccess, onError);
 
     useEffect(() => {
@@ -88,7 +88,7 @@ function LocationComponent() {
 
     const handleNavigateToItem = (location: Location) => {
         sessionStorage.setItem(SessionKey.LOCATION_PLACE, location.place);
-        navigate(`/${PathName.ITEM}?locationId=${location.driveItemId}`);
+        navigate(`/${PathName.ITEM}?id=${location.driveItemId}`);
     }
 
     const handleOpenEditDialog = (location?: Location) => {
