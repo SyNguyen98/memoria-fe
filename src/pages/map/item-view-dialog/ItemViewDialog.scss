@@ -13,13 +13,12 @@
       justify-content: space-between;
 
       .location-place {
-        margin: auto 1rem;
+        margin: auto 0;
         font-size: 24px;
         font-weight: 600;
         @include respond(tablet) {
-          margin: auto;
           font-size: 20px;
-          max-width: 100%;
+          max-width: 80%;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -36,12 +35,12 @@
 
       .btn-wrapper {
         display: flex;
-        @include respond(tablet) {
-          display: none;
-        }
 
         .item-index {
           margin: auto 0;
+          @include respond(tablet) {
+            display: none;
+          }
 
           .index {
             margin: auto 0;
@@ -53,6 +52,9 @@
           margin: auto 1rem;
           height: 80%;
           border-color: white;
+          @include respond(tablet) {
+            display: none;
+          }
         }
 
         .MuiIconButton-root {
