@@ -9,6 +9,7 @@ import {Item} from "../../../models/Item";
 import {Location} from "../../../models/Location";
 import {HashLoader} from "react-spinners";
 import {useTranslation} from "react-i18next";
+import {useSwipeable} from "react-swipeable";
 
 type Props = {
     open: boolean;
@@ -26,6 +27,11 @@ export default function ImageDialog(props: Readonly<Props>) {
     const dispatch = useAppDispatch();
 
     const itemQuery = useItemQuery(props.location.driveItemId!, "medium")
+
+    const handlers = useSwipeable({
+        onSwipedLeft: () => handleNext(),
+        onSwipedRight: () => handlePrevious()
+    });
 
     useEffect(() => {
         if (itemQuery.isError) {
@@ -116,7 +122,7 @@ export default function ImageDialog(props: Readonly<Props>) {
                     </div>
                 </DialogTitle>
             )}
-            <div className="dialog-body">
+            <div className="dialog-body" {...handlers}>
                 <div className="item-wrapper">
                     {itemLoading && (<HashLoader className="item-loading" color="#2196F3" size={80}/>)}
                     {itemChose && (itemChose.mimeType.includes('image') ? (
@@ -128,7 +134,11 @@ export default function ImageDialog(props: Readonly<Props>) {
                         <video className="item-chose" controls autoPlay
                                style={{display: `${itemLoading ? 'none' : 'block'}`}}
                                src={itemChose.downloadUrl}
-                               onLoadedData={() => {setItemLoading(false)}}/>
+                               onLoadedData={() => {
+                                   setItemLoading(false)
+                               }}>
+                            <track kind="captions" src={itemChose.downloadUrl} srcLang="en" label="English"/>
+                        </video>
                     ))}
                 </div>
             </div>
