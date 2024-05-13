@@ -108,9 +108,9 @@ export default function ImageDialog(props: Readonly<Props>) {
                             <IconButton aria-label="previous" onClick={() => handlePrevious()}>
                                 <SkipPrevious/>
                             </IconButton>
-                        <span className="index">
-                            {index + 1} / {items.length}
-                        </span>
+                            <span className="index">
+                                {index + 1} / {items.length}
+                            </span>
                             <IconButton aria-label="next" onClick={() => handleNext()}>
                                 <SkipNext/>
                             </IconButton>
@@ -129,7 +129,9 @@ export default function ImageDialog(props: Readonly<Props>) {
                         <img className="item-chose"
                              style={{display: `${itemLoading ? 'none' : 'block'}`}}
                              alt={itemChose.name} src={itemChose.downloadUrl}
-                             onLoadCapture={() => {setItemLoading(false)}}/>
+                             onLoadCapture={() => {
+                                 setItemLoading(false)
+                             }}/>
                     ) : (
                         <video className="item-chose" controls autoPlay
                                style={{display: `${itemLoading ? 'none' : 'block'}`}}
