@@ -1,0 +1,58 @@
+@import "src/assets/styles/color";
+
+.location-detail-container {
+  position: fixed;
+  bottom: 0;
+  width: calc(100% - 2rem);
+  z-index: 999;
+  background-color: $white;
+  padding: .5rem 1rem;
+  transition: height 0.3s ease-in-out;
+
+  .detail-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    .MuiIconButton-root {
+      margin: 0 auto;
+      height: 4px;
+      padding: 2px 0;
+
+      .MuiSvgIcon-root {
+        font-size: 40px;
+      }
+    }
+
+    .location-title {
+      margin: 4px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: $blue-700;
+    }
+
+    .location-time {
+      display: flex;
+      color: $gray-500;
+
+      .MuiSvgIcon-root {
+        margin: auto 0;
+        font-size: 14px;
+      }
+
+      .text {
+        margin: auto 0;
+        font-size: 12px;
+        font-style: italic;
+      }
+    }
+
+    .location-description {
+      margin-top: 4px;
+      font-size: 12px;
+    }
+  }
+
+  .image-list {
+    overflow-y: scroll;
+  }
+}
