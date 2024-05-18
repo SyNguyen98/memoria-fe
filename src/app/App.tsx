@@ -10,7 +10,7 @@ import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
 import {openSnackbar} from "../reducers/SnackbarReducer";
 // Components
-import AppLoader from "../components/AppLoader";
+import AppLoader from "../components/app-loader/AppLoader.tsx";
 import AppSnackbar from "../components/AppSnackbar.tsx";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header.tsx";
