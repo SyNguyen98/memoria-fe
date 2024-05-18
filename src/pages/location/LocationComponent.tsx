@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import {Add, Delete, Edit, KeyboardArrowRight, Menu} from "@mui/icons-material";
 // Components
-import AppLoader from "../../components/AppLoader";
+import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import LocationDialog from "./location-dialog/LocationDialog";
 // Models & Constants
 import {Location} from "../../models/Location";
