@@ -1,0 +1,57 @@
+@import "src/assets/styles/breakpoint";
+@import "src/assets/styles/color";
+@import "react-image-gallery/styles/scss/image-gallery.scss";
+
+.phone-img-dialog {
+
+  .MuiDialog-paper {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+
+    .MuiDialogTitle-root {
+      color: $white;
+      padding: .5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+
+      .location-name {
+        margin: auto 0;
+        font-size: 20px;
+        font-weight: 600;
+        max-width: 80%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .MuiIconButton-root {
+        margin: auto 0;
+        color: white;
+        padding: 0;
+      }
+    }
+
+    .MuiDialogContent-root {
+      padding: 0 0 1rem;
+    }
+
+    .item-loading {
+      position: absolute !important;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(165deg) !important;
+    }
+
+    .image-gallery {
+      top: 50%;
+      bottom: 50%;
+      transform: translate(0, -50%);
+    }
+
+    .MuiDialogActions-root {
+      color: $white;
+      padding: .5rem 1rem;
+      justify-content: center;
+    }
+  }
+}
+

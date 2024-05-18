@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import {Add, Delete, Edit, Menu} from "@mui/icons-material";
 // Components
-import AppLoader from "../../components/AppLoader";
+import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import CollectionDialog from "./collection-dialog/CollectionDialog";
 import DeleteCollectionDialog from "./delete-collection-dialog/DeleteCollectionDialog.tsx";
 // Models & Constants

@@ -11,7 +11,7 @@ import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useItemQuery} from "../../custom-query/ItemQueryHook.ts";
 // Component
-import AppLoader from "../../components/AppLoader";
+import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 // Models / Constants
 import {Item} from "../../models/Item";
