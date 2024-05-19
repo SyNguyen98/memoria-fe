@@ -9,8 +9,6 @@ import {Menu} from "@mui/icons-material";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {useAppDispatch} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
-import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {useQueryClient} from "@tanstack/react-query";
 import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
 import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 // Components
@@ -46,7 +44,6 @@ export default function MapAndLocation() {
     const [dialogOpened, setDialogOpened] = useState(false);
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const queryClient = useQueryClient();
     const collectionQuery = useCollectionQuery();
     const locationQuery = useLocationQuery(collectionId);
 
@@ -61,28 +58,27 @@ export default function MapAndLocation() {
             if (collection) {
                 setCollectionChose(collection);
             }
-            queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', id]}).then(() => {
-                if (locationQuery.data && locationQuery.data.length > 0) {
-                    let lat = 0, lng = 0;
-                    const markerBounds = latLngBounds([]);
-                    locationQuery.data.forEach(location => {
-                        lat = lat + location.coordinate.latitude;
-                        lng = lng + location.coordinate.longitude;
-                        markerBounds.extend([location.coordinate.latitude, location.coordinate.longitude]);
-                    });
-                    setCenter([lat / locationQuery.data.length, lng / locationQuery.data.length]);
-                    setBounds(markerBounds);
-                }
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
-            });
         } else {
             const collection = collectionQuery.data?.[0];
             if (collection) {
                 setSearchParams({id: collection.id ?? ""});
             }
         }
-    }, [collectionQuery.data, dispatch, locationQuery.data, queryClient, searchParams, setSearchParams, t]);
+    }, [collectionQuery.data, searchParams, setSearchParams]);
+
+    useEffect(() => {
+        if (locationQuery.data && locationQuery.data.length > 0) {
+            let lat = 0, lng = 0;
+            const markerBounds = latLngBounds([]);
+            locationQuery.data.forEach(location => {
+                lat = lat + location.coordinate.latitude;
+                lng = lng + location.coordinate.longitude;
+                markerBounds.extend([location.coordinate.latitude, location.coordinate.longitude]);
+            });
+            setCenter([lat / locationQuery.data.length, lng / locationQuery.data.length]);
+            setBounds(markerBounds);
+        }
+    }, [locationQuery.data]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
