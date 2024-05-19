@@ -1,5 +1,5 @@
 import "./MapAndLocation.scss";
-import {Fragment, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {MapContainer, Marker, TileLayer, Tooltip as TooltipMarker, useMap} from 'react-leaflet';
@@ -145,41 +145,40 @@ export default function MapAndLocation() {
                 </Toolbar>
             </AppBar>
             <div className="map-wrapper">
-                {(collectionQuery.isLoading || locationQuery.isLoading) ? <AppLoader/> :
-                    (collectionChose && locationQuery.data) && (
-                        <Fragment>
-                            <LocationList collection={collectionChose} locations={locationQuery.data}
-                                          handleChoseLocation={handleChoseLocation}/>
-                            <MapContainer className="map" center={center}>
-                                <ChangeView center={center} zoom={zoom} bounds={bounds}/>
-                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                                {locationQuery.data?.map(location => {
-                                    const coordinate = location.coordinate;
-                                    return (
-                                        <Marker key={location.id}
-                                                icon={location.id === locationChose?.id ? greenIcon : blueIcon}
-                                                position={[coordinate.latitude, coordinate.longitude]}
-                                                eventHandlers={{click: () => handleClickMarker(location)}}>
-                                            {!isTabletOrPhone() && (
-                                                <TooltipMarker className="marker-tooltip">
-                                                    <Typography variant="h6">
-                                                        {location.place}
-                                                    </Typography>
-                                                    <Typography variant="subtitle1">
-                                                        {DateUtil.renderDateTime(location)}
-                                                    </Typography>
-                                                    <Typography variant="body1">
-                                                        {location.description}
-                                                    </Typography>
-                                                </TooltipMarker>
-                                            )}
-                                        </Marker>
-                                    )
-                                })}
-                            </MapContainer>
-                        </Fragment>
-                    )
-                }
+                {(collectionQuery.isLoading || locationQuery.isLoading) && <AppLoader/>}
+
+                {(collectionChose && locationQuery.data) && (
+                    <LocationList collection={collectionChose} locations={locationQuery.data}
+                                  handleChoseLocation={handleChoseLocation}/>
+                )}
+
+                <MapContainer className="map" center={center}>
+                    <ChangeView center={center} zoom={zoom} bounds={bounds}/>
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                    {locationQuery.data?.map(location => {
+                        const coordinate = location.coordinate;
+                        return (
+                            <Marker key={location.id}
+                                    icon={location.id === locationChose?.id ? greenIcon : blueIcon}
+                                    position={[coordinate.latitude, coordinate.longitude]}
+                                    eventHandlers={{click: () => handleClickMarker(location)}}>
+                                {!isTabletOrPhone() && (
+                                    <TooltipMarker className="marker-tooltip">
+                                        <Typography variant="h6">
+                                            {location.place}
+                                        </Typography>
+                                        <Typography variant="subtitle1">
+                                            {DateUtil.renderDateTime(location)}
+                                        </Typography>
+                                        <Typography variant="body1">
+                                            {location.description}
+                                        </Typography>
+                                    </TooltipMarker>
+                                )}
+                            </Marker>
+                        )
+                    })}
+                </MapContainer>
             </div>
             {locationChose && (isTabletOrPhone() ? (
                 <LocationDetail location={locationChose}/>
