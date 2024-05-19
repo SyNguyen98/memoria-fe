@@ -15,7 +15,8 @@
     "save": "Lưu",
     "cancel": "Hủy",
     "add": "Thêm",
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "view_location": "Xem địa điểm"
   },
   "homepage": {
     "banner_quote": "Sau cùng thì, tất cả chỉ còn là kỷ niệm",
@@ -75,6 +76,7 @@
   "tags": {
     "family": "Gia đình",
     "friends": "Bạn bè",
-    "colleagues": "Đồng nghiệp"
+    "colleagues": "Đồng nghiệp",
+    "lover": "Người yêu"
   }
 }
