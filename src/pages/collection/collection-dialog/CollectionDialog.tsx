@@ -19,6 +19,7 @@ import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 // Models
 import {Collection} from "../../../models/Collection";
+import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
 
 type Props = {
     open: boolean;
@@ -67,8 +68,11 @@ export default function CollectionDialog(props: Readonly<Props>) {
         {
             label: t("tags.colleagues"),
             value: "COLLEAGUES"
+        },
+        {
+            label: t("tags.lover"),
+            value: "LOVER"
         }
-
     ]
 
     useEffect(() => {
@@ -142,7 +146,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
     }
 
     return (
-        <Dialog className="collection-dialog" maxWidth='md'
+        <Dialog className="collection-dialog" maxWidth={isTabletOrPhone() ? "xs" : "md"}
                 open={props.open} onClose={onClose}>
             <DialogTitle>
                 {props.collection ? t("collection.edit") : t("collection.add")}

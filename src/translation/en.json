@@ -15,7 +15,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "add": "Add",
-    "delete": "Delete"
+    "delete": "Delete",
+    "view_location": "View Location"
   },
   "homepage": {
     "banner_quote": "In the end, there is only memories",
@@ -75,6 +76,7 @@
   "tags": {
     "family": "Family",
     "friends": "Friends",
-    "colleagues": "Colleagues"
+    "colleagues": "Colleagues",
+    "lover": "Lover"
   }
 }

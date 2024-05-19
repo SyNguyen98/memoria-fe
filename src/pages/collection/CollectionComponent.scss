@@ -1,5 +1,5 @@
-@import "../../assets/styles/breakpoint";
-@import "../../assets/styles/color";
+@import "src/assets/styles/breakpoint";
+@import "src/assets/styles/color";
 
 .collection-container {
 
@@ -15,6 +15,7 @@
       font-size: 16px;
       font-weight: bold;
       color: $blue-700;
+
       &:hover {
         color: $blue-500;
         cursor: pointer;
@@ -28,6 +29,81 @@
       .MuiChip-label {
         padding: 8px;
         font-size: 14px;
+      }
+    }
+  }
+
+  .collection-card-list {
+    padding: .5rem 1rem;
+
+    .MuiCard-root {
+      margin-bottom: .5rem;
+      border-top: 3px solid $green-500;
+      &:nth-child(even) {
+        border-top: 3px solid $green-900;
+      }
+
+      .MuiCardContent-root {
+        padding-bottom: 0;
+
+        .collection-title {
+          margin-bottom: .5rem;
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .collection-name {
+          margin-bottom: .5rem;
+          font-size: 16px;
+          font-weight: 600;
+          color: $blue-700;
+        }
+
+        .collection-description {
+          margin-bottom: .5rem;
+          font-size: 14px;
+          color: $gray-700;
+        }
+
+        .title-wrapper, .date-tag-wrapper {
+          display: flex;
+          justify-content: space-between;
+
+          .collection-date {
+            margin: auto 0;
+            font-size: 14px;
+            color: $gray-700;
+          }
+
+          .collection-tag {
+            margin: auto 0;
+
+            .MuiChip-filled {
+              margin-left: 4px;
+              height: 30px;
+
+              .MuiChip-label {
+                padding: 0 8px;
+                font-size: 14px;
+              }
+            }
+          }
+        }
+
+        .MuiChip-outlined {
+          margin: 0 .5rem .5rem 0;
+          height: 28px;
+
+          .MuiChip-label {
+            padding: 0 8px;
+            font-size: 12px;
+          }
+        }
+      }
+
+      .MuiCardActions-root {
+        display: flex;
+        justify-content: space-between;
       }
     }
   }

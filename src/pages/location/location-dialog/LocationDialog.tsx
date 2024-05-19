@@ -155,7 +155,7 @@ export default function LocationDialog(props: Readonly<Props>) {
     }
 
     return (
-        <Dialog className="collection-dialog" maxWidth='lg'
+        <Dialog className="location-dialog" maxWidth='lg'
                 open={props.open} onClose={onClose}>
             <DialogTitle>
                 {props.location ? "Chỉnh Sửa " : "Thêm "} Địa Điểm
