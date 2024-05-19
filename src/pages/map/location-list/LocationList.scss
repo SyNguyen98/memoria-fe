@@ -1,0 +1,82 @@
+@import "src/assets/styles/breakpoint";
+@import "src/assets/styles/color";
+
+.location-list-container {
+  width: 300px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  padding: 1rem;
+  @include respond(tablet) {
+    display: none;
+  }
+
+  .collection-name {
+    margin-bottom: .5rem;
+    font-size: 20px;
+    color: $blue-700;
+  }
+
+  .collection-description {
+    font-size: 14px;
+    color: $gray-700;
+  }
+
+  .MuiDivider-root {
+    margin: 1rem 0;
+  }
+
+  .MuiCard-root {
+    margin-bottom: 1rem;
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.03);
+      transition: transform 0.3s;
+    }
+
+    .MuiCardContent-root {
+      padding: 1rem;
+
+      .location-place {
+        display: flex;
+        width: 100%;
+        color: $blue-700;
+
+        .MuiSvgIcon-root {
+          margin: auto 0;
+          font-size: 20px;
+        }
+
+        .text {
+          font-size: 16px;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .location-time {
+        margin-top: .2rem;
+        display: flex;
+        color: $gray-700;
+
+        .MuiSvgIcon-root {
+          margin: auto 1px auto 3px;
+          font-size: 14px;
+        }
+
+        .text {
+          margin: auto 0;
+          font-size: 12px;
+          font-weight: 300;
+          font-style: italic;
+        }
+      }
+
+      .location-description {
+        margin-top: .5rem;
+        font-size: 14px;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import {Alert, Snackbar} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../app/hook.ts";
-import {closeSnackbar} from "../reducers/SnackbarReducer.ts";
+import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
+import {closeSnackbar} from "../../reducers/SnackbarReducer.ts";
 
 export default function AppSnackbar() {
     const snackbar = useAppSelector(state => state.snackbar.value);
