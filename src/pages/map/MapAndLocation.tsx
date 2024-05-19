@@ -68,14 +68,10 @@ export default function MapAndLocation() {
 
     useEffect(() => {
         if (locationQuery.data && locationQuery.data.length > 0) {
-            let lat = 0, lng = 0;
             const markerBounds = latLngBounds([]);
             locationQuery.data.forEach(location => {
-                lat = lat + location.coordinate.latitude;
-                lng = lng + location.coordinate.longitude;
                 markerBounds.extend([location.coordinate.latitude, location.coordinate.longitude]);
             });
-            setCenter([lat / locationQuery.data.length, lng / locationQuery.data.length]);
             setBounds(markerBounds);
         }
     }, [locationQuery.data]);
@@ -197,13 +193,17 @@ type ChangeViewProps = {
 
 function ChangeView(props: ChangeViewProps) {
     const map = useMap();
-    if (props.zoom) {
-        map.setView(props.center, props.zoom);
-    } else {
-        map.setView(props.center);
-    }
-    if (props.bounds) {
-        map.fitBounds(props.bounds);
-    }
+
+    useEffect(() => {
+        if (props.zoom) {
+            map.setView(props.center, props.zoom);
+        } else {
+            map.setView(props.center);
+        }
+        if (props.bounds) {
+            map.fitBounds(props.bounds);
+        }
+    }, [map, props]);
+
     return null;
 }
