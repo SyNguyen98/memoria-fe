@@ -63,10 +63,14 @@ export default function MapAndLocation() {
             }
             queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', id]}).then(() => {
                 if (locationQuery.data && locationQuery.data.length > 0) {
+                    let lat = 0, lng = 0;
                     const markerBounds = latLngBounds([]);
                     locationQuery.data.forEach(location => {
+                        lat = lat + location.coordinate.latitude;
+                        lng = lng + location.coordinate.longitude;
                         markerBounds.extend([location.coordinate.latitude, location.coordinate.longitude]);
                     });
+                    setCenter([lat / locationQuery.data.length, lng / locationQuery.data.length]);
                     setBounds(markerBounds);
                 }
             }).catch(() => {
@@ -96,7 +100,7 @@ export default function MapAndLocation() {
         setLocationChose(location);
         setBounds(null);
         if (isTabletOrPhone()) {
-            setCenter([location.coordinate.latitude - 0.03, location.coordinate.longitude]);
+            setCenter([location.coordinate.latitude - 0.04, location.coordinate.longitude]);
             setZoom(13);
         } else {
             setDialogOpened(true);
@@ -182,7 +186,7 @@ export default function MapAndLocation() {
                 }
             </div>
             {locationChose && (isTabletOrPhone() ? (
-                <LocationDetail location={locationChose} />
+                <LocationDetail location={locationChose}/>
             ) : (
                 <ItemViewDialog location={locationChose} open={dialogOpened} onClose={handleCloseDialog}/>
             ))}
