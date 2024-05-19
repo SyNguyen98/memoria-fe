@@ -11,7 +11,7 @@ import {setUser} from "../reducers/UserReducer";
 import {openSnackbar} from "../reducers/SnackbarReducer";
 // Components
 import AppLoader from "../components/app-loader/AppLoader.tsx";
-import AppSnackbar from "../components/AppSnackbar.tsx";
+import AppSnackbar from "../components/app-snackbar/AppSnackbar.tsx";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header.tsx";
 import Home from "../pages/home/Home.tsx";
