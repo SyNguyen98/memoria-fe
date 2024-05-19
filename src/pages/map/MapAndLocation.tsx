@@ -22,16 +22,16 @@ import {Collection} from "../../models/Collection.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 import LocationList from "./location-list/LocationList.tsx";
 
-const greenIcon = new Icon({
-    iconUrl: 'https://i.ibb.co/k9VW1GL/green-marker.png',
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
+const redIcon = new Icon({
+    iconUrl: 'https://i.ibb.co/RBTLwTB/red-marker.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
 });
 
 const blueIcon = new Icon({
-    iconUrl: 'https://i.ibb.co/drCJ75Z/blue-marker.png',
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
+    iconUrl: 'https://i.ibb.co/MkQgTfN/blue-marker.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
 });
 
 export default function MapAndLocation() {
@@ -155,7 +155,7 @@ export default function MapAndLocation() {
                         const coordinate = location.coordinate;
                         return (
                             <Marker key={location.id}
-                                    icon={location.id === locationChose?.id ? greenIcon : blueIcon}
+                                    icon={location.id === locationChose?.id ? redIcon : blueIcon}
                                     position={[coordinate.latitude, coordinate.longitude]}
                                     eventHandlers={{click: () => handleClickMarker(location)}}>
                                 {!isTabletOrPhone() && (

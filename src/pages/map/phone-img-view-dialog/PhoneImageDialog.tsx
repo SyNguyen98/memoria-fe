@@ -20,6 +20,7 @@ type Props = {
 export default function PhoneImageDialog(props: Readonly<Props>) {
     const [images, setImages] = useState<ReactImageGalleryItem[]>([]);
     const [index, setIndex] = useState(0);
+    const [imageLoading, setImageLoading] = useState(true);
 
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
@@ -77,13 +78,14 @@ export default function PhoneImageDialog(props: Readonly<Props>) {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <HashLoader className="item-loading" color="#2196F3" size={50}/>
+                {imageLoading && <HashLoader className="item-loading" color="#2196F3" size={50}/>}
                 <ImageGallery items={images} lazyLoad
                               showBullets={false} showNav={false}
                               showPlayButton={false} showFullscreenButton={false}
                               showThumbnails={false}
                               startIndex={props.index}
-                              onSlide={handleSlide}/>
+                              onSlide={handleSlide}
+                              onImageLoad={() => setImageLoading(false)}/>
             </DialogContent>
             <DialogActions>
                 {index + 1} / {images.length}
