@@ -9,6 +9,9 @@ import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
     AppBar,
     Button,
+    Card,
+    CardActions,
+    CardContent,
     Dialog,
     DialogActions,
     DialogContent,
@@ -33,6 +36,7 @@ import {PathName} from "../../constants/Page";
 // Utils & Services
 import {DateUtil} from "../../utils/DateUtil";
 import {useTranslation} from "react-i18next";
+import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 
 function LocationComponent() {
     const [collectionId, setCollectionId] = useState('');
@@ -115,6 +119,94 @@ function LocationComponent() {
         deleteMutation.mutate(choseLocation!.id!);
     }
 
+    const renderLocationList = () => {
+        if (isTabletOrPhone()) {
+            return (
+                <div className="location-card-list">
+                    {locationQuery.data?.map(location => (
+                        <Card key={location.id}>
+                            <CardContent>
+                                <div className="location-place">
+                                    {location.place}
+                                </div>
+                                <div className="location-description">
+                                    {location.description}
+                                </div>
+                                <div className="location-title">
+                                    {t("collection.modified_date")}
+                                </div>
+                                <div className="location-date">
+                                    {DateUtil.renderDateTime(location)}
+                                </div>
+                            </CardContent>
+                            <CardActions>
+                                <div className="btn-wrapper">
+                                    <IconButton size="small" color="primary"
+                                                onClick={() => handleOpenEditDialog(location)}>
+                                        <Edit/>
+                                    </IconButton>
+                                    <IconButton size="small" color="error"
+                                                onClick={() => handleOpenDeleteDialog(location)}>
+                                        <Delete/>
+                                    </IconButton>
+                                </div>
+                                <Button size="small" color="primary" variant="text"
+                                        onClick={() => handleNavigateToItem(location)}>
+                                    {t("button.view_item")}
+                                    <KeyboardArrowRight/>
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    ))}
+                </div>
+            )
+        }
+        return (
+            <Table className="location-table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell align="center">#</TableCell>
+                        <TableCell>Địa Điểm</TableCell>
+                        <TableCell>Mô Tả</TableCell>
+                        <TableCell>Thời Gian</TableCell>
+                        {isCollectionOwner() && <TableCell/>}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {locationQuery.data?.map((location, index) => (
+                        <TableRow key={location.id}>
+                            <TableCell align="center" width={50}>
+                                {index + 1}
+                            </TableCell>
+                            <TableCell width={300}>
+                                <Typography variant="body1" className="location-name"
+                                            onClick={() => handleNavigateToItem(location)}>
+                                    {location.place}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                {location.description}
+                            </TableCell>
+                            <TableCell width={130}>
+                                {DateUtil.renderDateTime(location)}
+                            </TableCell>
+                            {isCollectionOwner() && (
+                                <TableCell align="center" width={80}>
+                                    <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(location)}>
+                                        <Edit/>
+                                    </IconButton>
+                                    <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(location)}>
+                                        <Delete/>
+                                    </IconButton>
+                                </TableCell>
+                            )}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        )
+    }
+
     return (
         <section className="location-container">
             {/* App Bar */}
@@ -136,51 +228,8 @@ function LocationComponent() {
                     </Button>
                 </Toolbar>
             </AppBar>
-            {/* Collection List */}
-            {locationQuery.isLoading ? <AppLoader /> : (
-                <Table className="location-table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="center">#</TableCell>
-                            <TableCell>Địa Điểm</TableCell>
-                            <TableCell>Mô Tả</TableCell>
-                            <TableCell>Thời Gian</TableCell>
-                            {isCollectionOwner() && <TableCell/>}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {locationQuery.data?.map((location, index) => (
-                            <TableRow key={location.id}>
-                                <TableCell align="center" width={50}>
-                                    {index + 1}
-                                </TableCell>
-                                <TableCell width={300}>
-                                    <Typography variant="body1" className="location-name"
-                                                onClick={() => handleNavigateToItem(location)}>
-                                        {location.place}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    {location.description}
-                                </TableCell>
-                                <TableCell width={130}>
-                                    {DateUtil.renderDateTime(location)}
-                                </TableCell>
-                                {isCollectionOwner() && (
-                                    <TableCell align="center" width={80}>
-                                        <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(location)}>
-                                            <Edit/>
-                                        </IconButton>
-                                        <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(location)}>
-                                            <Delete/>
-                                        </IconButton>
-                                    </TableCell>
-                                )}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            )}
+            {/* Location List */}
+            {locationQuery.isLoading ? <AppLoader /> : renderLocationList()}
             {/* Edit dialog */}
             <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation}/>
             {/* Delete dialog */}

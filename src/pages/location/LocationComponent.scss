@@ -1,10 +1,13 @@
-@import "../../assets/styles/breakpoint";
-@import "../../assets/styles/color";
+@import "src/assets/styles/breakpoint";
+@import "src/assets/styles/color";
 
 .location-container {
 
   .page-title {
     display: flex;
+    @include respond(tablet) {
+      font-size: 16px;
+    }
 
     .collection-title {
       text-decoration: unset;
@@ -37,6 +40,52 @@
       &:hover {
         color: $blue-500;
         cursor: pointer;
+      }
+    }
+  }
+
+  .location-card-list {
+    padding: .5rem 1rem;
+
+    .MuiCard-root {
+      margin-bottom: .5rem;
+      border-top: 3px solid $green-500;
+      &:nth-child(even) {
+        border-top: 3px solid $green-900;
+      }
+
+      .MuiCardContent-root {
+        padding-bottom: 0;
+
+        .location-title {
+          margin-bottom: .5rem;
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .location-place {
+          margin-bottom: .5rem;
+          font-size: 18px;
+          font-weight: 600;
+          color: $blue-700;
+        }
+
+        .location-description {
+          margin-bottom: .5rem;
+          font-size: 14px;
+          color: $gray-700;
+        }
+
+        .location-date {
+          margin: auto 0;
+          font-size: 14px;
+          color: $gray-700;
+        }
+      }
+
+      .MuiCardActions-root {
+        display: flex;
+        justify-content: space-between;
       }
     }
   }
