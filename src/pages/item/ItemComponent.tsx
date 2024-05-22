@@ -79,7 +79,7 @@ export default function ItemComponent() {
                             {t("page.collection")}
                         </Link>
                         <KeyboardArrowRight />
-                        <Link className="location-title" to={`/${PathName.LOCATION}?collectionId=${sessionStorage.getItem(SessionKey.COLLECTION_ID)}`}>
+                        <Link className="location-title" to={`/${PathName.LOCATION}?id=${sessionStorage.getItem(SessionKey.COLLECTION_ID)}`}>
                             {collectionName}
                         </Link>
                         <KeyboardArrowRight />

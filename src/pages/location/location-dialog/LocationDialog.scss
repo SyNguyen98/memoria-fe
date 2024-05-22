@@ -1,4 +1,5 @@
-@import "../../../assets/styles/color";
+@import "src/assets/styles/breakpoint";
+@import "src/assets/styles/color";
 
 .location-dialog {
   text-align: center;
@@ -6,6 +7,9 @@
   .MuiDialog-paper {
     min-width: 600px;
     background-color: $white !important;
+    @include respond(tablet) {
+      min-width: unset;
+    }
   }
 
   .MuiDialogTitle-root {
@@ -17,6 +21,10 @@
 
     .MuiTextField-root {
       margin: .5rem 0;
+    }
+
+    .time-input {
+      min-width: 100%;
     }
   }
 

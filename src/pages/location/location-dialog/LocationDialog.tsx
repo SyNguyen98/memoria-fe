@@ -11,6 +11,7 @@ import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {useAppDispatch} from "../../../app/hook";
 import {Location} from "../../../models/Location";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
+import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
 
 type Props = {
     open: boolean;
@@ -82,7 +83,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                 longitude: props.location.coordinate.longitude,
             });
         }
-        const collectionId = searchParams.get("collectionId");
+        const collectionId = searchParams.get("id");
         if (collectionId) {
             setCollectionId(collectionId);
         }
@@ -155,7 +156,7 @@ export default function LocationDialog(props: Readonly<Props>) {
     }
 
     return (
-        <Dialog className="location-dialog" maxWidth='lg'
+        <Dialog className="location-dialog" maxWidth={isTabletOrPhone() ? "xs" : "lg"}
                 open={props.open} onClose={onClose}>
             <DialogTitle>
                 {props.location ? "Chỉnh Sửa " : "Thêm "} Địa Điểm
@@ -172,7 +173,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                            value={inputs.description}
                            onChange={onInputChange}/>
                 <Grid container spacing={1}>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} md={3}>
                         {/* Year */}
                         <TextField select fullWidth
                                    name="takenYear" label="Năm"
@@ -185,7 +186,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} md={3}>
                         {/* Month */}
                         <TextField select fullWidth
                                    name="takenMonth" label="Tháng"
@@ -199,7 +200,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} md={3}>
                         {/* Day */}
                         <TextField select fullWidth
                                    name="takenDay" label="Ngày"
@@ -213,10 +214,10 @@ export default function LocationDialog(props: Readonly<Props>) {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} md={3}>
                         {/* Time */}
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <TimePicker label="Thời Gian" ampm={false}
+                            <TimePicker className="time-input" label="Thời Gian" ampm={false}
                                         disabled={inputs.takenYear === null && inputs.takenMonth === null && inputs.takenDay === null}
                                         value={getTime()} onChange={onInputTime}/>
                         </LocalizationProvider>
@@ -224,14 +225,14 @@ export default function LocationDialog(props: Readonly<Props>) {
                 </Grid>
                 {/* Coordinate */}
                 <Grid container spacing={1}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         {/* Latitude */}
                         <TextField autoComplete="off" required fullWidth
                                    name="latitude" label="Vĩ Độ"
                                    value={inputs.latitude}
                                    onChange={onInputCoordinate}/>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         {/* Longitude */}
                         <TextField autoComplete="off" required fullWidth
                                    name="longitude" label="Kinh Độ"
