@@ -111,7 +111,7 @@ function CollectionComponent() {
         if (isTabletOrPhone()) {
             return (
                 <div className="collection-card-list">
-                    {collectionQuery.data?.map((collection) =>
+                    {collectionQuery.data?.map(collection =>
                         <Card key={collection.id}>
                             <CardContent>
                                 <div className="collection-name">
