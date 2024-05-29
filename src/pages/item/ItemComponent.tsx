@@ -75,7 +75,7 @@ export default function ItemComponent() {
                         <MenuIcon />
                     </IconButton>
                     <Typography className="page-title" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link className="location-title" to={`/${PathName.COLLECTION}`}>
+                        <Link className="collection-title" to={`/${PathName.COLLECTION}`}>
                             {t("page.collection")}
                         </Link>
                         <KeyboardArrowRight />
@@ -83,15 +83,17 @@ export default function ItemComponent() {
                             {collectionName}
                         </Link>
                         <KeyboardArrowRight />
-                        {locationPlace}
+                        <div className="location-place">
+                            {locationPlace}
+                        </div>
                     </Typography>
                 </Toolbar>
             </AppBar>
              {/* Image/Video List */}
             {itemQuery.isLoading ? <AppLoader /> : (
-                <Grid className="item-list" container spacing={2}>
+                <Grid className="item-list" container spacing={1}>
                     {items.map((item, index) =>
-                        <Grid key={item.id} item lg={2} md={2.4} xs={3}>
+                        <Grid key={item.id} item lg={2} md={2.4} sm={3} xs={4}>
                             <img alt={item.name} src={item.thumbnailUrl}
                                 // onContextMenu={(event) => handleRightClickImage(event)}
                                  onClick={() => handleOpenViewDialog(index)}/>
