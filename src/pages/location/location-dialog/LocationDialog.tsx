@@ -169,7 +169,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                            value={inputs.description}
                            onChange={onInputChange}/>
                 <Grid container spacing={1}>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={6} md={3}>
                         {/* Year */}
                         <TextField select fullWidth
                                    name="takenYear" label="Năm"
@@ -182,7 +182,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={6} md={3}>
                         {/* Month */}
                         <TextField select fullWidth
                                    name="takenMonth" label="Tháng"
@@ -196,7 +196,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={6} md={3}>
                         {/* Day */}
                         <TextField select fullWidth
                                    name="takenDay" label="Ngày"
@@ -210,7 +210,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={6} md={3}>
                         {/* Time */}
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <TimePicker className="time-input" label="Thời Gian" ampm={false}

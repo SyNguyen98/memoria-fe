@@ -22,11 +22,17 @@
 
     .MuiSvgIcon-root {
       margin: auto .5rem;
+      @include respond(tablet) {
+        margin: auto 2px;
+      }
     }
   }
 
   .add-btn {
     color: $white;
+    @include respond(tablet) {
+      padding: 0 !important;
+    }
   }
 
   .location-table {
