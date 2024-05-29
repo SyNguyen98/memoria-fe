@@ -41,10 +41,15 @@ const initialInput: Input = {
     longitude: 0,
 }
 
+
+const MONTHS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const DAYS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+const CURRENT_YEAR = new Date().getFullYear();
+const YEARS: number[] = Array.from({length: CURRENT_YEAR - 2000 + 1}, (_, i) => CURRENT_YEAR - i);
+
 export default function LocationDialog(props: Readonly<Props>) {
     const [collectionId, setCollectionId] = useState('');
     const [inputs, setInputs] = useState<Input>(initialInput);
-    const [years, setYears] = useState<number[]>([]);
 
     const [searchParams] = useSearchParams();
     const {t} = useTranslation();
@@ -61,16 +66,7 @@ export default function LocationDialog(props: Readonly<Props>) {
     const createMutation = useCreateLocationMutation(onSuccess, onError);
     const updateMutation = useUpdateLocationMutation(onSuccess, onError);
 
-    const MONTHS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    const DAYS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
-
     useEffect(() => {
-        const _years = []
-        const currentYear = new Date().getFullYear();
-        for (let i = currentYear; i >= 1990; i--) {
-            _years.push(i);
-        }
-        setYears(_years);
         if (props.location) {
             setInputs({
                 place: props.location.place,
@@ -179,7 +175,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                                    name="takenYear" label="Năm"
                                    value={inputs.takenYear}
                                    onChange={onInputChange}>
-                            {years.map(year => (
+                            {YEARS.map(year => (
                                 <MenuItem key={year} value={year}>
                                     {year}
                                 </MenuItem>
