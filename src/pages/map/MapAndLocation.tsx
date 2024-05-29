@@ -25,13 +25,13 @@ import LocationList from "./location-list/LocationList.tsx";
 const redIcon = new Icon({
     iconUrl: 'https://i.ibb.co/RBTLwTB/red-marker.png',
     iconSize: [40, 40],
-    iconAnchor: [20, 20],
+    iconAnchor: [18, 15],
 });
 
 const blueIcon = new Icon({
     iconUrl: 'https://i.ibb.co/MkQgTfN/blue-marker.png',
     iconSize: [40, 40],
-    iconAnchor: [20, 20],
+    iconAnchor: [18, 15],
 });
 
 export default function MapAndLocation() {

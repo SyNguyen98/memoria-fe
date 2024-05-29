@@ -1,14 +1,18 @@
-@import "../../assets/styles/color";
+@import "src/assets/styles/breakpoint";
+@import "src/assets/styles/color";
 
 .item-container {
 
   .page-title {
     display: flex;
 
-    .location-title {
+    .collection-title, .location-title {
       text-decoration: unset;
       font-weight: 400;
       color: white;
+      @include respond(tablet) {
+        font-size: 14px;
+      }
 
       &:hover {
         cursor: pointer;
@@ -16,8 +20,30 @@
       }
     }
 
+    .location-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @include respond(tablet) {
+        width: 20vw;
+      }
+    }
+
+    .location-place {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @include respond(tablet) {
+        width: 20vw;
+        font-size: 14px;
+      }
+    }
+
     .MuiSvgIcon-root {
       margin: auto .5rem;
+      @include respond(tablet) {
+        margin: auto 2px;
+      }
     }
   }
 
