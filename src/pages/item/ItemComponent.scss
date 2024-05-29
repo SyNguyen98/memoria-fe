@@ -49,6 +49,9 @@
 
   .add-btn {
     color: $white;
+    @include respond(tablet) {
+      padding: 0 !important;
+    }
   }
 
   .item-list {

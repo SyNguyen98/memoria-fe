@@ -56,6 +56,9 @@
 
   .MuiDialogContent-root {
     display: flex;
+    @include respond(tablet) {
+      padding: 1rem 0;
+    }
 
     .item-wrapper {
       position: relative;
