@@ -15,21 +15,21 @@ import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import LocationDetail from "./location-detail/LocationDetail.tsx";
+import LocationList from "./location-list/LocationList.tsx";
 // Models & Services
 import {Location} from "../../models/Location";
 import {DateUtil} from "../../utils/DateUtil";
 import {Collection} from "../../models/Collection.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import LocationList from "./location-list/LocationList.tsx";
 
 const redIcon = new Icon({
-    iconUrl: 'https://i.ibb.co/RBTLwTB/red-marker.png',
-    iconSize: [40, 40],
-    iconAnchor: [18, 15],
+    iconUrl: 'https://i.ibb.co/W0fR1J0/red-marker.png',
+    iconSize: [42, 42],
+    iconAnchor: [20, 18],
 });
 
 const blueIcon = new Icon({
-    iconUrl: 'https://i.ibb.co/MkQgTfN/blue-marker.png',
+    iconUrl: 'https://i.ibb.co/mvghYJv/blue-marker.png',
     iconSize: [40, 40],
     iconAnchor: [18, 15],
 });
@@ -38,8 +38,6 @@ export default function MapAndLocation() {
     const [collectionId, setCollectionId] = useState("");
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
     const [locationChose, setLocationChose] = useState<Location | null>(null);
-    const [center, setCenter] = useState<[latCenter: number, lngCenter: number]>([10.788393847875726, 106.69381039515127]);
-    const [zoom, setZoom] = useState(13);
     const [bounds, setBounds] = useState<LatLngBounds | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
 
@@ -90,15 +88,7 @@ export default function MapAndLocation() {
 
     const handleClickMarker = (location: Location) => {
         setLocationChose(location);
-        setBounds(null);
-        if (isTabletOrPhone()) {
-            setCenter([location.coordinate.latitude - 0.04, location.coordinate.longitude]);
-            setZoom(13);
-        } else {
-            setDialogOpened(true);
-            setCenter([location.coordinate.latitude, location.coordinate.longitude]);
-            setZoom(15);
-        }
+        setDialogOpened(true);
     }
 
     const handleCloseDialog = () => {
@@ -108,13 +98,10 @@ export default function MapAndLocation() {
 
     const handleChoseLocation = (location: Location) => {
         setLocationChose(location);
-        setCenter([location.coordinate.latitude, location.coordinate.longitude]);
-        setZoom(15);
-        setBounds(null);
     }
 
     return (
-        <section id="map-container" className="map-and-location-container">
+        <section className="map-and-location-container">
             {/* App Bar*/}
             <AppBar position="static">
                 <Toolbar>
@@ -122,7 +109,7 @@ export default function MapAndLocation() {
                                 onClick={handleOpenMenu}>
                         <Menu/>
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                    <Typography className="map-title" sx={{flexGrow: 1}}>
                         {t("page.map")}
                     </Typography>
                     <FormControl className="collection-select" size="small" variant="filled">
@@ -148,8 +135,8 @@ export default function MapAndLocation() {
                                   handleChoseLocation={handleChoseLocation}/>
                 )}
 
-                <MapContainer className="map" center={center}>
-                    <ChangeView center={center} zoom={zoom} bounds={bounds}/>
+                <MapContainer className="map">
+                    <ChangeView bounds={bounds}/>
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                     {locationQuery.data?.map(location => {
                         const coordinate = location.coordinate;
@@ -186,8 +173,6 @@ export default function MapAndLocation() {
 }
 
 type ChangeViewProps = {
-    center: [latCenter: number, lngCenter: number];
-    zoom: number | null;
     bounds: LatLngBounds | null;
 }
 
@@ -195,11 +180,6 @@ function ChangeView(props: ChangeViewProps) {
     const map = useMap();
 
     useEffect(() => {
-        if (props.zoom) {
-            map.setView(props.center, props.zoom);
-        } else {
-            map.setView(props.center);
-        }
         if (props.bounds) {
             map.fitBounds(props.bounds);
         }

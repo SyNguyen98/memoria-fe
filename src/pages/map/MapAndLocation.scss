@@ -6,10 +6,12 @@
   position: relative;
   overflow-x: hidden;
 
-  .filter-title {
-    margin-right: 1rem;
-    font-size: 18px;
-    font-weight: 500;
+  .map-title {
+    font-size: 20px;
+    font-weight: 700;
+    @include respond(tablet) {
+      font-size: 16px;
+    }
   }
 
   .collection-select {
@@ -59,7 +61,7 @@
           white-space: pre-wrap;
         }
       }
-  }
+    }
 
     .leaflet-popup-content {
       margin: 1rem;
