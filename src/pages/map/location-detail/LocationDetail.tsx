@@ -17,7 +17,7 @@ const MAX_HEIGHT = '60svh';
 
 function LocationDetail(props: Readonly<Props>) {
     const [items, setItems] = useState<Item[]>([]);
-    const [showDetail, setShowDetail] = useState(false);
+    const [showDetail, setShowDetail] = useState(true);
     const [minHeight, setMinHeight] = useState(0);
     const [imageListTop, setImageListTop] = useState(true);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -47,6 +47,7 @@ function LocationDetail(props: Readonly<Props>) {
     useEffect(() => {
         const detailHeight = detailRef.current ? detailRef.current.offsetHeight : 0;
         setMinHeight(detailHeight + 8);
+        setShowDetail(true);
     }, [props]);
 
     useEffect(() => {
