@@ -2,6 +2,7 @@
   "language": "Ngôn ngữ",
   "feedback": "Phản hồi lỗi ↗",
   "logout": "Đăng xuất",
+  "filter": "Bộ lọc",
   "header_menu": {
     "homepage": "Trang Chủ",
     "about_memoria": "Về MEMORIA",
@@ -9,7 +10,8 @@
   },
   "page": {
     "map": "Bản Đồ",
-    "collection": "Bộ Sưu Tập"
+    "collection": "Bộ Sưu Tập",
+    "location": "Địa Điểm"
   },
   "button": {
     "save": "Lưu",

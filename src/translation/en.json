@@ -2,6 +2,7 @@
   "language": "Language",
   "feedback": "Error feedback ↗",
   "logout": "Logout",
+  "filter": "Filter",
   "header_menu": {
     "homepage": "Homepage",
     "about_memoria": "About MEMORIA",
@@ -9,7 +10,8 @@
   },
   "page": {
     "map": "Map",
-    "collection": "Collection"
+    "collection": "Collection",
+    "location": "Location"
   },
   "button": {
     "save": "Save",
