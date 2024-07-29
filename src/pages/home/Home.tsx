@@ -23,7 +23,7 @@ export default function Home() {
                     <Button className="login-btn" variant="outlined"
                             onClick={handleLoginWithGoogle}>
                         <img className="google-icon" alt="Google"
-                             src="https://i.ibb.co/82K2Hhy/google-logo.png"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/google-logo.png?raw=true"/>
                         <Typography variant="body1">
                             {t('homepage.banner_login')}
                         </Typography>
@@ -37,7 +37,7 @@ export default function Home() {
                 </Typography>
                 <div className="introduce-content">
                     <img className="introduce-img" alt="introduction"
-                         src="https://i.ibb.co/DCpBHrF/introduction.png"/>
+                         src="https://github.com/SyNguyen98/image-storage/blob/main/introduction.png?raw=true"/>
                     <div className="introduce-text">
                         {t('homepage.memoria_introduction')}
                     </div>
@@ -57,7 +57,7 @@ export default function Home() {
                         {t('homepage.features.1.title')}
                     </Typography>
                     <img alt="man-and-camera" width={300} height={300}
-                         src="https://i.ibb.co/SwtJTRB/man-and-camera.png"/>
+                         src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.png?raw=true"/>
                     <Typography variant="body1">
                         {t('homepage.features.1.description')}
                     </Typography>
@@ -67,7 +67,7 @@ export default function Home() {
                         {t('homepage.features.2.title')}
                     </Typography>
                     <img alt="album" width={300} height={250}
-                         src="https://i.ibb.co/vJrxxSF/album.png"/>
+                         src="https://github.com/SyNguyen98/image-storage/blob/main/album.png?raw=true"/>
                     <Typography variant="body1">
                         {t('homepage.features.2.description')}
                     </Typography>
@@ -77,7 +77,7 @@ export default function Home() {
                         {t('homepage.features.3.title')}
                     </Typography>
                     <img alt="man-with-map" width={300} height={250}
-                         src="https://i.ibb.co/2KVcj2B/man-with-map.png"/>
+                         src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.png?raw=true"/>
                     <Typography variant="body1">
                         {t('homepage.features.3.description')}
                     </Typography>
@@ -87,7 +87,7 @@ export default function Home() {
                     {/* Row 1 */}
                     <Grid item xs={6}>
                         <img alt="man-and-camera" width={350} height={350}
-                             src="https://i.ibb.co/SwtJTRB/man-and-camera.png"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.png?raw=truev"/>
                     </Grid>
                     <Grid item xs={6} className="text-wrapper">
                         <Typography variant="h3">
@@ -108,12 +108,12 @@ export default function Home() {
                     </Grid>
                     <Grid item xs={6} className="img-wrapper">
                         <img className="float-right" alt="album" width={400} height={400}
-                             src="https://i.ibb.co/vJrxxSF/album.png"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/album.png?raw=true"/>
                     </Grid>
                     {/* Row 3 */}
                     <Grid item xs={6}>
                         <img alt="man-with-map" width={450} height={450}
-                             src="https://i.ibb.co/2KVcj2B/man-with-map.png"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.png?raw=true"/>
                     </Grid>
                     <Grid item xs={6} className="text-wrapper">
                         <Typography variant="h3">
@@ -143,7 +143,7 @@ export default function Home() {
 
             <footer className="app-footer">
                 <div className="left-wrapper">
-                    <img alt="App Logo" src="https://i.ibb.co/khS54Vr/app-logo.png"/>
+                    <img alt="App Logo" src="https://github.com/SyNguyen98/image-storage/blob/main/app-logo.png?raw=true"/>
                     <Typography variant="body1">
                         MEMORIA {VERSION}, 2024
                     </Typography>
