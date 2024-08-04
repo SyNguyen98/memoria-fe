@@ -8,6 +8,8 @@ import {Item} from "../../../models/Item.ts";
 import {useSwipeable} from "react-swipeable";
 import {DateUtil} from "../../../utils/DateUtil.ts";
 import PhoneImageDialog from "../phone-img-view-dialog/PhoneImageDialog.tsx";
+import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
+import {HashLoader} from "react-spinners";
 
 type Props = {
     location: Location;
@@ -25,7 +27,7 @@ function LocationDetail(props: Readonly<Props>) {
 
     const detailRef = useRef<HTMLDivElement>(null);
 
-    const itemQuery = useItemQuery(props.location.driveItemId!, "medium");
+    const itemQuery = useItemQuery(props.location.driveItemId!, isTabletOrPhone() ? "small" : "medium");
 
     const detailSwipeHandlers = useSwipeable({
         onSwipedUp: () => {
@@ -98,19 +100,23 @@ function LocationDetail(props: Readonly<Props>) {
                     </div>
                 </div>
                 {showDetail && (
-                    <ImageList className="image-list" variant="woven" {...imagesSwipeHandler}
-                               cols={3} gap={6}
-                               style={{height: `calc(${MAX_HEIGHT} - ${minHeight + 16}px`}}
-                               onScroll={handleScroll}>
-                        {items.map((item, i) =>
-                            <ImageListItem key={item.id} onClick={() => handleOpenDialog(i)}>
-                                <img srcSet={`${item.thumbnailUrl}?fit=crop&auto=format&dpr=2 2x`}
-                                     src={`${item.thumbnailUrl}?fit=crop&auto=format`}
-                                     alt={item.name}
-                                     loading="lazy"/>
-                            </ImageListItem>
-                        )}
-                    </ImageList>
+                    itemQuery && itemQuery.isLoading ? (
+                        <HashLoader className="hash-loader" color="#2196F3" size={60}/>
+                    ) : (
+                        <ImageList className="image-list" variant="quilted" {...imagesSwipeHandler}
+                                   cols={3} gap={6}
+                                   style={{height: `calc(${MAX_HEIGHT} - ${minHeight + 16}px`}}
+                                   onScroll={handleScroll}>
+                            {items.map((item, i) =>
+                                <ImageListItem key={item.id} onClick={() => handleOpenDialog(i)}>
+                                    <img srcSet={`${item.thumbnailUrl}?fit=crop&auto=format&dpr=2 2x`}
+                                         src={`${item.thumbnailUrl}?fit=crop&auto=format`}
+                                         alt={item.name}
+                                         loading="lazy"/>
+                                </ImageListItem>
+                            )}
+                        </ImageList>
+                    )
                 )}
             </div>
 

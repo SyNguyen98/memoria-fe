@@ -49,6 +49,7 @@ export default function MapAndLocation() {
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
     const [locationChose, setLocationChose] = useState<Location | null>(null);
     const [center, setCenter] = useState<[number, number]>([0, 0]);
+    const [zoom, setZoom] = useState(13);
     const [filterMenuOpened, setFilterMenuOpened] = useState(false);
     const [dialogOpened, setDialogOpened] = useState(false);
 
@@ -84,6 +85,7 @@ export default function MapAndLocation() {
                 centerLng += location.coordinate.longitude;
             });
             setCenter([centerLat / locationQuery.data.length, centerLng / locationQuery.data.length]);
+            setZoom(13);
         }
     }, [locationQuery.data]);
 
@@ -127,7 +129,8 @@ export default function MapAndLocation() {
         if (location) {
             setLocationChose(location);
             if (isTabletOrPhone()) {
-                setCenter([location.coordinate.latitude - 0.03, location.coordinate.longitude]);
+                setCenter([location.coordinate.latitude - 0.01, location.coordinate.longitude]);
+                setZoom(15);
             } else {
                 setCenter([location.coordinate.latitude, location.coordinate.longitude]);
             }
@@ -139,7 +142,8 @@ export default function MapAndLocation() {
         setLocationChose(location);
         setDialogOpened(true);
         if (isTabletOrPhone()) {
-            setCenter([location.coordinate.latitude - 0.03, location.coordinate.longitude]);
+            setCenter([location.coordinate.latitude - 0.01, location.coordinate.longitude]);
+            setZoom(15);
         } else {
             setCenter([location.coordinate.latitude, location.coordinate.longitude]);
         }
@@ -234,7 +238,7 @@ export default function MapAndLocation() {
 
                 <MapContainer className="map">
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                    <ChangeView center={center}/>
+                    <ChangeView center={center} zoom={zoom}/>
                     {locationQuery.data?.map(location => {
                         const coordinate = location.coordinate;
                         return (
@@ -260,26 +264,25 @@ export default function MapAndLocation() {
                     })}
                 </MapContainer>
             </div>
-            {
-                locationChose && (isTabletOrPhone() ? (
-                    <LocationDetail location={locationChose}/>
-                ) : (
-                    <ItemViewDialog location={locationChose} open={dialogOpened} onClose={handleCloseDialog}/>
-                ))
-            }
+            {locationChose && (isTabletOrPhone() ? (
+                <LocationDetail location={locationChose}/>
+            ) : (
+                <ItemViewDialog location={locationChose} open={dialogOpened} onClose={handleCloseDialog}/>
+            ))}
         </section>
     )
 }
 
 type ChangeViewProps = {
     center: LatLngExpression;
+    zoom: number
 }
 
 function ChangeView(props: ChangeViewProps) {
     const map = useMap();
 
     useEffect(() => {
-        map.setView(props.center, 13);
+        map.setView(props.center, props.zoom);
     }, [map, props]);
 
     return null;
