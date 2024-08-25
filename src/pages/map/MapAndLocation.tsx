@@ -138,6 +138,11 @@ export default function MapAndLocation() {
         setFilterMenuOpened(false);
     }
 
+    /**
+     * Handles the click event for the marker.
+     * It sets the chosen location and opens the dialog to display the location details.
+     * Additionally, it sets the center of the map to the selected location.
+     */
     const handleClickMarker = (location: Location) => {
         setLocationChose(location);
         setDialogOpened(true);
@@ -146,6 +151,7 @@ export default function MapAndLocation() {
             setZoom(15);
         } else {
             setCenter([location.coordinate.latitude, location.coordinate.longitude]);
+            setZoom(17);
         }
     }
 
@@ -238,7 +244,8 @@ export default function MapAndLocation() {
 
                 <MapContainer className="map">
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                    <ChangeView center={center} zoom={zoom}/>
+                    <ChangeView center={center}
+                                zoom={zoom}/>
                     {locationQuery.data?.map(location => {
                         const coordinate = location.coordinate;
                         return (
@@ -275,7 +282,7 @@ export default function MapAndLocation() {
 
 type ChangeViewProps = {
     center: LatLngExpression;
-    zoom: number
+    zoom: number;
 }
 
 function ChangeView(props: ChangeViewProps) {
