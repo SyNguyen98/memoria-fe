@@ -75,13 +75,16 @@ export default function ImageDialog(props: Readonly<Props>) {
         setItemLoading(true);
     }
 
+    /**
+     * Handles the wheel event to scroll the specified element horizontally.
+     */
     const onWheel = (event: React.WheelEvent<HTMLDivElement>, elementId: string) => {
-        event.preventDefault();
+        const scrollSpeedMultiplier = 3; // Increase this value to make scrolling faster
         const container = document.getElementById(elementId)!;
         const containerScrollPosition = document.getElementById(elementId)!.scrollLeft;
         container.scrollTo({
             top: 0,
-            left: containerScrollPosition + event.deltaY,
+            left: containerScrollPosition + event.deltaY * scrollSpeedMultiplier,
             behavior: 'smooth'
         });
     }
