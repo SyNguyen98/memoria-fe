@@ -161,6 +161,7 @@ export default function MapAndLocation() {
     }
 
     const handleChoseLocation = (location: Location) => {
+        setCenter([location.coordinate.latitude, location.coordinate.longitude]);
         setLocationChose(location);
     }
 
