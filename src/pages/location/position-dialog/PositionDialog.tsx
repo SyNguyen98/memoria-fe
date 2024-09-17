@@ -2,7 +2,7 @@ import "./PositionDialog.scss";
 import {useState} from "react";
 import {Button, Dialog, DialogContent, DialogTitle, Grid2 as Grid, TextField} from "@mui/material";
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
-import {LatLng} from "leaflet";
+import {LatLng, LeafletMouseEvent} from "leaflet";
 import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
 import {useTranslation} from "react-i18next";
 
@@ -40,6 +40,8 @@ function PositionDialog(props: Readonly<PositionDialogProps>) {
                 newLongitude -= 360;
             }
             setDisplayLng(newLongitude);
+        } else {
+            setDisplayLng(latlng.lng);
         }
     }
 
@@ -99,9 +101,9 @@ function PositionDialog(props: Readonly<PositionDialogProps>) {
     )
 }
 
-function PickPosition({setPosition}: any) {
+function PickPosition({setPosition}: {setPosition: (latlng: LatLng) => void}) {
     const map = useMapEvents({
-        click: (event: any) => {
+        click: (event: LeafletMouseEvent) => {
             map.locate();
             setPosition(event.latlng);
         }
