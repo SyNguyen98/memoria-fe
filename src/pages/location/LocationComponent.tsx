@@ -166,9 +166,15 @@ function LocationComponent() {
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">#</TableCell>
-                        <TableCell>Địa Điểm</TableCell>
-                        <TableCell>Mô Tả</TableCell>
-                        <TableCell>Thời Gian</TableCell>
+                        <TableCell>
+                            {t("location.0")}
+                        </TableCell>
+                        <TableCell>
+                            {t("location.description")}
+                        </TableCell>
+                        <TableCell>
+                            {t("location.time")}
+                        </TableCell>
                         {isCollectionOwner() && <TableCell/>}
                     </TableRow>
                 </TableHead>

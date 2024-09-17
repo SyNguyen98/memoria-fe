@@ -1,17 +1,28 @@
 import "./LocationDialog.scss";
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
 import {useCreateLocationMutation, useUpdateLocationMutation} from "../../../custom-query/LocationQueryHook.ts";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField} from "@mui/material";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Grid2 as Grid,
+    IconButton,
+    MenuItem,
+    TextField
+} from "@mui/material";
+import {MyLocation} from "@mui/icons-material";
 import {LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-// Redux
 import {useAppDispatch} from "../../../app/hook";
 import {Location} from "../../../models/Location";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
+import PositionDialog from "../position-dialog/PositionDialog.tsx";
 
 type Props = {
     open: boolean;
@@ -50,6 +61,7 @@ const YEARS: number[] = Array.from({length: CURRENT_YEAR - 2000 + 1}, (_, i) => 
 export default function LocationDialog(props: Readonly<Props>) {
     const [collectionId, setCollectionId] = useState('');
     const [inputs, setInputs] = useState<Input>(initialInput);
+    const [posDialogOpen, setPosDialogOpen] = useState(false);
 
     const [searchParams] = useSearchParams();
     const {t} = useTranslation();
@@ -124,6 +136,18 @@ export default function LocationDialog(props: Readonly<Props>) {
             : null;
     }
 
+    const handleOpenPositionDialog = () => {
+        setPosDialogOpen(true);
+    }
+
+    const handleClosePositionDialog = () => {
+        setPosDialogOpen(false);
+    }
+
+    const handleSetPosition = (lat: number, lng: number) => {
+        setInputs(state => ({...state, latitude: lat, longitude: lng}));
+    }
+
     const handleSave = () => {
         const location: Location = {
             place: inputs.place,
@@ -152,99 +176,118 @@ export default function LocationDialog(props: Readonly<Props>) {
     }
 
     return (
-        <Dialog className="location-dialog" maxWidth={isTabletOrPhone() ? "xs" : "lg"}
-                open={props.open} onClose={onClose}>
-            <DialogTitle>
-                {props.location ? "Chỉnh Sửa " : "Thêm "} Địa Điểm
-            </DialogTitle>
-            <DialogContent>
-                {/* Place */}
-                <TextField autoComplete="off" required fullWidth
-                           name="place" label="Địa Điểm"
-                           value={inputs.place}
-                           onChange={onInputChange}/>
-                {/* Description */}
-                <TextField autoComplete="off" fullWidth multiline maxRows={3}
-                           name="description" label="Mô tả"
-                           value={inputs.description}
-                           onChange={onInputChange}/>
-                <Grid container spacing={1}>
-                    <Grid item xs={6} md={3}>
-                        {/* Year */}
-                        <TextField select fullWidth
-                                   name="takenYear" label="Năm"
-                                   value={inputs.takenYear}
-                                   onChange={onInputChange}>
-                            {YEARS.map(year => (
-                                <MenuItem key={year} value={year}>
-                                    {year}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+        <Fragment>
+            <Dialog className="location-dialog" maxWidth={isTabletOrPhone() ? "xs" : "lg"}
+                    open={props.open} onClose={onClose}>
+                <DialogTitle>
+                    {props.location ? t("location.edit") : t("location.add")}
+                </DialogTitle>
+                <DialogContent>
+                    {/* Place */}
+                    <TextField autoComplete="off" required fullWidth
+                               name="place"
+                               label={t("location.0")}
+                               value={inputs.place}
+                               onChange={onInputChange}/>
+                    {/* Description */}
+                    <TextField autoComplete="off" fullWidth multiline maxRows={3}
+                               name="description"
+                               label={t("location.description")}
+                               value={inputs.description}
+                               onChange={onInputChange}/>
+                    <Grid container spacing={1}>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                            {/* Year */}
+                            <TextField select fullWidth
+                                       name="takenYear"
+                                       label={t("location.year")}
+                                       value={inputs.takenYear}
+                                       onChange={onInputChange}>
+                                {YEARS.map(year => (
+                                    <MenuItem key={year} value={year}>
+                                        {year}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                            {/* Month */}
+                            <TextField select fullWidth
+                                       name="takenMonth"
+                                       label={t("location.month")}
+                                       disabled={inputs.takenYear === null}
+                                       value={inputs.takenMonth}
+                                       onChange={onInputChange}>
+                                {MONTHS.map(month => (
+                                    <MenuItem key={month} value={month}>
+                                        {month}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                            {/* Day */}
+                            <TextField select fullWidth
+                                       name="takenDay"
+                                       label={t("location.day")}
+                                       disabled={inputs.takenYear === null && inputs.takenMonth === null}
+                                       value={inputs.takenDay}
+                                       onChange={onInputChange}>
+                                {DAYS.map(day => (
+                                    <MenuItem key={day} value={day}>
+                                        {day}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                            {/* Time */}
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <TimePicker className="time-input"
+                                            label={t("location.time")}
+                                            ampm={false}
+                                            disabled={inputs.takenYear === null && inputs.takenMonth === null && inputs.takenDay === null}
+                                            value={getTime()} onChange={onInputTime}/>
+                            </LocalizationProvider>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={6} md={3}>
-                        {/* Month */}
-                        <TextField select fullWidth
-                                   name="takenMonth" label="Tháng"
-                                   disabled={inputs.takenYear === null}
-                                   value={inputs.takenMonth}
-                                   onChange={onInputChange}>
-                            {MONTHS.map(month => (
-                                <MenuItem key={month} value={month}>
-                                    {month}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                    {/* Coordinate */}
+                    <Grid container spacing={1}>
+                        <Grid size={{ xs: 12, md: 5.5 }}>
+                            {/* Latitude */}
+                            <TextField autoComplete="off" required fullWidth
+                                       name="latitude"
+                                       label={t("location.latitude")}
+                                       value={inputs.latitude}
+                                       onChange={onInputCoordinate}/>
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 5.5 }}>
+                            {/* Longitude */}
+                            <TextField autoComplete="off" required fullWidth
+                                       name="longitude"
+                                       label={t("location.longitude")}
+                                       value={inputs.longitude}
+                                       onChange={onInputCoordinate}/>
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 1 }} className="coor-btn">
+                            <IconButton onClick={handleOpenPositionDialog}>
+                                <MyLocation />
+                            </IconButton>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={6} md={3}>
-                        {/* Day */}
-                        <TextField select fullWidth
-                                   name="takenDay" label="Ngày"
-                                   disabled={inputs.takenYear === null && inputs.takenMonth === null}
-                                   value={inputs.takenDay}
-                                   onChange={onInputChange}>
-                            {DAYS.map(day => (
-                                <MenuItem key={day} value={day}>
-                                    {day}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={6} md={3}>
-                        {/* Time */}
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <TimePicker className="time-input" label="Thời Gian" ampm={false}
-                                        disabled={inputs.takenYear === null && inputs.takenMonth === null && inputs.takenDay === null}
-                                        value={getTime()} onChange={onInputTime}/>
-                        </LocalizationProvider>
-                    </Grid>
-                </Grid>
-                {/* Coordinate */}
-                <Grid container spacing={1}>
-                    <Grid item xs={12} md={6}>
-                        {/* Latitude */}
-                        <TextField autoComplete="off" required fullWidth
-                                   name="latitude" label="Vĩ Độ"
-                                   value={inputs.latitude}
-                                   onChange={onInputCoordinate}/>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        {/* Longitude */}
-                        <TextField autoComplete="off" required fullWidth
-                                   name="longitude" label="Kinh Độ"
-                                   value={inputs.longitude}
-                                   onChange={onInputCoordinate}/>
-                    </Grid>
-                </Grid>
-            </DialogContent>
-            <DialogActions>
-                <Button variant="contained" color="primary" onClick={handleSave}>
-                    Lưu
-                </Button>
-                <Button variant="contained" color="inherit" onClick={handleCancel}>
-                    Hủy
-                </Button>
-            </DialogActions>
-        </Dialog>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" color="primary" onClick={handleSave}>
+                        {t("button.save")}
+                    </Button>
+                    <Button variant="contained" color="inherit" onClick={handleCancel}>
+                        {t("button.cancel")}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <PositionDialog open={posDialogOpen} onClose={handleClosePositionDialog}
+                            setPosition={handleSetPosition} />
+        </Fragment>
     )
 }

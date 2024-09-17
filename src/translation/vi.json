@@ -66,9 +66,27 @@
     "confirm_delete": "Bạn có chắc là muốn xóa bộ sưu tập "
   },
   "location": {
+    "0": "Địa Điểm",
+    "description": "Mô Tả",
+    "year": "Năm",
+    "month": "Tháng",
+    "day": "Ngày",
+    "time": "Thời Gian",
+    "latitude": "Vĩ Độ",
+    "longitude": "Kinh Độ",
     "save_success": "Lưu địa điểm thành công",
     "save_error": "Không thể lưu địa điểm",
-    "cannot_load": "Không thể tải địa điểm"
+    "cannot_load": "Không thể tải địa điểm",
+    "add": "Thêm Địa Điểm",
+    "edit": "Chỉnh Sửa Địa Điểm"
+  },
+  "position": {
+    "choose": "Chọn vị trí",
+    "coordinate": "Tọa Độ",
+    "latitude": "Vĩ Độ",
+    "longitude": "Kinh Độ",
+    "btn-choose": "Chọn",
+    "btn-close": "Hủy"
   },
   "item": {
     "cannot_load": "Không thể tải hình ảnh"
