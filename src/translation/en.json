@@ -66,9 +66,27 @@
     "confirm_delete": "Are you sure want to delete this collection "
   },
   "location": {
+    "0": "Location",
+    "description": "Description",
+    "year": "Year",
+    "month": "Month",
+    "day": "Day",
+    "time": "Time",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
     "save_success": "Save location successfully",
     "save_error": "Cannot save the collection",
-    "cannot_load": "Cannot load locations"
+    "cannot_load": "Cannot load locations",
+    "add": "Add Location",
+    "edit": "Edit Location"
+  },
+  "position": {
+    "choose": "Choose position",
+    "coordinate": "Coordinate",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "btn-choose": "Choose",
+    "btn-close": "Close"
   },
   "item": {
     "cannot_load": "Cannot load images"

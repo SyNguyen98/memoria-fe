@@ -20,7 +20,7 @@
   .coordinate {
     font-size: 16px;
     font-weight: 500;
-    margin: 1rem;
+    margin: 0 auto 1rem;
   }
 
   .MuiFormControl-root {
@@ -29,5 +29,6 @@
 
   .MuiButtonBase-root {
     width: 100px;
+    margin: auto 1rem;
   }
 }
