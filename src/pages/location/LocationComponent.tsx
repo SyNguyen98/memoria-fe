@@ -76,7 +76,7 @@ function LocationComponent() {
                 dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
             });
         }
-    }, [searchParams]);
+    }, [dispatch, queryClient, searchParams, t]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
