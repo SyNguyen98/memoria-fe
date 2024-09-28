@@ -25,7 +25,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "@tanstack/react-query": "^5.56.2",
     "axios": "^1.7.7",
-    "date-fns": "^2.30.0",
+    "date-fns": "^4.1.0",
     "i18next": "^23.15.1",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
