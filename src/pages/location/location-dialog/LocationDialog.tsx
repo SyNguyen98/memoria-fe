@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import {MyLocation} from "@mui/icons-material";
 import {LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFnsV3";
 import {useAppDispatch} from "../../../app/hook";
 import {Location} from "../../../models/Location";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
