@@ -11,12 +11,14 @@
   "page": {
     "map": "Map",
     "collection": "Collection",
-    "location": "Location"
+    "location": "Location",
+    "profile": "Profile"
   },
   "button": {
     "save": "Save",
     "cancel": "Cancel",
     "add": "Add",
+    "edit": "Edit",
     "delete": "Delete",
     "view_location": "View Location",
     "view_item": "View Photos/Videos"

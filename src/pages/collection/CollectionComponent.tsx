@@ -49,6 +49,8 @@ function CollectionComponent() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        document.title = `MEMORIA | ${t("page.collection")}`;
+
         if (collectionQuery.isError) {
             dispatch(openSnackbar({type: "error", message: t("collection.cannot_load")}));
         }

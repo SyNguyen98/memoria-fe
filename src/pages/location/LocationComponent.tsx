@@ -67,6 +67,8 @@ function LocationComponent() {
     const deleteMutation = useDeleteLocationMutation(onSuccess, onError);
 
     useEffect(() => {
+        document.title = `MEMORIA | ${sessionStorage.getItem(SessionKey.COLLECTION_NAME)}`;
+
         const collectionId = searchParams.get("id");
         if (collectionId) {
             setCollectionId(collectionId);

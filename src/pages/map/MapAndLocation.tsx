@@ -61,6 +61,8 @@ export default function MapAndLocation() {
     const {t} = useTranslation();
 
     useEffect(() => {
+        document.title = `MEMORIA | ${t("page.map")}`;
+
         const id = searchParams.get("id");
         if (id) {
             setCollectionId(id);
