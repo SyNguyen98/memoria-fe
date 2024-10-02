@@ -11,12 +11,14 @@
   "page": {
     "map": "Bản Đồ",
     "collection": "Bộ Sưu Tập",
-    "location": "Địa Điểm"
+    "location": "Địa Điểm",
+    "profile": "Hồ Sơ"
   },
   "button": {
     "save": "Lưu",
     "cancel": "Hủy",
     "add": "Thêm",
+    "edit": "Sửa",
     "delete": "Xóa",
     "view_location": "Xem địa điểm",
     "view_item": "Xem hình ảnh"
