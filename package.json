@@ -21,7 +21,7 @@
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
     "@mui/system": "^6.1.1",
-    "@mui/x-date-pickers": "^7.18.0",
+    "@mui/x-date-pickers": "^7.19.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@tanstack/react-query": "^5.56.2",
     "axios": "^1.7.7",
