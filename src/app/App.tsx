@@ -1,6 +1,7 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
-import {Navigate, Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
+import {Route, Routes, useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {Button, Dialog, DialogActions, DialogTitle} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import i18n from "../translation/i18n.tsx";
 import {useQueryClient} from "@tanstack/react-query";
@@ -26,9 +27,9 @@ import ProfileComponent from "../pages/profile/ProfileComponent";
 // Models
 import {CookieKey} from "../constants/Storage";
 import {PathName} from '../constants/Page';
+import {GOOGLE_AUTH_URL} from "../constants/Url.ts";
 // Services
 import {CookieUtil} from "../utils/CookieUtil";
-import {AuthApi} from "../api/AuthApi";
 import {appAxios} from "../api";
 
 export default function App() {
@@ -100,7 +101,6 @@ export default function App() {
                             </Protected>
                         }/>
                         <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
-                        <Route path="/login/microsoft" element={<OAuth2MicrosoftRedirectHandler/>}/>
                     </Routes>
                 </div>
             </div>
@@ -112,9 +112,44 @@ function Protected({children}: Readonly<{ children: React.JSX.Element }>) {
 
     return (
         <Fragment>
-            {CookieUtil.getCookie(CookieKey.ACCESS_TOKEN) ? children : <Navigate to="/" replace/>}
+            {CookieUtil.getCookie(CookieKey.ACCESS_TOKEN) ? children : <SessionExpireDialog/>}
         </Fragment>
     )
+}
+
+function SessionExpireDialog() {
+    const location = useLocation();
+    const {t} = useTranslation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fullPath = `${location.pathname}${location.search}`;
+        localStorage.setItem("lastPath", fullPath);
+    }, [location])
+
+    const handleReLogin = () => {
+        window.location.href = GOOGLE_AUTH_URL;
+    }
+
+    const handleBack = () => {
+        navigate("/");
+    }
+
+    return (
+        <Dialog className="session-expired-dialog" open={true}>
+            <DialogTitle>
+                {t("session_expired")}
+            </DialogTitle>
+            <DialogActions>
+                <Button variant="contained" color="primary" onClick={handleReLogin}>
+                    {t("button.login_again")}
+                </Button>
+                <Button variant="contained" color="inherit" onClick={handleBack}>
+                    {t("button.back_homepage")}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 }
 
 function OAuth2RedirectHandler() {
@@ -138,30 +173,13 @@ function OAuth2RedirectHandler() {
             });
 
             queryClient.invalidateQueries({queryKey: ["getCurrentUser"]}).then(() => {
-                navigate("/map");
+                const lastPath = localStorage.getItem("lastPath");
+                navigate(lastPath ? lastPath : "/map");
             }).catch(() => {
                 dispatch(openSnackbar({type: "error", message: t("user.cannot_load")}));
             })
         }
     }, [dispatch, navigate, queryClient, searchParams, t]);
-
-    return <AppLoader/>;
-}
-
-function OAuth2MicrosoftRedirectHandler() {
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const currentUser = useAppSelector(state => state.user.value);
-
-    useEffect(() => {
-        const code = searchParams.get('code');
-        if (currentUser && code) {
-            AuthApi.sendAuthorizeCode(code).then(() => {
-                navigate("/map");
-            });
-        }
-    }, [currentUser, dispatch, navigate, searchParams]);
 
     return <AppLoader/>;
 }
