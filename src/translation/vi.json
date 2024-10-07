@@ -20,9 +20,12 @@
     "add": "Thêm",
     "edit": "Sửa",
     "delete": "Xóa",
+    "login_again": "Đăng Nhập Lại",
+    "back_homepage": "Quay về Trang Chủ",
     "view_location": "Xem địa điểm",
     "view_item": "Xem hình ảnh"
   },
+  "session_expired": "Phiên làm việc đã hết. Vui lòng đăng nhập lại",
   "homepage": {
     "banner_quote": "Sau cùng thì, tất cả chỉ còn là kỷ niệm",
     "banner_quote_phone": "Sau cùng thì,\ntất cả chỉ còn là\nkỷ niệm",

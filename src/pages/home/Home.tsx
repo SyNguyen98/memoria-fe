@@ -1,9 +1,9 @@
 import "./Home.scss";
-import {Button, Divider, Grid, Typography} from "@mui/material";
-import {GOOGLE_AUTH_URL} from "../../constants/Url";
+import {Button, Divider, Grid2, Typography} from "@mui/material";
 import {OpenInNew} from "@mui/icons-material";
-import {VERSION} from "../../constants";
 import {useTranslation} from "react-i18next";
+import {GOOGLE_AUTH_URL} from "../../constants/Url";
+import {VERSION} from "../../constants";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 
 export default function Home() {
@@ -83,47 +83,47 @@ export default function Home() {
                     </Typography>
                 </div>
             ) : (
-                <Grid className="feature-list" container rowSpacing={10}>
+                <Grid2 className="feature-list" container rowSpacing={10}>
                     {/* Row 1 */}
-                    <Grid item xs={6}>
+                    <Grid2 size={{ xs: 6 }}>
                         <img alt="man-and-camera" width={350} height={350}
                              src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.png?raw=truev"/>
-                    </Grid>
-                    <Grid item xs={6} className="text-wrapper">
+                    </Grid2>
+                    <Grid2 size={{ xs: 6 }} className="text-wrapper">
                         <Typography variant="h3">
                             {t('homepage.features.1.title')}
                         </Typography>
                         <Typography variant="body1">
                             {t('homepage.features.1.description')}
                         </Typography>
-                    </Grid>
+                    </Grid2>
                     {/* Row 2 */}
-                    <Grid item xs={6} className="text-wrapper">
+                    <Grid2 size={{ xs: 6 }} className="text-wrapper">
                         <Typography variant="h3">
                             {t('homepage.features.2.title')}
                         </Typography>
                         <Typography variant="body1">
                             {t('homepage.features.2.description')}
                         </Typography>
-                    </Grid>
-                    <Grid item xs={6} className="img-wrapper">
+                    </Grid2>
+                    <Grid2 size={{ xs: 6 }} className="img-wrapper">
                         <img className="float-right" alt="album" width={400} height={400}
                              src="https://github.com/SyNguyen98/image-storage/blob/main/album.png?raw=true"/>
-                    </Grid>
+                    </Grid2>
                     {/* Row 3 */}
-                    <Grid item xs={6}>
+                    <Grid2 size={{ xs: 6 }}>
                         <img alt="man-with-map" width={450} height={450}
                              src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.png?raw=true"/>
-                    </Grid>
-                    <Grid item xs={6} className="text-wrapper">
+                    </Grid2>
+                    <Grid2 size={{ xs: 6 }} className="text-wrapper">
                         <Typography variant="h3">
                             {t('homepage.features.3.title')}
                         </Typography>
                         <Typography variant="body1">
                             {t('homepage.features.3.description')}
                         </Typography>
-                    </Grid>
-                </Grid>
+                    </Grid2>
+                </Grid2>
             )}
 
             <div className="quote-wrapper-2">
