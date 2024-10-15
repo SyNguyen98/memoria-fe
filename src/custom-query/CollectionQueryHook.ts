@@ -6,7 +6,7 @@ export const useCollectionQuery = () => {
     return useQuery({
         queryKey: ['getAllCollectionsHavingAccess'],
         queryFn: async (): Promise<Collection[]> => {
-            const res = await appAxios.get('/api/collections');
+            const res = await appAxios.get('/api/collections?sort=lastModifiedDate,desc');
             return res.data;
         }
     })
