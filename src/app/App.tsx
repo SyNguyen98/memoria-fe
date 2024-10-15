@@ -47,8 +47,11 @@ export default function App() {
             }, (error) => {
                 throw new Error(error);
             });
+            if (window.location.pathname === '/') {
+                navigate(PathName.MAP);
+            }
         }
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         i18n.changeLanguage(currentLanguage);
@@ -57,11 +60,8 @@ export default function App() {
     useEffect(() => {
         if (userQuery.data) {
             dispatch(setUser(userQuery.data));
-            if (window.location.pathname === '/') {
-                navigate(PathName.MAP);
-            }
         }
-    }, [dispatch, navigate, userQuery.data]);
+    }, [dispatch, userQuery.data]);
 
     return (
         <Fragment>

@@ -66,7 +66,7 @@ export default function Sidebar() {
     const handleLogout = () => {
         CookieUtil.deleteCookie(CookieKey.ACCESS_TOKEN);
         dispatch(clearUser());
-        window.location.reload();
+        navigate("/");
     }
 
     return (
