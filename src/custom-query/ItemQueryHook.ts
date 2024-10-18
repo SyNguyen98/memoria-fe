@@ -10,6 +10,7 @@ export const useItemQuery = (driveItemId: string, thumbnailSize?: "large" | "med
         queryFn: async (): Promise<Item[]> => {
             const res = await appAxios.get(API_URL, {params: { driveItemId, thumbnailSize }});
             return res.data;
-        }
+        },
+        enabled: driveItemId !== "" && appAxios.defaults.headers.Authorization !== undefined
     })
 }

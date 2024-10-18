@@ -8,7 +8,8 @@ export const useCollectionQuery = () => {
         queryFn: async (): Promise<Collection[]> => {
             const res = await appAxios.get('/api/collections?sort=lastModifiedDate,desc');
             return res.data;
-        }
+        },
+        enabled: appAxios.defaults.headers.Authorization !== undefined
     })
 }
 
