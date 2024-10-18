@@ -62,7 +62,9 @@ export default function MapAndLocation() {
 
     useEffect(() => {
         document.title = `MEMORIA | ${t("page.map")}`;
+    }, [t]);
 
+    useEffect(() => {
         const id = searchParams.get("id");
         if (id) {
             setCollectionId(id);
@@ -189,7 +191,9 @@ export default function MapAndLocation() {
                             <InputLabel id="collection-select">
                                 {t("page.collection")}
                             </InputLabel>
-                            <Select labelId="collection-select" value={collectionId}
+                            <Select labelId="collection-select"
+                                    variant="filled"
+                                    value={collectionId}
                                     onChange={handleChangeCollection}>
                                 {collectionQuery.data?.map(collection =>
                                     <MenuItem key={collection.id} value={collection.id}>
@@ -204,10 +208,9 @@ export default function MapAndLocation() {
             <div className="map-wrapper">
                 {(collectionQuery.isLoading || locationQuery.isLoading) && <AppLoader/>}
 
-                {(collectionChose && locationQuery.data) && (
-                    <LocationList collection={collectionChose} locations={locationQuery.data}
-                                  handleChoseLocation={handleChoseLocation}/>
-                )}
+                <LocationList collection={collectionChose}
+                              locations={locationQuery.data}
+                              handleChoseLocation={handleChoseLocation}/>
 
                 <Drawer anchor="right" open={filterMenuOpened}
                         onClose={handleCloseCollectionMenu}>
@@ -219,7 +222,9 @@ export default function MapAndLocation() {
                             <InputLabel id="collection-select">
                                 {t("page.collection")}
                             </InputLabel>
-                            <Select labelId="collection-select" value={collectionId}
+                            <Select labelId="collection-select"
+                                    variant="filled"
+                                    value={collectionId}
                                     onChange={handleChangeCollection}>
                                 {collectionQuery.data?.map(collection =>
                                     <MenuItem key={collection.id} value={collection.id}>
@@ -233,8 +238,10 @@ export default function MapAndLocation() {
                             <InputLabel id="location-select">
                                 {t("page.location")}
                             </InputLabel>
-                            <Select labelId="location-select" value={locationChose?.id}
-                                    onChange={handleChangeLocation}>
+                            <Select labelId="location-select"
+                                    variant="filled"
+                                    value={locationChose?.id}
+                                    onChange={handleChangeLocation} >
                                 {locationQuery.data?.map(location =>
                                     <MenuItem key={location.id} value={location.id}>
                                         {location.place}

@@ -10,7 +10,8 @@ export const useLocationQuery = (collectionId?: string) => {
         queryFn: async (): Promise<Location[]> => {
             const res = await appAxios.get(API_URL, {params: {collectionId}});
             return res.data;
-        }
+        },
+        enabled: collectionId !== undefined && collectionId !== "" && appAxios.defaults.headers.Authorization !== undefined
     })
 }
 

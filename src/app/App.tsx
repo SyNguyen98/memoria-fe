@@ -41,12 +41,8 @@ export default function App() {
 
     useEffect(() => {
         if (CookieUtil.getCookie(CookieKey.ACCESS_TOKEN)) {
-            appAxios.interceptors.request.use((config) => {
-                config.headers.Authorization = CookieUtil.getCookie(CookieKey.ACCESS_TOKEN);
-                return config;
-            }, (error) => {
-                throw new Error(error);
-            });
+            appAxios.defaults.headers.Authorization = CookieUtil.getCookie(CookieKey.ACCESS_TOKEN);
+
             if (window.location.pathname === '/') {
                 navigate(PathName.MAP);
             }
@@ -67,7 +63,9 @@ export default function App() {
         <Fragment>
             <AppSnackbar/>
             <div className="App">
-                {currentUser ? <Sidebar/> : <Header/>}
+                {!userQuery.isLoading && (
+                    currentUser ? <Sidebar/> : <Header/>
+                )}
 
                 <div className="main-container">
                     <Routes>
