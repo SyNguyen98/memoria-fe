@@ -67,7 +67,9 @@ export default function App() {
         <Fragment>
             <AppSnackbar/>
             <div className="App">
-                {currentUser ? <Sidebar/> : <Header/>}
+                {!userQuery.isLoading && (
+                    currentUser ? <Sidebar/> : <Header/>
+                )}
 
                 <div className="main-container">
                     <Routes>
