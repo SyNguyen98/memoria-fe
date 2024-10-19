@@ -1,0 +1,16 @@
+.session-expired-dialog {
+
+    .MuiDialogTitle-root {
+        text-align: center;
+    }
+
+    .MuiDialogActions-root {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+
+        .MuiButton-root {
+            margin-bottom: 1rem;
+        }
+    }
+}
