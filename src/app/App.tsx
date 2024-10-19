@@ -1,7 +1,6 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
-import {Route, Routes, useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {Button, Dialog, DialogActions, DialogTitle} from "@mui/material";
+import {Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import i18n from "../translation/i18n.tsx";
 import {useQueryClient} from "@tanstack/react-query";
@@ -24,10 +23,10 @@ import CollectionComponent from "../pages/collection/CollectionComponent";
 import LocationComponent from "../pages/location/LocationComponent";
 import ItemComponent from "../pages/item/ItemComponent";
 import ProfileComponent from "../pages/profile/ProfileComponent";
+import SessionExpireDialog from "../components/session-expire-dialog/SessionExpireDialog.tsx";
 // Models
 import {CookieKey} from "../constants/Storage";
 import {PathName} from '../constants/Page';
-import {GOOGLE_AUTH_URL} from "../constants/Url.ts";
 // Services
 import {CookieUtil} from "../utils/CookieUtil";
 import {appAxios} from "../api";
@@ -115,41 +114,6 @@ function Protected({children}: Readonly<{ children: React.JSX.Element }>) {
     )
 }
 
-function SessionExpireDialog() {
-    const location = useLocation();
-    const {t} = useTranslation();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const fullPath = `${location.pathname}${location.search}`;
-        localStorage.setItem("lastPath", fullPath);
-    }, [location])
-
-    const handleReLogin = () => {
-        window.location.href = GOOGLE_AUTH_URL;
-    }
-
-    const handleBack = () => {
-        navigate("/");
-    }
-
-    return (
-        <Dialog className="session-expired-dialog" open={true}>
-            <DialogTitle>
-                {t("session_expired")}
-            </DialogTitle>
-            <DialogActions>
-                <Button variant="contained" color="primary" onClick={handleReLogin}>
-                    {t("button.login_again")}
-                </Button>
-                <Button variant="contained" color="inherit" onClick={handleBack}>
-                    {t("button.back_homepage")}
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
-}
-
 function OAuth2RedirectHandler() {
     const [searchParams] = useSearchParams();
     const dispatch = useAppDispatch();
@@ -163,12 +127,7 @@ function OAuth2RedirectHandler() {
         if (token) {
             CookieUtil.setCookie(CookieKey.ACCESS_TOKEN, `Bearer ${token}`, 1);
 
-            appAxios.interceptors.request.use((config) => {
-                config.headers.Authorization = `Bearer ${token}`;
-                return config;
-            }, (error) => {
-                throw new Error(error);
-            });
+            appAxios.defaults.headers.Authorization = `Bearer ${token}`;
 
             queryClient.invalidateQueries({queryKey: ["getCurrentUser"]}).then(() => {
                 const lastPath = localStorage.getItem("lastPath");
