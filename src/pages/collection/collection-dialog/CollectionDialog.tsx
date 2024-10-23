@@ -107,11 +107,12 @@ export default function CollectionDialog(props: Readonly<Props>) {
         setTags(value.map(option => option.value));
     };
 
-    const onEnterEmail = (event: any) => {
+    const onEnterEmail = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === 'Enter') {
+            const target = event.target as HTMLInputElement;
             const emails = inputs.userEmails ? [...inputs.userEmails] : [];
-            emails.push(event.target.value);
-            event.target.value = "";
+            emails.push(target.value);
+            target.value = "";
             setInputs(state => ({...state, userEmails: emails}));
         }
     }

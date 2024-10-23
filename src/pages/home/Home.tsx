@@ -46,7 +46,7 @@ export default function Home() {
 
             <div className="quote-wrapper">
                 <div className="quote">
-                    "{t(`homepage.${isTabletOrPhone() ? 'quote_1_phone' : 'quote_1'}`)}"
+                    &#34;{t(`homepage.${isTabletOrPhone() ? 'quote_1_phone' : 'quote_1'}`)}&#34;
                 </div>
             </div>
 
