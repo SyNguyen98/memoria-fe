@@ -13,6 +13,17 @@ export const useCollectionQuery = () => {
     })
 }
 
+export const useUserEmailsCollectionQuery = () => {
+    return useQuery({
+        queryKey: ['getAllUserEmailsOfCollection'],
+        queryFn: async (): Promise<string[]> => {
+            const res = await appAxios.get('/api/collections/user-emails');
+            return res.data;
+        },
+        enabled: appAxios.defaults.headers.Authorization !== undefined
+    })
+}
+
 export const useCreateCollectionMutation = (onSuccess: () => void, onError: () => void) => {
     return useMutation({
         mutationKey: ['createCollection'],
