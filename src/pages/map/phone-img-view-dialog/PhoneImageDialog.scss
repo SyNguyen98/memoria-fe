@@ -1,6 +1,6 @@
-@import "src/assets/styles/breakpoint";
-@import "src/assets/styles/color";
-@import "react-image-gallery/styles/scss/image-gallery.scss";
+@use "src/assets/styles/breakpoint" as *;
+@use "src/assets/styles/color" as *;
+@use "react-image-gallery/styles/scss/image-gallery.scss" as *;
 
 .phone-img-dialog {
 

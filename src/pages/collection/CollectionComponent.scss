@@ -1,5 +1,5 @@
-@import "src/assets/styles/breakpoint";
-@import "src/assets/styles/color";
+@use "src/assets/styles/breakpoint" as *;
+@use "src/assets/styles/color" as *;
 
 .collection-container {
 

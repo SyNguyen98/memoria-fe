@@ -2,7 +2,11 @@ import "./CollectionDialog.scss";
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
-import {useCreateCollectionMutation, useUpdateCollectionMutation} from "../../../custom-query/CollectionQueryHook.ts";
+import {
+    useCreateCollectionMutation,
+    useUpdateCollectionMutation,
+    useUserEmailsCollectionQuery
+} from "../../../custom-query/CollectionQueryHook.ts";
 import {
     Autocomplete,
     Button,
@@ -53,6 +57,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
     const onError = () => {
         dispatch(openSnackbar({type: "error", message: t("collection.save_error")}));
     }
+    const userEmailsCollectionQuery = useUserEmailsCollectionQuery();
     const createMutation = useCreateCollectionMutation(onSuccess, onError);
     const updateMutation = useUpdateCollectionMutation(onSuccess, onError);
 
@@ -107,11 +112,12 @@ export default function CollectionDialog(props: Readonly<Props>) {
         setTags(value.map(option => option.value));
     };
 
-    const onEnterEmail = (event: any) => {
+    const onEnterEmail = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === 'Enter') {
+            const target = event.target as HTMLInputElement;
             const emails = inputs.userEmails ? [...inputs.userEmails] : [];
-            emails.push(event.target.value);
-            event.target.value = "";
+            emails.push(target.value);
+            target.value = "";
             setInputs(state => ({...state, userEmails: emails}));
         }
     }
@@ -173,10 +179,13 @@ export default function CollectionDialog(props: Readonly<Props>) {
                               )}
                 />
                 {/* Emails */}
-                <TextField autoComplete="off" fullWidth
-                           name="email" label={t("collection.shared_email")}
-                           placeholder={t("collection.email_placeholder")}
-                           onKeyDown={event => onEnterEmail(event)}/>
+                <Autocomplete options={userEmailsCollectionQuery.data || []}
+                              renderInput={(params) =>
+                                  <TextField {...params}
+                                             name="email"
+                                             label={t("collection.shared_email")}
+                                             placeholder={t("collection.email_placeholder")}
+                                             onKeyDown={event => onEnterEmail(event)}/>}/>
                 <Typography variant="body1">
                     {t("collection.email_description")}
                 </Typography>

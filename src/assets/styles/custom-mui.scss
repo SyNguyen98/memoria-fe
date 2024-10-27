@@ -1,5 +1,4 @@
-@import "breakpoint";
-@import "color";
+@use "color" as *;
 
 // Button
 .MuiButton-containedInherit {

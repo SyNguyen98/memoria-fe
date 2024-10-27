@@ -1,4 +1,4 @@
-@import "src/assets/styles/color";
+@use "src/assets/styles/color" as *;
 
 .collection-dialog {
   text-align: center;
@@ -50,5 +50,11 @@
         background-color: $gray-300;
       }
     }
+  }
+}
+
+.MuiAutocomplete-popper {
+  .MuiAutocomplete-listbox {
+    max-height: 20vh;
   }
 }
