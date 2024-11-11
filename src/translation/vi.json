@@ -83,7 +83,9 @@
     "save_error": "Không thể lưu địa điểm",
     "cannot_load": "Không thể tải địa điểm",
     "add": "Thêm Địa Điểm",
-    "edit": "Chỉnh Sửa Địa Điểm"
+    "edit": "Chỉnh Sửa Địa Điểm",
+    "delete": "Xóa Địa Điểm",
+    "confirm_delete": "Bạn có chắc là muốn xóa địa điểm "
   },
   "position": {
     "choose": "Chọn vị trí",
