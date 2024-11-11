@@ -2,6 +2,8 @@
 @use "src/assets/styles/color" as *;
 
 .location-container {
+  display: flex;
+  flex-direction: column;
 
   .page-title {
     display: flex;
@@ -95,25 +97,9 @@
       }
     }
   }
-}
 
-#delete-collection-dialog {
-  text-align: center;
-
-  .MuiDialog-paper {
-    background-color: $white !important;
-  }
-
-  .MuiDialogTitle-root {
-    font-size: 20px;
-    font-weight: 600;
-  }
-
-  .MuiDialogActions-root {
-    justify-content: center;
-
-    .MuiButton-root {
-      width: 100px;
-    }
+  .MuiTablePagination-root {
+    margin: 0 auto 1rem;
+    border-bottom: unset;
   }
 }
