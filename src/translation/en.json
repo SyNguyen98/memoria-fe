@@ -83,7 +83,9 @@
     "save_error": "Cannot save the collection",
     "cannot_load": "Cannot load locations",
     "add": "Add Location",
-    "edit": "Edit Location"
+    "edit": "Edit Location",
+    "delete": "Delete Location",
+    "confirm_delete": "Are you sure want to delete this location "
   },
   "position": {
     "choose": "Choose position",

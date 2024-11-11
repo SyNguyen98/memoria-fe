@@ -1,15 +1,19 @@
+import {AxiosHeaders} from "axios";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {appAxios} from "../api";
 import {Location} from "../models/Location.ts";
 
 const API_URL = '/api/locations';
 
-export const useLocationQuery = (collectionId?: string) => {
+export const useLocationQuery = (collectionId: string, page: number, size: number) => {
     return useQuery({
-        queryKey: ['getAllLocationsByCollectionId', collectionId],
-        queryFn: async (): Promise<Location[]> => {
-            const res = await appAxios.get(API_URL, {params: {collectionId}});
-            return res.data;
+        queryKey: ['getAllLocationsByCollectionId', collectionId, page, size],
+        queryFn: async (): Promise<{ header: AxiosHeaders, data: Location[] }> => {
+            const res = await appAxios.get(API_URL, {params: {collectionId, page, size}});
+            return {
+                header: res.headers as AxiosHeaders,
+                data: res.data
+            };
         },
         enabled: collectionId !== undefined && collectionId !== "" && appAxios.defaults.headers.Authorization !== undefined
     })
@@ -39,13 +43,11 @@ export const useUpdateLocationMutation = (onSuccess: () => void, onError: () => 
     });
 }
 
-export const useDeleteLocationMutation = (onSuccess: () => void, onError: () => void) => {
+export const useDeleteLocationMutation = () => {
     return useMutation({
         mutationKey: ['deleteLocationById'],
         mutationFn: (id: string): Promise<void> => {
             return appAxios.delete(`${API_URL}/${id}`);
         },
-        onSuccess,
-        onError
     });
 }

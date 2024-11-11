@@ -55,7 +55,7 @@ export default function MapAndLocation() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const collectionQuery = useCollectionQuery();
-    const locationQuery = useLocationQuery(collectionId);
+    const locationQuery = useLocationQuery(collectionId, 0, 100);
 
     const dispatch = useAppDispatch();
     const {t} = useTranslation();
@@ -81,14 +81,14 @@ export default function MapAndLocation() {
     }, [collectionQuery.data, searchParams, setSearchParams]);
 
     useEffect(() => {
-        if (locationQuery.data && locationQuery.data.length > 0) {
+        if (locationQuery.data && locationQuery.data.data.length > 0) {
             let centerLat = 0;
             let centerLng = 0;
-            locationQuery.data.forEach(location => {
+            locationQuery.data.data.forEach(location => {
                 centerLat += location.coordinate.latitude;
                 centerLng += location.coordinate.longitude;
             });
-            setCenter([centerLat / locationQuery.data.length, centerLng / locationQuery.data.length]);
+            setCenter([centerLat / locationQuery.data.data.length, centerLng / locationQuery.data.data.length]);
             setZoom(13);
         }
     }, [locationQuery.data]);
@@ -129,7 +129,7 @@ export default function MapAndLocation() {
      * Additionally, it closes the filter menu.
      */
     const handleChangeLocation = (event: SelectChangeEvent) => {
-        const location = locationQuery.data?.find(l => l.id === event.target.value);
+        const location = locationQuery.data?.data.find(l => l.id === event.target.value);
         if (location) {
             setLocationChose(location);
             if (isTabletOrPhone()) {
@@ -209,7 +209,7 @@ export default function MapAndLocation() {
                 {(collectionQuery.isLoading || locationQuery.isLoading) && <AppLoader/>}
 
                 <LocationList collection={collectionChose}
-                              locations={locationQuery.data}
+                              locations={locationQuery.data?.data}
                               handleChoseLocation={handleChoseLocation}/>
 
                 <Drawer anchor="right" open={filterMenuOpened}
@@ -242,7 +242,7 @@ export default function MapAndLocation() {
                                     variant="filled"
                                     value={locationChose?.id}
                                     onChange={handleChangeLocation} >
-                                {locationQuery.data?.map(location =>
+                                {locationQuery.data?.data.map(location =>
                                     <MenuItem key={location.id} value={location.id}>
                                         {location.place}
                                     </MenuItem>
@@ -256,7 +256,7 @@ export default function MapAndLocation() {
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                     <ChangeView center={center}
                                 zoom={zoom}/>
-                    {locationQuery.data?.map(location => {
+                    {locationQuery.data?.data.map(location => {
                         const coordinate = location.coordinate;
                         return (
                             <Marker key={location.id}

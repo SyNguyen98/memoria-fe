@@ -1,8 +1,8 @@
 import './LocationComponent.scss';
-import {useEffect, useState} from "react";
+import {ChangeEvent, MouseEvent, useEffect, useState} from "react";
 import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {useQueryClient} from "@tanstack/react-query";
-import {useDeleteLocationMutation, useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
+import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
@@ -12,15 +12,12 @@ import {
     Card,
     CardActions,
     CardContent,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
     IconButton,
     Table,
     TableBody,
     TableCell,
     TableHead,
+    TablePagination,
     TableRow,
     Toolbar,
     Typography
@@ -37,6 +34,7 @@ import {PathName} from "../../constants/Page";
 import {DateUtil} from "../../utils/DateUtil";
 import {useTranslation} from "react-i18next";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import DeleteLocationDialog from "./delete-location-dialog/DeleteLocationDialog.tsx";
 
 function LocationComponent() {
     const [collectionId, setCollectionId] = useState('');
@@ -44,6 +42,9 @@ function LocationComponent() {
     const [choseLocation, setChoseLocation] = useState<Location | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const [page, setPage] = useState(0);
+    const [numOfLocations, setNumOfLocations] = useState(0);
 
     const currentUser = useAppSelector(state => state.user.value);
     const [searchParams] = useSearchParams();
@@ -52,19 +53,7 @@ function LocationComponent() {
     const {t} = useTranslation();
 
     const queryClient = useQueryClient();
-    const onSuccess = () => {
-        onDeleteDialogClose();
-        dispatch(openSnackbar({type: "success", message: "Đã xóa bộ sưu tập"}));
-        queryClient.invalidateQueries({ queryKey: ['getAllLocationsByCollectionId', collectionId] }).catch(() => {
-            dispatch(openSnackbar({type: "error", message: "Không thể tải địa điểm"}));
-        });
-    }
-    const onError = () => {
-        dispatch(openSnackbar({type: "error", message: "Không thể xóa bộ sưu tập"}));
-    }
-
-    const locationQuery = useLocationQuery(collectionId);
-    const deleteMutation = useDeleteLocationMutation(onSuccess, onError);
+    const locationQuery = useLocationQuery(collectionId, page, rowsPerPage);
 
     useEffect(() => {
         document.title = `MEMORIA | ${sessionStorage.getItem(SessionKey.COLLECTION_NAME)}`;
@@ -74,11 +63,21 @@ function LocationComponent() {
             setCollectionId(collectionId);
             sessionStorage.setItem(SessionKey.COLLECTION_ID, collectionId);
             setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
-            queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collectionId]}).catch(() => {
-                dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
-            });
+            refreshLocations(page, rowsPerPage);
         }
     }, [dispatch, queryClient, searchParams, t]);
+
+    useEffect(() => {
+        if (locationQuery.data) {
+            setNumOfLocations(Number(locationQuery.data.header.get("x-total-count")));
+        }
+    }, [locationQuery.data]);
+
+    const refreshLocations = (page: number, size: number) => {
+        queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collectionId, page, size]}).catch(() => {
+            dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
+        });
+    }
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -117,15 +116,22 @@ function LocationComponent() {
         setChoseLocation(null);
     }
 
-    const handleDeleteCollection = () => {
-        deleteMutation.mutate(choseLocation!.id!);
+    const handleOnChangePage = (_event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+        refreshLocations(newPage, rowsPerPage);
     }
+
+    const handleOnChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        refreshLocations(0, parseInt(event.target.value, 10));
+    };
 
     const renderLocationList = () => {
         if (isTabletOrPhone()) {
             return (
                 <div className="location-card-list">
-                    {locationQuery.data?.map(location => (
+                    {locationQuery.data?.data.map(location => (
                         <Card key={location.id}>
                             <CardContent>
                                 <div className="location-place">
@@ -181,10 +187,10 @@ function LocationComponent() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {locationQuery.data?.map((location, index) => (
+                    {locationQuery.data?.data.map((location, index) => (
                         <TableRow key={location.id}>
                             <TableCell align="center" width={50}>
-                                {index + 1}
+                                {page * rowsPerPage + index + 1}
                             </TableCell>
                             <TableCell width={300}>
                                 <Typography variant="body1" className="location-name"
@@ -200,10 +206,12 @@ function LocationComponent() {
                             </TableCell>
                             {isCollectionOwner() && (
                                 <TableCell align="center" width={80}>
-                                    <IconButton size="small" color="primary" onClick={() => handleOpenEditDialog(location)}>
+                                    <IconButton size="small" color="primary"
+                                                onClick={() => handleOpenEditDialog(location)}>
                                         <Edit/>
                                     </IconButton>
-                                    <IconButton size="small" color="error" onClick={() => handleOpenDeleteDialog(location)}>
+                                    <IconButton size="small" color="error"
+                                                onClick={() => handleOpenDeleteDialog(location)}>
                                         <Delete/>
                                     </IconButton>
                                 </TableCell>
@@ -227,7 +235,7 @@ function LocationComponent() {
                         <Link className="collection-title" to={`/${PathName.COLLECTION}`}>
                             {t("page.collection")}
                         </Link>
-                        <KeyboardArrowRight />
+                        <KeyboardArrowRight/>
                         {collectionName}
                     </Typography>
                     <Button className="add-btn" variant="outlined" startIcon={<Add/>}
@@ -237,26 +245,19 @@ function LocationComponent() {
                 </Toolbar>
             </AppBar>
             {/* Location List */}
-            {locationQuery.isLoading ? <AppLoader /> : renderLocationList()}
+            {locationQuery.isLoading ? <AppLoader/> : renderLocationList()}
+
+            <TablePagination count={numOfLocations}
+                             page={page}
+                             onPageChange={handleOnChangePage}
+                             rowsPerPage={rowsPerPage}
+                             rowsPerPageOptions={[5, 10, 20, 50]}
+                             onRowsPerPageChange={handleOnChangeRowsPerPage}/>
+
             {/* Edit dialog */}
             <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation}/>
             {/* Delete dialog */}
-            {choseLocation && (
-                <Dialog id="delete-collection-dialog" open={dltDialogOpened} onClose={onDeleteDialogClose}>
-                    <DialogTitle>Xóa Địa Điểm</DialogTitle>
-                    <DialogContent>
-                        Bạn có chắc là muốn xóa địa điểm <b><i>{choseLocation.place}</i></b>?
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="contained" color="error" onClick={handleDeleteCollection}>
-                            Xóa
-                        </Button>
-                        <Button variant="contained" color="inherit" onClick={onDeleteDialogClose}>
-                            Hủy
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            )}
+            <DeleteLocationDialog open={dltDialogOpened} onClose={onDeleteDialogClose} location={choseLocation}/>
         </section>
     )
 }
