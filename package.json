@@ -38,7 +38,7 @@
     "react-router-dom": "^6.28.0",
     "react-spinners": "^0.14.1",
     "react-swipeable": "^7.0.2",
-    "sass": "^1.80.6"
+    "sass": "^1.81.0"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.60.1",
