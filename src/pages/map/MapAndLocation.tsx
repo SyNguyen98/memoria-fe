@@ -1,6 +1,6 @@
 import "./MapAndLocation.scss";
 import {useEffect, useState} from "react";
-import {useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {MapContainer, Marker, TileLayer, Tooltip as TooltipMarker, useMap} from 'react-leaflet';
 import {Icon, LatLngExpression} from "leaflet";

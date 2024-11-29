@@ -1,6 +1,6 @@
 import "./SessionExpireDialog.scss";
 import {useEffect} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Button, Dialog, DialogActions, DialogTitle} from "@mui/material";
 import {GOOGLE_AUTH_URL} from "../../constants/Url.ts";

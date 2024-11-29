@@ -1,6 +1,6 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
-import {Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
+import {Route, Routes, useNavigate, useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import i18n from "../translation/i18n.tsx";
 import {useQueryClient} from "@tanstack/react-query";
