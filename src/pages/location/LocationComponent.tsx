@@ -1,6 +1,6 @@
 import './LocationComponent.scss';
 import {ChangeEvent, MouseEvent, useEffect, useState} from "react";
-import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router";
 import {useQueryClient} from "@tanstack/react-query";
 import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
