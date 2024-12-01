@@ -2,8 +2,6 @@ import "./PrivacyPolicies.scss";
 import {useTranslation} from "react-i18next";
 import {Typography} from "@mui/material";
 import {VERSION} from "../../constants";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import {OpenInNew} from "@mui/icons-material";
 
 function PrivacyPolicies() {
     const {t} = useTranslation();

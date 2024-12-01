@@ -1,7 +1,6 @@
 import "./Home.scss";
 import {Link} from "react-router";
 import {Button, Divider, Grid2, Typography} from "@mui/material";
-import {OpenInNew} from "@mui/icons-material";
 import {useTranslation} from "react-i18next";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {VERSION} from "../../constants";
