@@ -1,6 +1,6 @@
 import "./Header.scss";
 import {Fragment, MouseEvent, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import {useTranslation} from "react-i18next";
 import {IconButton, InputAdornment, Menu, MenuItem, Select} from "@mui/material";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";

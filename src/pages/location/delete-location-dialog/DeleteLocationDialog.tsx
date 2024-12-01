@@ -1,5 +1,5 @@
 import "./DeleteLocationDialog.scss";
-import {useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
 import {useTranslation} from "react-i18next";

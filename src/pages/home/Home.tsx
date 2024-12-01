@@ -1,9 +1,11 @@
 import "./Home.scss";
+import {Link} from "react-router";
 import {Button, Divider, Grid2, Typography} from "@mui/material";
 import {OpenInNew} from "@mui/icons-material";
 import {useTranslation} from "react-i18next";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {VERSION} from "../../constants";
+import {PathName} from "../../constants/Page.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 
 export default function Home() {
@@ -152,14 +154,11 @@ export default function Home() {
                     <Typography variant="body1">
                         {t('homepage.slogan')}
                     </Typography>
-                    {!isTabletOrPhone() && (
-                        <Typography variant="body2">
-                            <a href="https://forms.gle/K9b1Rr3TXEYYfx8p6" rel="noreferrer" target="_blank">
-                                {t('feedback')}
-                            </a>
-                            <OpenInNew/>
-                        </Typography>
-                    )}
+                    <Typography variant="body2">
+                        <Link to={`/${PathName.PRIVACY}`}>
+                            {t('header_menu.privacy')}
+                        </Link>
+                    </Typography>
                 </div>
             </footer>
         </section>

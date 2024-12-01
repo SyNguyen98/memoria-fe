@@ -1,6 +1,6 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
-import {Route, Routes, useNavigate, useSearchParams} from "react-router-dom";
+import {Route, Routes, useNavigate, useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import i18n from "../translation/i18n.tsx";
 import {useQueryClient} from "@tanstack/react-query";
@@ -10,20 +10,21 @@ import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
 import {openSnackbar} from "../reducers/SnackbarReducer";
 // Components
-import AppLoader from "../components/app-loader/AppLoader.tsx";
-import AppSnackbar from "../components/app-snackbar/AppSnackbar.tsx";
+import AppLoader from "../components/app-loader/AppLoader";
+import AppSnackbar from "../components/app-snackbar/AppSnackbar";
 import Sidebar from "../components/sidebar/Sidebar";
-import Header from "../components/header/Header.tsx";
-import Home from "../pages/home/Home.tsx";
-import AboutMemoria from "../pages/about-memoria/AboutMemoria.tsx";
-import AboutMe from "../pages/about-me/AboutMe.tsx";
-import Faq from "../pages/faq/Faq.tsx";
-import MapAndLocation from "../pages/map/MapAndLocation.tsx";
+import Header from "../components/header/Header";
+import Home from "../pages/home/Home";
+import AboutMemoria from "../pages/about-memoria/AboutMemoria";
+import AboutMe from "../pages/about-me/AboutMe";
+import Faq from "../pages/faq/Faq";
+import PrivacyPolicies from "../pages/privacy/PrivacyPolicies";
+import MapAndLocation from "../pages/map/MapAndLocation";
 import CollectionComponent from "../pages/collection/CollectionComponent";
 import LocationComponent from "../pages/location/LocationComponent";
 import ItemComponent from "../pages/item/ItemComponent";
 import ProfileComponent from "../pages/profile/ProfileComponent";
-import SessionExpireDialog from "../components/session-expire-dialog/SessionExpireDialog.tsx";
+import SessionExpireDialog from "../components/session-expire-dialog/SessionExpireDialog";
 // Models
 import {CookieKey} from "../constants/Storage";
 import {PathName} from '../constants/Page';
@@ -62,9 +63,7 @@ export default function App() {
         <Fragment>
             <AppSnackbar/>
             <div className="App">
-                {!userQuery.isLoading && (
-                    currentUser ? <Sidebar/> : <Header/>
-                )}
+                {currentUser ? <Sidebar/> : <Header/>}
 
                 <div className="main-container">
                     <Routes>
@@ -72,6 +71,7 @@ export default function App() {
                         <Route path={PathName.ABOUT_MEMORIA} element={<AboutMemoria/>}/>
                         <Route path={PathName.ABOUT_ME} element={<AboutMe/>}/>
                         <Route path={PathName.FAQ} element={<Faq/>}/>
+                        <Route path={PathName.PRIVACY} element={<PrivacyPolicies/>}/>
                         <Route path={PathName.MAP} element={
                             <Protected>
                                 <MapAndLocation/>

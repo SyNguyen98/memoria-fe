@@ -1,5 +1,5 @@
-@use "src/assets/styles/breakpoint" as *;
-@use "src/assets/styles/color" as *;
+@use "../../assets/styles/breakpoint" as *;
+@use "../../assets/styles/color" as *;
 
 .home-container {
 
@@ -306,11 +306,6 @@
           text-decoration: unset;
           font-family: 'Signika', sans-serif;
           font-weight: 500;
-        }
-
-        .MuiSvgIcon-root {
-          margin-left: 2px;
-          font-size: 14px;
         }
       }
     }

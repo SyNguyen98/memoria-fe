@@ -1,6 +1,6 @@
 import "./Sidebar.scss";
 import React, {useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
 import {closeSidebar} from "../../reducers/SidebarReducer.ts";
