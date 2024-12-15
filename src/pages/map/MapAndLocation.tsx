@@ -54,7 +54,7 @@ export default function MapAndLocation() {
     const [dialogOpened, setDialogOpened] = useState(false);
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const collectionQuery = useCollectionQuery();
+    const collectionQuery = useCollectionQuery({unpaged: true});
     const locationQuery = useLocationQuery(collectionId, 0, 100);
 
     const dispatch = useAppDispatch();
@@ -68,12 +68,12 @@ export default function MapAndLocation() {
         const id = searchParams.get("id");
         if (id) {
             setCollectionId(id);
-            const collection = collectionQuery.data?.find(c => c.id === id);
+            const collection = collectionQuery.data?.data.find(c => c.id === id);
             if (collection) {
                 setCollectionChose(collection);
             }
         } else {
-            const collection = collectionQuery.data?.[0];
+            const collection = collectionQuery.data?.data[0];
             if (collection) {
                 setSearchParams({id: collection.id ?? ""});
             }
@@ -113,7 +113,7 @@ export default function MapAndLocation() {
      * Additionally, it closes the filter menu.
      */
     const handleChangeCollection = (event: SelectChangeEvent) => {
-        const collection = collectionQuery.data?.find(c => c.id === event.target.value);
+        const collection = collectionQuery.data?.data.find(c => c.id === event.target.value);
         if (collection) {
             setSearchParams({id: collection.id ?? ""});
             setLocationChose(null);
@@ -195,7 +195,7 @@ export default function MapAndLocation() {
                                     variant="filled"
                                     value={collectionId}
                                     onChange={handleChangeCollection}>
-                                {collectionQuery.data?.map(collection =>
+                                {collectionQuery.data?.data.map(collection =>
                                     <MenuItem key={collection.id} value={collection.id}>
                                         {collection.name}
                                     </MenuItem>
@@ -226,7 +226,7 @@ export default function MapAndLocation() {
                                     variant="filled"
                                     value={collectionId}
                                     onChange={handleChangeCollection}>
-                                {collectionQuery.data?.map(collection =>
+                                {collectionQuery.data?.data.map(collection =>
                                     <MenuItem key={collection.id} value={collection.id}>
                                         {collection.name}
                                     </MenuItem>
