@@ -1,5 +1,5 @@
 import './CollectionComponent.scss';
-import {useEffect, useState} from "react";
+import {ChangeEvent, MouseEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
@@ -16,7 +16,7 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableHead,
+    TableHead, TablePagination,
     TableRow,
     Toolbar,
     Typography
@@ -34,16 +34,21 @@ import {PathName} from "../../constants/Page";
 import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
 import {DateUtil} from "../../utils/DateUtil.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import {useQueryClient} from "@tanstack/react-query";
 
 function CollectionComponent() {
     const [choseCollection, setChoseCollection] = useState<Collection | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const [page, setPage] = useState(0);
+    const [numOfCollections, setNumOfCollections] = useState(0);
 
     const dispatch = useAppDispatch();
     const {t} = useTranslation();
 
-    const collectionQuery = useCollectionQuery();
+    const queryClient = useQueryClient();
+    const collectionQuery = useCollectionQuery({page, size: rowsPerPage});
 
     const currentUser = useAppSelector(state => state.user.value);
     const navigate = useNavigate();
@@ -55,6 +60,18 @@ function CollectionComponent() {
             dispatch(openSnackbar({type: "error", message: t("collection.cannot_load")}));
         }
     }, [collectionQuery.isError, dispatch, t]);
+
+    useEffect(() => {
+        if (collectionQuery.data) {
+            setNumOfCollections(Number(collectionQuery.data.header.get("x-total-count")));
+        }
+    }, [collectionQuery.data]);
+
+    const refreshCollections = (page: number, size: number) => {
+        queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess', {page, size}]}).catch(() => {
+            dispatch(openSnackbar({type: "error", message: t("collection.cannot_load")}));
+        });
+    }
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -73,6 +90,17 @@ function CollectionComponent() {
         sessionStorage.setItem(SessionKey.COLLECTION_OWNER_EMAIL, collection.ownerEmail ?? '');
         navigate(`/${PathName.LOCATION}?id=${collection.id}`);
     }
+
+    const handleOnChangePage = (_event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+        refreshCollections(newPage, rowsPerPage);
+    }
+
+    const handleOnChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        refreshCollections(0, parseInt(event.target.value, 10));
+    };
 
     const handleOpenEditDialog = (collection?: Collection) => {
         setDialogOpened(true);
@@ -113,7 +141,7 @@ function CollectionComponent() {
         if (isTabletOrPhone()) {
             return (
                 <div className="collection-card-list">
-                    {collectionQuery.data?.map(collection =>
+                    {collectionQuery.data?.data.map(collection =>
                         <Card key={collection.id}>
                             <CardContent>
                                 <div className="collection-name">
@@ -195,10 +223,10 @@ function CollectionComponent() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {collectionQuery.data?.map((collection, index) => (
+                    {collectionQuery.data?.data.map((collection, index) => (
                         <TableRow key={collection.id}>
                             <TableCell align="center">
-                                {index + 1}
+                                {page * rowsPerPage + index + 1}
                             </TableCell>
                             <TableCell width={200}>
                                 <Typography variant="body1" className="collection-name"
@@ -262,6 +290,14 @@ function CollectionComponent() {
             </AppBar>
             {/* Collection List */}
             {collectionQuery.isLoading ? <AppLoader/> : renderCollectionList()}
+
+            <TablePagination count={numOfCollections}
+                             page={page}
+                             onPageChange={handleOnChangePage}
+                             rowsPerPage={rowsPerPage}
+                             rowsPerPageOptions={[5, 10, 20, 50]}
+                             onRowsPerPageChange={handleOnChangeRowsPerPage}/>
+
             {/* Edit dialog */}
             <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection}/>
             {/* Delete dialog */}
