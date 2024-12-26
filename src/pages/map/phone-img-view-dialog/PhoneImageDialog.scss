@@ -1,6 +1,5 @@
 @use "../../../assets/styles/breakpoint" as *;
 @use "../../../assets/styles/color" as *;
-@use "react-image-gallery/styles/scss/image-gallery.scss" as *;
 
 .phone-img-dialog {
 
@@ -32,6 +31,20 @@
 
     .MuiDialogContent-root {
       padding: 0 0 1rem;
+      display: flex;
+      flex-direction: column;
+
+      .slick-slider {
+        margin: auto 0;
+
+        .slick-list, .slick-track, .slick-slide {
+          display: flex;
+
+          .slick-slide div {
+            margin: auto 0;
+          }
+        }
+      }
     }
 
     .item-loading {
@@ -39,12 +52,6 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) rotate(165deg) !important;
-    }
-
-    .image-gallery {
-      top: 50%;
-      bottom: 50%;
-      transform: translate(0, -50%);
     }
 
     .MuiDialogActions-root {
