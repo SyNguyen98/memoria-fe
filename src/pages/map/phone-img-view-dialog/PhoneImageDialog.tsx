@@ -1,14 +1,14 @@
 import "./PhoneImageDialog.scss";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
-import ImageGallery, {ReactImageGalleryItem} from "react-image-gallery";
 import {Dialog, DialogActions, DialogContent, DialogTitle, IconButton} from "@mui/material";
 import {Close} from "@mui/icons-material";
+import Slider from "react-slick";
+import {HashLoader} from "react-spinners";
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
 import {Location} from "../../../models/Location";
-import {HashLoader} from "react-spinners";
 
 type Props = {
     open: boolean;
@@ -18,9 +18,8 @@ type Props = {
 }
 
 export default function PhoneImageDialog(props: Readonly<Props>) {
-    const [images, setImages] = useState<ReactImageGalleryItem[]>([]);
     const [index, setIndex] = useState(0);
-    const [imageLoading, setImageLoading] = useState(true);
+    const sliderRef = useRef<Slider | null>(null);
 
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
@@ -29,7 +28,12 @@ export default function PhoneImageDialog(props: Readonly<Props>) {
 
     useEffect(() => {
         setIndex(props.index);
-    }, [props]);
+        setTimeout(() => {
+            if (sliderRef.current) {
+                sliderRef.current.slickGoTo(props.index);
+            }
+        }, 100);
+    }, [props, sliderRef.current]);
 
     useEffect(() => {
         if (itemQuery.isError) {
@@ -37,27 +41,8 @@ export default function PhoneImageDialog(props: Readonly<Props>) {
         }
     }, [dispatch, itemQuery.isError, t]);
 
-    useEffect(() => {
-        if (itemQuery.data) {
-            setImages(itemQuery.data.map(item => ({
-                original: item.downloadUrl,
-                thumbnail: item.thumbnailUrl,
-                renderItem: () => (
-                    item.mimeType.includes('image') ? (
-                        <img className="image-gallery-image" alt={item.name} src={item.downloadUrl}/>
-                    ) : (
-                        <video className="image-gallery-image" controls>
-                            <source src={item.downloadUrl} type="video/mp4"/>
-                            Your browser does not support the video tag.
-                        </video>
-                    )
-                )
-            })));
-        }
-    }, [itemQuery.data]);
-
     const onClose = () => {
-        setIndex(0);
+        setIndex(1);
         props.onClose();
     }
 
@@ -78,17 +63,27 @@ export default function PhoneImageDialog(props: Readonly<Props>) {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                {imageLoading && <HashLoader className="item-loading" color="#2196F3" size={50}/>}
-                <ImageGallery items={images} lazyLoad
-                              showBullets={false} showNav={false}
-                              showPlayButton={false} showFullscreenButton={false}
-                              showThumbnails={false}
-                              startIndex={props.index}
-                              onSlide={handleSlide}
-                              onImageLoad={() => setImageLoading(false)}/>
+                {<HashLoader className="item-loading" color="#2196F3" size={50}/>}
+                <Slider ref={sliderRef}
+                        arrows={false} dots={false} infinite={true}
+                        slidesToShow={1} slidesToScroll={1}
+                        speed={500}
+                        lazyLoad="progressive"
+                        afterChange={handleSlide}>
+                    {itemQuery.data?.map(item =>
+                        item.mimeType.includes('image') ? (
+                            <img key={item.id} alt={item.name} src={item.downloadUrl}/>
+                        ) : (
+                            <video key={item.id} controls>
+                                <source src={item.downloadUrl} type="video/mp4"/>
+                                Your browser does not support the video tag.
+                            </video>
+                        )
+                    )}
+                </Slider>
             </DialogContent>
             <DialogActions>
-                {index + 1} / {images.length}
+                {index + 1} / {itemQuery.data?.length}
             </DialogActions>
         </Dialog>
     )
