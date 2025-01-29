@@ -7,7 +7,6 @@ export interface Location {
     coordinate: Coordinate;
     place: string;
     description: string;
-    driveItemId?: string;
     collectionId?: string;
 }
 

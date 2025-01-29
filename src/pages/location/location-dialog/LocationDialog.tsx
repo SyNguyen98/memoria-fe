@@ -163,7 +163,6 @@ export default function LocationDialog(props: Readonly<Props>) {
         }
         if (props.location) {
             location.id = props.location.id;
-            location.driveItemId = props.location.driveItemId;
             updateMutation.mutate(location);
         } else {
             createMutation.mutate(location);

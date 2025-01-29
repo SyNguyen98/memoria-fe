@@ -19,7 +19,7 @@ import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 
 export default function ItemComponent() {
-    const [driveItemId, setDriveItemId] = useState('');
+    const [locationId, setLocationId] = useState('');
     const [collectionName, setCollectionName] = useState('');
     const [locationPlace, setLocationPlace] = useState('');
     const [items, setItems] = useState<Item[]>([])
@@ -29,7 +29,7 @@ export default function ItemComponent() {
     const [searchParams] = useSearchParams();
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-    const itemQuery = useItemQuery(driveItemId, "medium")
+    const itemQuery = useItemQuery(locationId, "medium")
 
     useEffect(() => {
         document.title = `MEMORIA | ${sessionStorage.getItem(SessionKey.LOCATION_PLACE)}`;
@@ -37,7 +37,7 @@ export default function ItemComponent() {
         setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
         setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) ?? '');
         if (searchParams.has('id')) {
-            setDriveItemId(searchParams.get('id') as string);
+            setLocationId(searchParams.get('id') as string);
         }
     }, [searchParams]);
 

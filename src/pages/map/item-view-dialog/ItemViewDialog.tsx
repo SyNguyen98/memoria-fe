@@ -26,7 +26,7 @@ export default function ImageDialog(props: Readonly<Props>) {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
 
-    const itemQuery = useItemQuery(props.location.driveItemId!, "medium")
+    const itemQuery = useItemQuery(props.location.id!, "medium")
 
     const handlers = useSwipeable({
         onSwipedLeft: () => handleNext(),

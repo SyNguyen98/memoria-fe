@@ -93,7 +93,7 @@ function LocationComponent() {
 
     const handleNavigateToItem = (location: Location) => {
         sessionStorage.setItem(SessionKey.LOCATION_PLACE, location.place);
-        navigate(`/${PathName.ITEM}?id=${location.driveItemId}`);
+        navigate(`/${PathName.ITEM}?id=${location.id}`);
     }
 
     const handleOpenEditDialog = (location?: Location) => {
