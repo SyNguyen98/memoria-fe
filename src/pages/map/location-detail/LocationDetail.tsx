@@ -27,7 +27,7 @@ function LocationDetail(props: Readonly<Props>) {
 
     const detailRef = useRef<HTMLDivElement>(null);
 
-    const itemQuery = useItemQuery(props.location.driveItemId!, isTabletOrPhone() ? "small" : "medium");
+    const itemQuery = useItemQuery(props.location.id!, isTabletOrPhone() ? "small" : "medium");
 
     const detailSwipeHandlers = useSwipeable({
         onSwipedUp: () => {

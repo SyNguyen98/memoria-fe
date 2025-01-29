@@ -24,7 +24,7 @@ export default function PhoneImageDialog(props: Readonly<Props>) {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
 
-    const itemQuery = useItemQuery(props.location.driveItemId!, "medium");
+    const itemQuery = useItemQuery(props.location.id!, "medium");
 
     useEffect(() => {
         setIndex(props.index);
