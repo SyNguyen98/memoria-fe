@@ -29,6 +29,28 @@ export const useCollectionQuery = (params: CollectionApiParams) => {
     })
 }
 
+export const useCollectionByIdQuery = (id: string) => {
+    return useQuery({
+        queryKey: ['getCollectionById', id],
+        queryFn: async (): Promise<Collection> => {
+            const res = await appAxios.get(`${API_URL}/${id}`);
+            return res.data;
+        },
+        enabled: appAxios.defaults.headers.Authorization !== undefined
+    })
+}
+
+export const useCollectionByLocationIdQuery = (locationId: string) => {
+    return useQuery({
+        queryKey: ['getCollectionByLocationId', locationId],
+        queryFn: async (): Promise<Collection> => {
+            const res = await appAxios.get(`${API_URL}/locations/${locationId}`);
+            return res.data;
+        },
+        enabled: appAxios.defaults.headers.Authorization !== undefined
+    })
+}
+
 export const useUserEmailsCollectionQuery = () => {
     return useQuery({
         queryKey: ['getAllUserEmailsOfCollection'],

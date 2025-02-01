@@ -19,6 +19,17 @@ export const useLocationQuery = (collectionId: string, page: number, size: numbe
     })
 }
 
+export const useLocationByIdQuery = (id: string) => {
+    return useQuery({
+        queryKey: ['getLocationById', id],
+        queryFn: async (): Promise<Location> => {
+            const res = await appAxios.get(`${API_URL}/${id}`);
+            return res.data;
+        },
+        enabled: id !== undefined && id !== "" && appAxios.defaults.headers.Authorization !== undefined
+    })
+}
+
 export const useCreateLocationMutation = (onSuccess: () => void, onError: () => void) => {
     return useMutation({
         mutationKey: ['createLocation'],

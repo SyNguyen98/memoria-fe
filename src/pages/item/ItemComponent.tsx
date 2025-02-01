@@ -10,18 +10,19 @@ import {useAppDispatch} from "../../app/hook";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useItemQuery} from "../../custom-query/ItemQueryHook.ts";
+import {useLocationByIdQuery} from "../../custom-query/LocationQueryHook.ts";
+import {useCollectionByLocationIdQuery} from "../../custom-query/CollectionQueryHook.ts";
 // Component
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 // Models / Constants
 import {Item} from "../../models/Item";
-import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 
 export default function ItemComponent() {
     const [locationId, setLocationId] = useState('');
-    const [collectionName, setCollectionName] = useState('');
     const [locationPlace, setLocationPlace] = useState('');
+    const [collectionName, setCollectionName] = useState('');
     const [items, setItems] = useState<Item[]>([])
     const [choseIndex, setChoseIndex] = useState(-1);
     const [viewDialogOpened, setViewDialogOpened] = useState(false);
@@ -29,13 +30,11 @@ export default function ItemComponent() {
     const [searchParams] = useSearchParams();
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-    const itemQuery = useItemQuery(locationId, "medium")
+    const itemQuery = useItemQuery(locationId, "medium");
+    const locationQuery = useLocationByIdQuery(locationId);
+    const collectionQuery = useCollectionByLocationIdQuery(locationId);
 
     useEffect(() => {
-        document.title = `MEMORIA | ${sessionStorage.getItem(SessionKey.LOCATION_PLACE)}`;
-
-        setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
-        setLocationPlace(sessionStorage.getItem(SessionKey.LOCATION_PLACE) ?? '');
         if (searchParams.has('id')) {
             setLocationId(searchParams.get('id') as string);
         }
@@ -52,6 +51,19 @@ export default function ItemComponent() {
             setItems([...itemQuery.data].sort((a, b) => new Date(a.takenDateTime).getTime() - new Date(b.takenDateTime).getTime()));
         }
     }, [itemQuery.data]);
+
+    useEffect(() => {
+        if (locationQuery.data) {
+            setLocationPlace(locationQuery.data.place);
+            document.title = `MEMORIA | ${locationQuery.data.place}`;
+        }
+    }, [locationQuery.data]);
+
+    useEffect(() => {
+        if (collectionQuery.data) {
+            setCollectionName(collectionQuery.data.name);
+        }
+    }, [collectionQuery.data]);
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -82,7 +94,7 @@ export default function ItemComponent() {
                         </Link>
                         <KeyboardArrowRight/>
                         <Link className="location-title"
-                              to={`/${PathName.LOCATION}?id=${sessionStorage.getItem(SessionKey.COLLECTION_ID)}`}>
+                              to={`/${PathName.LOCATION}?id=${collectionQuery.data?.id}`}>
                             {collectionName}
                         </Link>
                         <KeyboardArrowRight/>

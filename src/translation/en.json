@@ -230,6 +230,7 @@
     "btn-close": "Close"
   },
   "item": {
+    "img_video": "Imaged / Videos",
     "cannot_load": "Cannot load images"
   },
   "user": {
