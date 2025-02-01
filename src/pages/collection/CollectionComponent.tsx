@@ -16,7 +16,8 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableHead, TablePagination,
+    TableHead,
+    TablePagination,
     TableRow,
     Toolbar,
     Typography
@@ -28,7 +29,6 @@ import CollectionDialog from "./collection-dialog/CollectionDialog";
 import DeleteCollectionDialog from "./delete-collection-dialog/DeleteCollectionDialog.tsx";
 // Models & Constants
 import {Collection} from "../../models/Collection";
-import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Utils & Services
 import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
@@ -85,9 +85,6 @@ function CollectionComponent() {
     }
 
     const handleNavigateToLocation = (collection: Collection) => {
-        sessionStorage.setItem(SessionKey.COLLECTION_ID, collection.id!);
-        sessionStorage.setItem(SessionKey.COLLECTION_NAME, collection.name);
-        sessionStorage.setItem(SessionKey.COLLECTION_OWNER_EMAIL, collection.ownerEmail ?? '');
         navigate(`/${PathName.LOCATION}?id=${collection.id}`);
     }
 

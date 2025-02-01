@@ -28,13 +28,13 @@ import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import LocationDialog from "./location-dialog/LocationDialog";
 // Models & Constants
 import {Location} from "../../models/Location";
-import {SessionKey} from "../../constants/Storage";
 import {PathName} from "../../constants/Page";
 // Utils & Services
 import {DateUtil} from "../../utils/DateUtil";
 import {useTranslation} from "react-i18next";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 import DeleteLocationDialog from "./delete-location-dialog/DeleteLocationDialog.tsx";
+import {useCollectionByIdQuery} from "../../custom-query/CollectionQueryHook.ts";
 
 function LocationComponent() {
     const [collectionId, setCollectionId] = useState('');
@@ -54,15 +54,12 @@ function LocationComponent() {
 
     const queryClient = useQueryClient();
     const locationQuery = useLocationQuery(collectionId, page, rowsPerPage);
+    const collectionQuery = useCollectionByIdQuery(collectionId);
 
     useEffect(() => {
-        document.title = `MEMORIA | ${sessionStorage.getItem(SessionKey.COLLECTION_NAME)}`;
-
         const collectionId = searchParams.get("id");
         if (collectionId) {
             setCollectionId(collectionId);
-            sessionStorage.setItem(SessionKey.COLLECTION_ID, collectionId);
-            setCollectionName(sessionStorage.getItem(SessionKey.COLLECTION_NAME) ?? '');
             refreshLocations(page, rowsPerPage);
         }
     }, [dispatch, queryClient, searchParams, t]);
@@ -72,6 +69,13 @@ function LocationComponent() {
             setNumOfLocations(Number(locationQuery.data.header.get("x-total-count")));
         }
     }, [locationQuery.data]);
+
+    useEffect(() => {
+        if (collectionQuery.data) {
+            setCollectionName(collectionQuery.data.name);
+            document.title = `MEMORIA | ${collectionQuery.data.name}`;
+        }
+    }, [collectionQuery.data]);
 
     const refreshLocations = (page: number, size: number) => {
         queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collectionId, page, size]}).catch(() => {
@@ -84,7 +88,7 @@ function LocationComponent() {
     }
 
     const isCollectionOwner = () => {
-        const ownerEmail = sessionStorage.getItem(SessionKey.COLLECTION_OWNER_EMAIL);
+        const ownerEmail = collectionQuery.data?.ownerEmail;
         if (currentUser && ownerEmail) {
             return currentUser.email === ownerEmail;
         }
@@ -92,7 +96,6 @@ function LocationComponent() {
     }
 
     const handleNavigateToItem = (location: Location) => {
-        sessionStorage.setItem(SessionKey.LOCATION_PLACE, location.place);
         navigate(`/${PathName.ITEM}?id=${location.id}`);
     }
 
