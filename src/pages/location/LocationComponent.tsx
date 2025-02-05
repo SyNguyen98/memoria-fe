@@ -26,6 +26,7 @@ import {Add, Delete, Edit, KeyboardArrowRight, Menu} from "@mui/icons-material";
 // Components
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import LocationDialog from "./location-dialog/LocationDialog";
+import DeleteLocationDialog from "./delete-location-dialog/DeleteLocationDialog.tsx";
 // Models & Constants
 import {Location} from "../../models/Location";
 import {PathName} from "../../constants/Page";
@@ -33,7 +34,6 @@ import {PathName} from "../../constants/Page";
 import {DateUtil} from "../../utils/DateUtil";
 import {useTranslation} from "react-i18next";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import DeleteLocationDialog from "./delete-location-dialog/DeleteLocationDialog.tsx";
 import {useCollectionByIdQuery} from "../../custom-query/CollectionQueryHook.ts";
 
 function LocationComponent() {
@@ -250,12 +250,14 @@ function LocationComponent() {
             {/* Location List */}
             {locationQuery.isLoading ? <AppLoader/> : renderLocationList()}
 
-            <TablePagination count={numOfLocations}
-                             page={page}
-                             onPageChange={handleOnChangePage}
-                             rowsPerPage={rowsPerPage}
-                             rowsPerPageOptions={[5, 10, 20, 50]}
-                             onRowsPerPageChange={handleOnChangeRowsPerPage}/>
+            {locationQuery.data?.data && locationQuery.data?.data.length > 0 && (
+                <TablePagination count={numOfLocations}
+                                 page={page}
+                                 onPageChange={handleOnChangePage}
+                                 rowsPerPage={rowsPerPage}
+                                 rowsPerPageOptions={[5, 10, 20, 50]}
+                                 onRowsPerPageChange={handleOnChangeRowsPerPage}/>
+            )}
 
             {/* Edit dialog */}
             <LocationDialog open={dialogOpened} onClose={onEditDialogClose} location={choseLocation}/>
