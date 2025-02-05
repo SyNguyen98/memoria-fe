@@ -44,6 +44,7 @@ type TagOption = {
 
 export default function CollectionDialog(props: Readonly<Props>) {
     const [inputs, setInputs] = useState<Input>({name: '', description: '', userEmails: []});
+    const [inputEmail, setInputEmail] = useState('');
     const [tags, setTags] = useState<string[]>([]);
 
     const {t} = useTranslation();
@@ -101,6 +102,8 @@ export default function CollectionDialog(props: Readonly<Props>) {
 
     const handleClose = () => {
         setInputs({name: '', description: '', userEmails: []});
+        setInputEmail('');
+        setTags([]);
         props.onClose();
     }
 
@@ -117,8 +120,8 @@ export default function CollectionDialog(props: Readonly<Props>) {
             const target = event.target as HTMLInputElement;
             const emails = inputs.userEmails ? [...inputs.userEmails] : [];
             emails.push(target.value);
-            target.value = "";
             setInputs(state => ({...state, userEmails: emails}));
+            setInputEmail('');
         }
     }
 
@@ -180,12 +183,14 @@ export default function CollectionDialog(props: Readonly<Props>) {
                 />
                 {/* Emails */}
                 <Autocomplete options={userEmailsCollectionQuery.data || []}
+                              value={inputEmail}
+                              onInputChange={(_event, value) => setInputEmail(value)}
+                              onKeyDown={event => onEnterEmail(event)}
                               renderInput={(params) =>
                                   <TextField {...params}
                                              name="email"
                                              label={t("collection.shared_email")}
-                                             placeholder={t("collection.email_placeholder")}
-                                             onKeyDown={event => onEnterEmail(event)}/>}/>
+                                             placeholder={t("collection.email_placeholder")}/>}/>
                 <Typography variant="body1">
                     {t("collection.email_description")}
                 </Typography>
