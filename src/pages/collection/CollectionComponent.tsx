@@ -288,12 +288,16 @@ function CollectionComponent() {
             {/* Collection List */}
             {collectionQuery.isLoading ? <AppLoader/> : renderCollectionList()}
 
-            <TablePagination count={numOfCollections}
-                             page={page}
-                             onPageChange={handleOnChangePage}
-                             rowsPerPage={rowsPerPage}
-                             rowsPerPageOptions={[5, 10, 20, 50]}
-                             onRowsPerPageChange={handleOnChangeRowsPerPage}/>
+            {collectionQuery.data?.data && collectionQuery.data?.data.length > 0 && (
+                <TablePagination count={numOfCollections}
+                                 page={page}
+                                 onPageChange={handleOnChangePage}
+                                 rowsPerPage={rowsPerPage}
+                                 rowsPerPageOptions={[5, 10, 20, 50]}
+                                 onRowsPerPageChange={handleOnChangeRowsPerPage}
+                                 labelRowsPerPage={t("table.rows_per_page")}
+                                 labelDisplayedRows={({ from, to, count }) => t("table.displayed_rows", { from, to, count })}/>
+            )}
 
             {/* Edit dialog */}
             <CollectionDialog open={dialogOpened} onClose={onEditDialogClose} collection={choseCollection}/>
