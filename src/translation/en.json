@@ -26,6 +26,10 @@
     "view_location": "View Location",
     "view_item": "View Photos/Videos"
   },
+  "table": {
+    "rows_per_page": "Rows per page:",
+    "displayed_rows": "{{from}}–{{to}} of {{count}}"
+  },
   "session_expired": "Session expired. Please login again",
   "homepage": {
     "banner_quote": "In the end, there is only memories",

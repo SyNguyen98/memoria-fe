@@ -256,7 +256,9 @@ function LocationComponent() {
                                  onPageChange={handleOnChangePage}
                                  rowsPerPage={rowsPerPage}
                                  rowsPerPageOptions={[5, 10, 20, 50]}
-                                 onRowsPerPageChange={handleOnChangeRowsPerPage}/>
+                                 onRowsPerPageChange={handleOnChangeRowsPerPage}
+                                 labelRowsPerPage={t("table.rows_per_page")}
+                                 labelDisplayedRows={({ from, to, count }) => t("table.displayed_rows", { from, to, count })}/>
             )}
 
             {/* Edit dialog */}

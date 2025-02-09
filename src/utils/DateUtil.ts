@@ -25,3 +25,7 @@ export class DateUtil {
         return `${utcDate}/${utcMonth}/${result.getUTCFullYear()}`;
     }
 }
+
+export function isLeapYear(year: number) {
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}

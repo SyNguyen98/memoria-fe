@@ -22,6 +22,7 @@ import {useAppDispatch} from "../../../app/hook";
 import {Location} from "../../../models/Location";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
+import {isLeapYear} from "../../../utils/DateUtil.ts";
 import PositionDialog from "../position-dialog/PositionDialog.tsx";
 
 type Props = {
@@ -53,7 +54,6 @@ const initialInput: Input = {
 }
 
 const CURRENT_YEAR = new Date().getFullYear();
-const DAYS: number[] = Array.from({length: 31}, (_, i) => i + 1);
 const MONTHS: number[] = Array.from({length: 12}, (_, i) => i + 1);
 const YEARS: number[] = Array.from({length: CURRENT_YEAR - 2000 + 1}, (_, i) => CURRENT_YEAR - i);
 
@@ -208,7 +208,7 @@ export default function LocationDialog(props: Readonly<Props>) {
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid size={{ xs: 6, md: 3 }}>
+                        <Grid size={{xs: 6, md: 3}}>
                             {/* Month */}
                             <TextField select fullWidth
                                        name="takenMonth"
@@ -231,11 +231,16 @@ export default function LocationDialog(props: Readonly<Props>) {
                                        disabled={inputs.takenYear === null && inputs.takenMonth === null}
                                        value={inputs.takenDay}
                                        onChange={onInputChange}>
-                                {DAYS.map(day => (
-                                    <MenuItem key={day} value={day}>
-                                        {day}
-                                    </MenuItem>
-                                ))}
+                                {(() => {
+                                    const daysInMonth = inputs.takenMonth === 2
+                                        ? isLeapYear(inputs.takenYear!) ? 29 : 28
+                                        : [4, 6, 9, 11].includes(inputs.takenMonth!) ? 30 : 31;
+                                    return Array.from({length: daysInMonth}, (_, i) => i + 1).map(day => (
+                                        <MenuItem key={day} value={day}>
+                                            {day}
+                                        </MenuItem>
+                                    ));
+                                })()}
                             </TextField>
                         </Grid>
                         <Grid size={{ xs: 6, md: 3 }}>
