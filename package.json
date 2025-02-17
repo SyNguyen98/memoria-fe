@@ -42,7 +42,7 @@
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^5.66.0",
+    "@tanstack/eslint-plugin-query": "^5.66.1",
     "@types/leaflet": "^1.9.16",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
