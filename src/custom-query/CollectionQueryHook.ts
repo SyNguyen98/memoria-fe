@@ -62,6 +62,17 @@ export const useUserEmailsCollectionQuery = () => {
     })
 }
 
+export const useYearsOfCollectionQuery = () => {
+    return useQuery({
+        queryKey: ['getAllYearsOfCollection'],
+        queryFn: async (): Promise<number[]> => {
+            const res = await appAxios.get(`${API_URL}/years`);
+            return res.data;
+        },
+        enabled: appAxios.defaults.headers.Authorization !== undefined
+    })
+}
+
 export const useCreateCollectionMutation = (onSuccess: () => void, onError: () => void) => {
     return useMutation({
         mutationKey: ['createCollection'],
