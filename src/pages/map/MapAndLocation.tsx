@@ -1,26 +1,16 @@
 import "./MapAndLocation.scss";
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {MapContainer, Marker, TileLayer, Tooltip as TooltipMarker, useMap} from 'react-leaflet';
-import {Icon, LatLngExpression} from "leaflet";
-import {
-    AppBar, Divider,
-    Drawer,
-    FormControl,
-    IconButton,
-    InputLabel,
-    MenuItem,
-    Select,
-    Toolbar,
-    Typography
-} from "@mui/material";
+import {Icon, LatLngBoundsExpression, LatLngExpression} from "leaflet";
+import {AppBar, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography} from "@mui/material";
 import {FilterAltOutlined, Menu} from "@mui/icons-material";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {useAppDispatch} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
-import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
-import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
+import {useCollectionQuery, useYearsOfCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {useAllLocationsQuery} from "../../custom-query/LocationQueryHook.ts";
 // Components
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
@@ -31,6 +21,7 @@ import {Location} from "../../models/Location";
 import {DateUtil} from "../../utils/DateUtil";
 import {Collection} from "../../models/Collection.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import FilterDrawer from "./filter-drawer/FilterDrawer.tsx";
 
 const redIcon = new Icon({
     iconUrl: 'https://github.com/SyNguyen98/image-storage/blob/main/red-marker.png?raw=true',
@@ -45,17 +36,20 @@ const blueIcon = new Icon({
 });
 
 export default function MapAndLocation() {
-    const [collectionId, setCollectionId] = useState("");
+    const [collectionId, setCollectionId] = useState("all");
+    const [year, setYear] = useState("all");
     const [collectionChose, setCollectionChose] = useState<Collection | null>(null);
     const [locationChose, setLocationChose] = useState<Location | null>(null);
     const [center, setCenter] = useState<[number, number]>([0, 0]);
     const [zoom, setZoom] = useState(13);
+    const [bounds, setBounds] = useState<LatLngBoundsExpression | undefined>();
     const [filterMenuOpened, setFilterMenuOpened] = useState(false);
     const [dialogOpened, setDialogOpened] = useState(false);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const collectionQuery = useCollectionQuery({unpaged: true});
-    const locationQuery = useLocationQuery(collectionId, 0, 100);
+    const locationQuery = useAllLocationsQuery(collectionId, year);
+    const yearsQuery = useYearsOfCollectionQuery();
 
     const dispatch = useAppDispatch();
     const {t} = useTranslation();
@@ -66,6 +60,7 @@ export default function MapAndLocation() {
 
     useEffect(() => {
         const id = searchParams.get("id");
+        const year = searchParams.get("year");
         if (id) {
             setCollectionId(id);
             const collection = collectionQuery.data?.data.find(c => c.id === id);
@@ -73,23 +68,15 @@ export default function MapAndLocation() {
                 setCollectionChose(collection);
             }
         } else {
-            const collection = collectionQuery.data?.data[0];
-            if (collection) {
-                setSearchParams({id: collection.id ?? ""});
-            }
+            setCollectionId("all");
+            setCollectionChose(null);
         }
-    }, [collectionQuery.data, searchParams, setSearchParams]);
+        setYear(year || "all");
+    }, [collectionQuery.data, searchParams]);
 
     useEffect(() => {
-        if (locationQuery.data && locationQuery.data.data.length > 0) {
-            let centerLat = 0;
-            let centerLng = 0;
-            locationQuery.data.data.forEach(location => {
-                centerLat += location.coordinate.latitude;
-                centerLng += location.coordinate.longitude;
-            });
-            setCenter([centerLat / locationQuery.data.data.length, centerLng / locationQuery.data.data.length]);
-            setZoom(13);
+        if (locationQuery.data && locationQuery.data.length > 0) {
+            setBounds(locationQuery.data.map(location => [location.coordinate.latitude, location.coordinate.longitude]));
         }
     }, [locationQuery.data]);
 
@@ -97,12 +84,21 @@ export default function MapAndLocation() {
         setFilterMenuOpened(true);
     }
 
-    const handleCloseCollectionMenu = () => {
+    const handleCloseFilterMenu = () => {
         setFilterMenuOpened(false);
     }
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
+    }
+
+    const handleChangeYear = (event: SelectChangeEvent) => {
+        const year = event.target.value
+        const params: Record<string, string> = collectionId !== "all" ? {id: collectionId} : {};
+        if (year !== "all") {
+            params.year = year
+        }
+        setSearchParams(params);
     }
 
     /**
@@ -113,11 +109,13 @@ export default function MapAndLocation() {
      * Additionally, it closes the filter menu.
      */
     const handleChangeCollection = (event: SelectChangeEvent) => {
-        const collection = collectionQuery.data?.data.find(c => c.id === event.target.value);
-        if (collection) {
-            setSearchParams({id: collection.id ?? ""});
-            setLocationChose(null);
+        const collectionId = event.target.value;
+        const params: Record<string, string> = year !== "all" ? {year} : {};
+        if (collectionId !== "all") {
+            params.id = collectionId
         }
+        setSearchParams(params);
+        setLocationChose(null);
         setFilterMenuOpened(false);
     }
 
@@ -129,7 +127,7 @@ export default function MapAndLocation() {
      * Additionally, it closes the filter menu.
      */
     const handleChangeLocation = (event: SelectChangeEvent) => {
-        const location = locationQuery.data?.data.find(l => l.id === event.target.value);
+        const location = locationQuery.data?.find(l => l.id === event.target.value);
         if (location) {
             setLocationChose(location);
             if (isTabletOrPhone()) {
@@ -139,6 +137,7 @@ export default function MapAndLocation() {
                 setCenter([location.coordinate.latitude, location.coordinate.longitude]);
             }
         }
+        setBounds(undefined);
         setFilterMenuOpened(false);
     }
 
@@ -155,8 +154,9 @@ export default function MapAndLocation() {
             setZoom(15);
         } else {
             setCenter([location.coordinate.latitude, location.coordinate.longitude]);
-            setZoom(17);
+            setZoom(16);
         }
+        setBounds(undefined);
     }
 
     const handleCloseDialog = () => {
@@ -187,21 +187,44 @@ export default function MapAndLocation() {
                             <FilterAltOutlined/>
                         </IconButton>
                     ) : (
-                        <FormControl className="collection-select" size="small" variant="filled">
-                            <InputLabel id="collection-select">
-                                {t("page.collection")}
-                            </InputLabel>
-                            <Select labelId="collection-select"
-                                    variant="filled"
-                                    value={collectionId}
-                                    onChange={handleChangeCollection}>
-                                {collectionQuery.data?.data.map(collection =>
-                                    <MenuItem key={collection.id} value={collection.id}>
-                                        {collection.name}
+                        <Fragment>
+                            <FormControl className="year-select" size="small" variant="filled">
+                                <InputLabel id="year-select">
+                                    {t("input.year")}
+                                </InputLabel>
+                                <Select labelId="year-select"
+                                        variant="filled"
+                                        value={year}
+                                        onChange={handleChangeYear}>
+                                    <MenuItem key="all" value="all">
+                                        {t("select.all")}
                                     </MenuItem>
-                                )}
-                            </Select>
-                        </FormControl>
+                                    {yearsQuery.data?.sort((a, b) => a - b).map(year =>
+                                        <MenuItem key={year} value={year}>
+                                            {year}
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                            <FormControl className="collection-select" size="small" variant="filled">
+                                <InputLabel id="collection-select">
+                                    {t("page.collection")}
+                                </InputLabel>
+                                <Select labelId="collection-select"
+                                        variant="filled"
+                                        value={collectionId}
+                                        onChange={handleChangeCollection}>
+                                    <MenuItem key="all" value="all">
+                                        {t("select.all")}
+                                    </MenuItem>
+                                    {collectionQuery.data?.data.map(collection =>
+                                        <MenuItem key={collection.id} value={collection.id}>
+                                            {collection.name}
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Fragment>
                     )}
                 </Toolbar>
             </AppBar>
@@ -209,54 +232,21 @@ export default function MapAndLocation() {
                 {(collectionQuery.isLoading || locationQuery.isLoading) && <AppLoader/>}
 
                 <LocationList collection={collectionChose}
-                              locations={locationQuery.data?.data}
+                              locations={locationQuery.data}
                               handleChoseLocation={handleChoseLocation}/>
 
-                <Drawer anchor="right" open={filterMenuOpened}
-                        onClose={handleCloseCollectionMenu}>
-                    <div className="filter-drawer">
-                        <Typography variant="h6">
-                            {t("filter")}
-                        </Typography>
-                        <FormControl className="collection-select" size="small" variant="filled">
-                            <InputLabel id="collection-select">
-                                {t("page.collection")}
-                            </InputLabel>
-                            <Select labelId="collection-select"
-                                    variant="filled"
-                                    value={collectionId}
-                                    onChange={handleChangeCollection}>
-                                {collectionQuery.data?.data.map(collection =>
-                                    <MenuItem key={collection.id} value={collection.id}>
-                                        {collection.name}
-                                    </MenuItem>
-                                )}
-                            </Select>
-                        </FormControl>
-                        <Divider/>
-                        <FormControl className="location-select" size="small" variant="filled">
-                            <InputLabel id="location-select">
-                                {t("page.location")}
-                            </InputLabel>
-                            <Select labelId="location-select"
-                                    variant="filled"
-                                    value={locationChose?.id}
-                                    onChange={handleChangeLocation} >
-                                {locationQuery.data?.data.map(location =>
-                                    <MenuItem key={location.id} value={location.id}>
-                                        {location.place}
-                                    </MenuItem>
-                                )}
-                            </Select>
-                        </FormControl>
-                    </div>
-                </Drawer>
+                <FilterDrawer open={filterMenuOpened} onClose={handleCloseFilterMenu}
+                              locationChose={locationChose}
+                              onChangeCollection={handleChangeCollection}
+                              onChangeLocation={handleChangeLocation}
+                              onChangeYear={handleChangeYear}/>
 
                 <MapContainer className="map">
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                     <ChangeView center={center}
-                                zoom={zoom}/>
-                    {locationQuery.data?.data.map(location => {
+                                zoom={zoom}
+                                bounds={bounds}/>
+                    {locationQuery.data?.map(location => {
                         const coordinate = location.coordinate;
                         return (
                             <Marker key={location.id}
@@ -293,13 +283,23 @@ export default function MapAndLocation() {
 type ChangeViewProps = {
     center: LatLngExpression;
     zoom: number;
+    bounds?: LatLngBoundsExpression;
 }
 
 function ChangeView(props: ChangeViewProps) {
     const map = useMap();
 
     useEffect(() => {
-        map.setView(props.center, props.zoom);
+        if (props.bounds) {
+            map.fitBounds(props.bounds);
+
+            // setTimeout(() => {
+            //     console.log(map.getZoom())
+            //     // map.setZoom(map.getZoom() - 1);
+            // }, 400);
+        } else {
+            map.setView(props.center, props.zoom);
+        }
     }, [map, props]);
 
     return null;
