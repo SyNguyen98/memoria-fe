@@ -26,6 +26,12 @@
     "view_location": "View Location",
     "view_item": "View Photos/Videos"
   },
+  "input": {
+    "year": "Year"
+  },
+  "select": {
+    "all": "All"
+  },
   "table": {
     "rows_per_page": "Rows per page:",
     "displayed_rows": "{{from}}–{{to}} of {{count}}"
@@ -189,6 +195,9 @@
     "change_privacy_policy_body_3": "You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.",
     "contact_us": "Contact Us",
     "contact_us_body": "If you have any questions about this Privacy Policy, You can contact us by this email: "
+  },
+  "map": {
+    "location_list_title": "Location List"
   },
   "collection": {
     "name": "Name",

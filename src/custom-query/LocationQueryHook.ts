@@ -5,17 +5,36 @@ import {Location} from "../models/Location.ts";
 
 const API_URL = '/api/locations';
 
-export const useLocationQuery = (collectionId: string, page: number, size: number) => {
+export const useAllLocationsQuery = (collectionId: string, year: string) => {
+    const params: Record<string, string> = { collectionId, year };
+    if (!collectionId || collectionId === "all") delete params.collectionId;
+    if (!year || year === "all") delete params.year;
     return useQuery({
-        queryKey: ['getAllLocationsByCollectionId', collectionId, page, size],
+        queryKey: ['getAllLocationsByParams', collectionId, year],
+        queryFn: async (): Promise<Location[]> => {
+            const res = await appAxios.get(`${API_URL}/all`, { params });
+            return res.data;
+        },
+        enabled: appAxios.defaults.headers.Authorization !== undefined
+    })
+}
+
+export const usePagingLocationQuery = (collectionId: string, page: number, size: number) => {
+    return useQuery({
+        queryKey: ['getPagingLocationsByParams', collectionId, page, size],
         queryFn: async (): Promise<{ header: AxiosHeaders, data: Location[] }> => {
-            const res = await appAxios.get(API_URL, {params: {collectionId, page, size}});
+            const res = await appAxios.get(API_URL, {
+                params: {
+                    collectionId, page, size,
+                    sort: 'takenYear,desc,takenMonth,desc,takenDay,desc,takenTime,desc'
+                }
+            });
             return {
                 header: res.headers as AxiosHeaders,
                 data: res.data
             };
         },
-        enabled: collectionId !== undefined && collectionId !== "" && appAxios.defaults.headers.Authorization !== undefined
+        enabled: appAxios.defaults.headers.Authorization !== undefined
     })
 }
 

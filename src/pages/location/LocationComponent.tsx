@@ -2,7 +2,7 @@ import './LocationComponent.scss';
 import {ChangeEvent, MouseEvent, useEffect, useState} from "react";
 import {Link, useNavigate, useSearchParams} from "react-router";
 import {useQueryClient} from "@tanstack/react-query";
-import {useLocationQuery} from "../../custom-query/LocationQueryHook.ts";
+import {usePagingLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
@@ -53,7 +53,7 @@ function LocationComponent() {
     const {t} = useTranslation();
 
     const queryClient = useQueryClient();
-    const locationQuery = useLocationQuery(collectionId, page, rowsPerPage);
+    const locationQuery = usePagingLocationQuery(collectionId, page, rowsPerPage);
     const collectionQuery = useCollectionByIdQuery(collectionId);
 
     useEffect(() => {

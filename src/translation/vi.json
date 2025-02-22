@@ -26,6 +26,12 @@
     "view_location": "Xem địa điểm",
     "view_item": "Xem hình ảnh"
   },
+  "input": {
+    "year": "Năm"
+  },
+  "select": {
+    "all": "Tất cả"
+  },
   "table": {
     "rows_per_page": "Số hàng mỗi trang:",
     "displayed_rows": "{{from}}–{{to}} trong tổng số {{count}}"
@@ -189,6 +195,9 @@
     "change_privacy_policy_body_3": "Bạn nên xem lại Chính sách bảo mật này định kỳ để biết bất kỳ thay đổi nào. Những thay đổi đối với Chính sách bảo mật này có hiệu lực khi chúng được đăng trên trang này.",
     "contact_us": "Liên hệ với chúng tôi",
     "contact_us_body": "Nếu bạn có bất kỳ câu hỏi nào về Chính sách bảo mật này, bạn có thể liên hệ với chúng tôi qua email này: "
+  },
+  "map": {
+    "location_list_title": "Danh Sách Địa Điểm"
   },
   "collection": {
     "name": "Tên",

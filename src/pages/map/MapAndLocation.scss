@@ -18,6 +18,12 @@
     padding: 1rem 0;
   }
 
+  .year-select {
+    margin-right: 1rem;
+    background-color: white;
+    min-width: 120px;
+  }
+
   .collection-select {
     background-color: white;
     min-width: 200px;
@@ -101,24 +107,5 @@
 
   .leaflet-control-attribution {
     display: none;
-  }
-}
-
-.filter-drawer {
-  padding: .5rem;
-  width: 50vw;
-
-  .MuiTypography-h6 {
-    margin: .5rem 0;
-    text-align: center;
-    color: $blue-700;
-  }
-
-  .collection-select, .location-select {
-    width: calc(50vw - .5rem);
-  }
-
-  .MuiDivider-root {
-    margin: 1rem 0;
   }
 }
