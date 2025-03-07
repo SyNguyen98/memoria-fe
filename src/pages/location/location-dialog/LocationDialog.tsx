@@ -10,7 +10,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Grid2 as Grid,
+    Grid2,
     IconButton,
     MenuItem,
     TextField
@@ -193,8 +193,8 @@ export default function LocationDialog(props: Readonly<Props>) {
                                label={t("location.description")}
                                value={inputs.description}
                                onChange={onInputChange}/>
-                    <Grid container spacing={1}>
-                        <Grid size={{ xs: 6, md: 3 }}>
+                    <Grid2 container spacing={1}>
+                        <Grid2 size={{ xs: 6, md: 3 }}>
                             {/* Year */}
                             <TextField select fullWidth
                                        name="takenYear"
@@ -207,8 +207,8 @@ export default function LocationDialog(props: Readonly<Props>) {
                                     </MenuItem>
                                 ))}
                             </TextField>
-                        </Grid>
-                        <Grid size={{xs: 6, md: 3}}>
+                        </Grid2>
+                        <Grid2 size={{xs: 6, md: 3}}>
                             {/* Month */}
                             <TextField select fullWidth
                                        name="takenMonth"
@@ -222,8 +222,8 @@ export default function LocationDialog(props: Readonly<Props>) {
                                     </MenuItem>
                                 ))}
                             </TextField>
-                        </Grid>
-                        <Grid size={{ xs: 6, md: 3 }}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 6, md: 3 }}>
                             {/* Day */}
                             <TextField select fullWidth
                                        name="takenDay"
@@ -242,8 +242,8 @@ export default function LocationDialog(props: Readonly<Props>) {
                                     ));
                                 })()}
                             </TextField>
-                        </Grid>
-                        <Grid size={{ xs: 6, md: 3 }}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 6, md: 3 }}>
                             {/* Time */}
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <TimePicker className="time-input"
@@ -252,32 +252,32 @@ export default function LocationDialog(props: Readonly<Props>) {
                                             disabled={inputs.takenYear === null && inputs.takenMonth === null && inputs.takenDay === null}
                                             value={getTime()} onChange={onInputTime}/>
                             </LocalizationProvider>
-                        </Grid>
-                    </Grid>
+                        </Grid2>
+                    </Grid2>
                     {/* Coordinate */}
-                    <Grid container spacing={1}>
-                        <Grid size={{ xs: 12, md: 5.5 }}>
+                    <Grid2 container spacing={1}>
+                        <Grid2 size={{ xs: 12, md: 5.5 }}>
                             {/* Latitude */}
                             <TextField autoComplete="off" required fullWidth
                                        name="latitude"
                                        label={t("location.latitude")}
                                        value={inputs.latitude}
                                        onChange={onInputCoordinate}/>
-                        </Grid>
-                        <Grid size={{ xs: 12, md: 5.5 }}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 5.5 }}>
                             {/* Longitude */}
                             <TextField autoComplete="off" required fullWidth
                                        name="longitude"
                                        label={t("location.longitude")}
                                        value={inputs.longitude}
                                        onChange={onInputCoordinate}/>
-                        </Grid>
-                        <Grid size={{ xs: 12, md: 1 }} className="coor-btn">
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 1 }} className="coor-btn">
                             <IconButton onClick={handleOpenPositionDialog}>
                                 <MyLocation />
                             </IconButton>
-                        </Grid>
-                    </Grid>
+                        </Grid2>
+                    </Grid2>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" color="primary" onClick={handleSave}>
@@ -289,7 +289,9 @@ export default function LocationDialog(props: Readonly<Props>) {
                 </DialogActions>
             </Dialog>
 
-            <PositionDialog open={posDialogOpen} onClose={handleClosePositionDialog}
+            <PositionDialog open={posDialogOpen}
+                            onClose={handleClosePositionDialog}
+                            position={{lat: inputs.latitude, lng: inputs.longitude}}
                             setPosition={handleSetPosition} />
         </Fragment>
     )
