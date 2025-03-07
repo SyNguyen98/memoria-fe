@@ -1,5 +1,5 @@
 import "./PositionDialog.scss";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Button, Dialog, DialogContent, DialogTitle, Grid2 as Grid, TextField} from "@mui/material";
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
 import {LatLng, LeafletMouseEvent} from "leaflet";
@@ -9,6 +9,10 @@ import {useTranslation} from "react-i18next";
 type PositionDialogProps = {
     open: boolean;
     onClose: () => void;
+    position: {
+        lat: number;
+        lng: number;
+    };
     setPosition: (lat: number, lng: number) => void;
 }
 
@@ -18,6 +22,11 @@ function PositionDialog(props: Readonly<PositionDialogProps>) {
     const [displayLng, setDisplayLng] = useState(106.66679907558624);
 
     const {t} = useTranslation();
+
+    useEffect(() => {
+        setLatitude(props.position.lat);
+        setLongitude(props.position.lng);
+    }, [props.position]);
 
     const onClose = (_event: object, reason: string) => {
         if (reason !== "backdropClick") {
