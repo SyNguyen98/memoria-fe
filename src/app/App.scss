@@ -7,7 +7,7 @@
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
   @include respond(tablet) {
     width: 0;
   }
@@ -16,6 +16,7 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: $blue-400;
+  border-radius: 10px;
 }
 
 /* Handle on hover */
@@ -24,8 +25,13 @@
   cursor: pointer;
 }
 
+::-webkit-scrollbar-track {
+  background: $gray-100;
+}
+
 .App {
   width: 100vw;
+  background-color: $gray-100;
   @include respond(tablet) {
     display: flex;
     flex-direction: column;

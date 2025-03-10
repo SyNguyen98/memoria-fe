@@ -1,16 +1,13 @@
 import './App.scss';
 import React, {Fragment, useEffect} from 'react';
-import {Route, Routes, useNavigate, useSearchParams} from "react-router";
-import {useTranslation} from "react-i18next";
+import {Route, Routes, useNavigate} from "react-router";
 import i18n from "../translation/i18n.tsx";
-import {useQueryClient} from "@tanstack/react-query";
 import {useUserQuery} from "../custom-query/UserQueryHook.ts";
 // Redux
 import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
-import {openSnackbar} from "../reducers/SnackbarReducer";
 // Components
-import AppLoader from "../components/app-loader/AppLoader";
+import OAuthRedirectHandler from "./OAuthRedirectHandler.tsx";
 import AppSnackbar from "../components/app-snackbar/AppSnackbar";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";
@@ -32,9 +29,11 @@ import {PathName} from '../constants/Page';
 import {CookieUtil} from "../utils/CookieUtil";
 import {appAxios} from "../api";
 
+const PATH_NOT_LOGIN = ['/', PathName.ABOUT_MEMORIA, PathName.ABOUT_ME, PathName.FAQ, PathName.PRIVACY];
+const PATH_LOGIN = [PathName.MAP, PathName.COLLECTION, PathName.LOCATION, PathName.ITEM, PathName.PROFILE];
+
 export default function App() {
     const currentLanguage = useAppSelector(state => state.language.currentLanguage);
-    const currentUser = useAppSelector(state => state.user.value);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const userQuery = useUserQuery();
@@ -63,7 +62,8 @@ export default function App() {
         <Fragment>
             <AppSnackbar/>
             <div className="App">
-                {currentUser ? <Sidebar/> : <Header/>}
+                {(window.location.pathname === '/' || PATH_NOT_LOGIN.includes(window.location.pathname.slice(1))) && <Header/>}
+                {PATH_LOGIN.includes(window.location.pathname.slice(1)) && <Sidebar/>}
 
                 <div className="main-container">
                     <Routes>
@@ -97,7 +97,7 @@ export default function App() {
                                 <ProfileComponent/>
                             </Protected>
                         }/>
-                        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
+                        <Route path="/oauth2/redirect" element={<OAuthRedirectHandler/>}/>
                     </Routes>
                 </div>
             </div>
@@ -108,35 +108,6 @@ export default function App() {
 function Protected({children}: Readonly<{ children: React.JSX.Element }>) {
 
     return (
-        <Fragment>
-            {CookieUtil.getCookie(CookieKey.ACCESS_TOKEN) ? children : <SessionExpireDialog/>}
-        </Fragment>
+        CookieUtil.getCookie(CookieKey.ACCESS_TOKEN) ? children : <SessionExpireDialog/>
     )
-}
-
-function OAuth2RedirectHandler() {
-    const [searchParams] = useSearchParams();
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const {t} = useTranslation();
-    const queryClient = useQueryClient();
-
-    useEffect(() => {
-        const token = searchParams.get('token');
-
-        if (token) {
-            CookieUtil.setCookie(CookieKey.ACCESS_TOKEN, `Bearer ${token}`, 1);
-
-            appAxios.defaults.headers.Authorization = `Bearer ${token}`;
-
-            queryClient.invalidateQueries({queryKey: ["getCurrentUser"]}).then(() => {
-                const lastPath = localStorage.getItem("lastPath");
-                navigate(lastPath ? lastPath : "/map");
-            }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: t("user.cannot_load")}));
-            })
-        }
-    }, [dispatch, navigate, queryClient, searchParams, t]);
-
-    return <AppLoader/>;
 }
