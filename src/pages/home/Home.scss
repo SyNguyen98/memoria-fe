@@ -6,25 +6,48 @@
   .banner {
     display: flex;
     padding: 1rem;
-    height: 80vh;
-    background-image: url('https://github.com/SyNguyen98/image-storage/blob/main/homepage-bg.jpg?raw=true');
-    background-size: cover;
+    height: 88vh;
+    position: relative;
     @include respond(tablet) {
       padding: 0;
-      height: 90svh;
-      background-image: url('https://images.pexels.com/photos/895226/pexels-photo-895226.jpeg');
+      height: 95svh;
       white-space: pre-line;
     }
 
+    .video-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+
     .slogan-button {
-      margin: auto;
-      display: flex;
-      flex-direction: column;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
 
       .slogan {
-        color: $blue-a400;
         font-size: 64px;
-        text-shadow: 0 0 0 white, 0 4px 6px white, 0 6px 8px white, 0 4px 6px $shadow;
+        background: linear-gradient(to right, $indigo-700, $blue-700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 2px white) drop-shadow(0 0 4px white) drop-shadow(0 0px 6px #8A795D);
         @include respond(laptop) {
           font-size: 48px;
           text-align: center;
@@ -35,6 +58,7 @@
         margin: 2rem auto;
         background-color: $white;
         border: 2px solid $blue-700;
+
         &:hover {
           background-color: $gray-200;
         }
@@ -55,17 +79,18 @@
 
   .introduction {
     max-width: 1200px;
-    margin: 5rem auto;
+    margin: 8rem auto;
     @include respond(tablet) {
-      margin: 3rem auto;
+      margin: 4rem auto;
     }
 
     .MuiTypography-h3 {
-      margin-bottom: 1rem;
+      margin-bottom: 4rem;
       text-align: center;
       font-family: 'Signika', sans-serif;
       font-weight: 600;
       @include respond(tablet) {
+        margin-bottom: 2rem;
         font-size: 32px;
       }
     }
@@ -78,23 +103,23 @@
       }
 
       .introduce-img {
-        width: 350px;
-        height: 350px;
+        width: 400px;
+        height: 300px;
         @include respond(tablet) {
           width: 250px;
-          height: 250px;
+          height: 187px;
           margin: 1rem auto;
         }
       }
 
       .introduce-text {
         margin: auto 0;
-        width: 60%;
+        width: 55%;
         text-align: justify;
         font-family: 'Signika', sans-serif;
         font-size: 24px;
         font-weight: 300;
-        line-height: 34px;
+        line-height: 36px;
         @include respond(tablet) {
           width: calc(100% - 2rem);
           margin: auto 1rem;
@@ -108,7 +133,7 @@
   .quote-wrapper {
     width: 100vw;
     height: 16vw;
-    background-image: url('https://github.com/SyNguyen98/image-storage/blob/main/quote-bg.png?raw=true');
+    background-image: url('https://github.com/SyNguyen98/image-storage/blob/main/quotes-bg.png?raw=true');
     background-size: 100vw auto;
     background-repeat: no-repeat;
     display: flex;
@@ -119,12 +144,13 @@
     }
 
     .quote {
-      margin: 6vw auto auto;
+      margin: 5vw auto auto;
       font-family: 'Rosario', sans-serif;
       font-size: 42px;
-      font-weight: 300;
       font-style: italic;
       text-align: center;
+      color: $indigo-700;
+      text-shadow: 0 2px 4px $blue-500;
       @include respond(tablet) {
         margin: auto;
         font-size: 24px;
@@ -136,9 +162,9 @@
 
   .feature-list {
     max-width: 1200px;
-    margin: 5rem auto;
+    margin: 8rem auto;
     @include respond(tablet) {
-      margin: 3rem auto;
+      margin: 4rem auto;
       display: flex;
       flex-direction: column;
 
@@ -162,7 +188,17 @@
 
       .MuiDivider-root {
         width: 300px;
-        margin: 1.5rem auto;
+        margin: 2rem auto;
+      }
+    }
+
+    .MuiTypography-h3 {
+      margin-bottom: 4rem;
+      text-align: center;
+      font-weight: 600;
+      @include respond(tablet) {
+        margin-bottom: 2rem;
+        font-size: 32px;
       }
     }
 
@@ -174,10 +210,11 @@
       margin: auto 0;
 
       .MuiTypography-h3 {
+        margin-bottom: 2rem;
         text-align: center;
         font-size: 40px;
         font-weight: 600;
-        line-height: 50px;
+        line-height: 52px;
         white-space: pre-line;
       }
 
@@ -202,7 +239,7 @@
   .quote-wrapper-2 {
     width: 100vw;
     height: 10vw;
-    background-color: $purple-50;
+    background-color: $gray-200;
     display: flex;
     @include respond(tablet) {
       height: 15vh;
@@ -212,8 +249,11 @@
       margin: auto;
       font-family: 'Rosario', sans-serif;
       font-size: 40px;
-      font-weight: 300;
       font-style: italic;
+      background: linear-gradient(to right, $blue-700, $indigo-700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 1px 2px $blue-500);
       @include respond(tablet) {
         font-size: 24px;
         line-height: 36px;
@@ -224,7 +264,7 @@
 
   .contact {
     max-width: 1200px;
-    margin: 5rem auto;
+    margin: 8rem auto;
     text-align: center;
     @include respond(tablet) {
       margin: 3rem auto;
@@ -251,9 +291,11 @@
 
   .app-footer {
     max-width: 1200px;
-    margin: 0 auto 1rem;
+    margin: auto;
+    padding: 1rem 0;
     display: flex;
     justify-content: space-between;
+    border-top: 2px solid $gray-300;
     @include respond(tablet) {
       margin: 0 1rem 1rem;
     }
@@ -298,6 +340,7 @@
       .MuiTypography-body2 {
         margin: auto 0 auto 1rem;
         color: $blue-700;
+
         &:hover {
           color: $blue-500;
         }
