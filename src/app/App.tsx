@@ -7,7 +7,7 @@ import {useUserQuery} from "../custom-query/UserQueryHook.ts";
 import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
 // Components
-import OAuthRedirectHandler from "./OAuthRedirectHandler.tsx";
+import OAuthRedirectHandler from "../components/OAuthRedirectHandler/OAuthRedirectHandler.tsx";
 import AppSnackbar from "../components/app-snackbar/AppSnackbar";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";

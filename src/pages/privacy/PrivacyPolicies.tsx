@@ -1,10 +1,17 @@
 import "./PrivacyPolicies.scss";
+import {useEffect} from "react";
+import {useLocation} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Typography} from "@mui/material";
 import {VERSION} from "../../constants";
 
 function PrivacyPolicies() {
     const {t} = useTranslation();
+    const {pathname} = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
 
     return (
         <section className="privacy-container">

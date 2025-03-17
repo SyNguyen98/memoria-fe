@@ -119,12 +119,12 @@
         font-family: 'Signika', sans-serif;
         font-size: 24px;
         font-weight: 300;
-        line-height: 36px;
+        line-height: 40px;
         @include respond(tablet) {
           width: calc(100% - 2rem);
           margin: auto 1rem;
           font-size: 16px;
-          line-height: 28px;
+          line-height: 30px;
         }
       }
     }
@@ -133,7 +133,7 @@
   .quote-wrapper {
     width: 100vw;
     height: 16vw;
-    background-image: url('https://github.com/SyNguyen98/image-storage/blob/main/quotes-bg.png?raw=true');
+    background-image: url('https://github.com/SyNguyen98/image-storage/blob/main/quote-bg.webp?raw=true');
     background-size: 100vw auto;
     background-repeat: no-repeat;
     display: flex;
@@ -250,7 +250,7 @@
       font-family: 'Rosario', sans-serif;
       font-size: 40px;
       font-style: italic;
-      background: linear-gradient(to right, $blue-700, $indigo-700);
+      background: linear-gradient(to right, $indigo-700, $blue-700, $indigo-700);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       filter: drop-shadow(0 1px 2px $blue-500);

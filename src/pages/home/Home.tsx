@@ -31,7 +31,7 @@ export default function Home() {
                     <Button className="login-btn" variant="outlined"
                             onClick={handleLoginWithGoogle}>
                         <img className="google-icon" alt="Google"
-                             src="https://github.com/SyNguyen98/image-storage/blob/main/google-logo.png?raw=true"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/google-logo.webp?raw=true"/>
                         <Typography variant="body1">
                             {t('homepage.banner_login')}
                         </Typography>

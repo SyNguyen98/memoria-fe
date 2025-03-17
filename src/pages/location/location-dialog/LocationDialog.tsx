@@ -67,9 +67,10 @@ export default function LocationDialog(props: Readonly<Props>) {
     const dispatch = useAppDispatch();
     const queryClient = useQueryClient();
     const onSuccess = () => {
+        const collectionId = searchParams.get("id");
         dispatch(openSnackbar({type: "success", message: t('location.save_success')}));
         handleClose();
-        queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId']})
+        queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId]})
     }
     const onError = () => {
         dispatch(openSnackbar({type: "error", message: t('location.save_error')}));

@@ -78,7 +78,7 @@ function LocationComponent() {
     }, [collectionQuery.data]);
 
     const refreshLocations = (page: number, size: number) => {
-        queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collectionId, page, size]}).catch(() => {
+        queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId, page, size]}).catch(() => {
             dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
         });
     }

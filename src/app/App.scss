@@ -31,7 +31,6 @@
 
 .App {
   width: 100vw;
-  background-color: $gray-100;
   @include respond(tablet) {
     display: flex;
     flex-direction: column;

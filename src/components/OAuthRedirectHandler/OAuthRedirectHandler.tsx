@@ -2,12 +2,12 @@ import {useEffect} from "react";
 import {useNavigate, useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
-import {useAppDispatch} from "./hook.ts";
-import {CookieUtil} from "../utils/CookieUtil.ts";
-import {CookieKey} from "../constants/Storage.ts";
-import {appAxios} from "../api";
-import {openSnackbar} from "../reducers/SnackbarReducer.ts";
-import AppLoader from "../components/app-loader/AppLoader.tsx";
+import {useAppDispatch} from "../../app/hook.ts";
+import {CookieUtil} from "../../utils/CookieUtil.ts";
+import {CookieKey} from "../../constants/Storage.ts";
+import {appAxios} from "../../api";
+import {openSnackbar} from "../../reducers/SnackbarReducer.ts";
+import AppLoader from "../app-loader/AppLoader.tsx";
 
 export default function OAuthRedirectHandler() {
     const [searchParams] = useSearchParams();
