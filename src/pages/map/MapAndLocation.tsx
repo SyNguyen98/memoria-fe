@@ -24,13 +24,13 @@ import {DateUtil} from "../../utils/DateUtil";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 
 const redIcon = new Icon({
-    iconUrl: 'https://github.com/SyNguyen98/image-storage/blob/main/red-marker.webp?raw=true',
+    iconUrl: `${import.meta.env.BASE_URL}red-marker.webp`,
     iconSize: [42, 42],
     iconAnchor: [20, 18],
 });
 
 const blueIcon = new Icon({
-    iconUrl: 'https://github.com/SyNguyen98/image-storage/blob/main/blue-marker.webp?raw=true',
+    iconUrl: `${import.meta.env.BASE_URL}blue-marker.webp`,
     iconSize: [40, 40],
     iconAnchor: [18, 15],
 });
