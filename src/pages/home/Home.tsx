@@ -45,7 +45,7 @@ export default function Home() {
                 </Typography>
                 <div className="introduce-content">
                     <img className="introduce-img" alt="introduction"
-                         src="https://github.com/SyNguyen98/image-storage/blob/main/introduction-map.png?raw=true"/>
+                         src="https://github.com/SyNguyen98/image-storage/blob/main/introduction-map.webp?raw=true"/>
                     <div className="introduce-text">
                         {t('homepage.memoria_introduction')}
                     </div>
@@ -69,7 +69,7 @@ export default function Home() {
                             {t('homepage.features.1.title')}
                         </Typography>
                         <img alt="man-and-camera" width={300} height={300}
-                             src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.png?raw=true"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.webp?raw=true"/>
                         <Typography variant="body1">
                             {t('homepage.features.1.description')}
                         </Typography>
@@ -79,7 +79,7 @@ export default function Home() {
                             {t('homepage.features.2.title')}
                         </Typography>
                         <img alt="album" width={300} height={250}
-                             src="https://github.com/SyNguyen98/image-storage/blob/main/album.png?raw=true"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/album.webp?raw=true"/>
                         <Typography variant="body1">
                             {t('homepage.features.2.description')}
                         </Typography>
@@ -89,7 +89,7 @@ export default function Home() {
                             {t('homepage.features.3.title')}
                         </Typography>
                         <img alt="man-with-map" width={300} height={250}
-                             src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.png?raw=true"/>
+                             src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.webp?raw=true"/>
                         <Typography variant="body1">
                             {t('homepage.features.3.description')}
                         </Typography>
@@ -99,7 +99,7 @@ export default function Home() {
                         {/* Row 1 */}
                         <Grid2 size={{ xs: 6 }}>
                             <img alt="man-and-camera" width={350} height={350}
-                                 src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.png?raw=truev"/>
+                                 src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.webp?raw=truev"/>
                         </Grid2>
                         <Grid2 size={{ xs: 6 }} className="text-wrapper">
                             <Typography variant="h3">
@@ -120,12 +120,12 @@ export default function Home() {
                         </Grid2>
                         <Grid2 size={{ xs: 6 }} className="img-wrapper">
                             <img className="float-right" alt="album" width={450} height={400}
-                                 src="https://github.com/SyNguyen98/image-storage/blob/main/album.png?raw=true"/>
+                                 src="https://github.com/SyNguyen98/image-storage/blob/main/album.webp?raw=true"/>
                         </Grid2>
                         {/* Row 3 */}
                         <Grid2 size={{ xs: 6 }}>
                             <img alt="man-with-map" width={500} height={450}
-                                 src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.png?raw=true"/>
+                                 src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.webp?raw=true"/>
                         </Grid2>
                         <Grid2 size={{ xs: 6 }} className="text-wrapper">
                             <Typography variant="h3">
