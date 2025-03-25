@@ -79,7 +79,7 @@
 
   .introduction {
     max-width: 1200px;
-    margin: 8rem auto;
+    margin: 10rem auto;
     @include respond(tablet) {
       margin: 4rem auto;
     }
@@ -104,10 +104,10 @@
 
       .introduce-img {
         width: 400px;
-        height: 300px;
+        height: auto;
+        box-shadow: 0 8px 32px 0 $gray-500;
         @include respond(tablet) {
-          width: 250px;
-          height: 187px;
+          width: calc(100vw - 2rem);
           margin: 1rem auto;
         }
       }
@@ -140,7 +140,7 @@
     @include respond(tablet) {
       height: 15vh;
       background-image: unset;
-      background-color: #e8f5e9;
+      background-color: #64FFDA;
     }
 
     .quote {
@@ -239,7 +239,7 @@
   .quote-wrapper-2 {
     width: 100vw;
     height: 10vw;
-    background-color: $gray-200;
+    background-color: $gray-300;
     display: flex;
     @include respond(tablet) {
       height: 15vh;
@@ -331,7 +331,7 @@
         font-family: 'Signika', sans-serif;
         font-weight: 500;
         @include respond(tablet) {
-          margin: auto 0;
+          margin: auto 0 auto 2rem;
           font-size: 14px;
           font-weight: 400;
         }
