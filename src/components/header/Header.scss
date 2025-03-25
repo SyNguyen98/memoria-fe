@@ -5,6 +5,8 @@
   width: 100vw;
   display: flex;
   position: sticky;
+  background-color: $white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 
   .header-content {
     margin: auto;
@@ -58,11 +60,11 @@
         margin: auto 0 auto 2rem;
         font-size: 16px;
         font-weight: 600;
-        color: $blue-700;
+        color: $indigo-700;
         text-decoration: unset;
 
         &:hover {
-          color: $blue-500;
+          color: $blue-700;
         }
       }
 

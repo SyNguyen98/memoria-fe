@@ -67,7 +67,7 @@
 
 // Table
 .MuiTableHead-root {
-  background-color: $gray-300;
+  background-color: $gray-300 !important;
   border-bottom: 1px solid $gray-500;
 }
 
@@ -76,6 +76,11 @@
     border: 0
   }
   &:nth-child(even) {
-    background-color: $gray-100;
+    background-color: $white;
   }
+}
+
+// Typography
+.MuiTypography-h3 {
+  color: $gray-900 !important;
 }

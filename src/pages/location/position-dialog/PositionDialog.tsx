@@ -17,15 +17,16 @@ type PositionDialogProps = {
 }
 
 function PositionDialog(props: Readonly<PositionDialogProps>) {
-    const [latitude, setLatitude] = useState(10.826567739464473);
-    const [longitude, setLongitude] = useState(106.66679907558624);
-    const [displayLng, setDisplayLng] = useState(106.66679907558624);
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
+    const [displayLng, setDisplayLng] = useState(0);
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        setLatitude(props.position.lat);
-        setLongitude(props.position.lng);
+        setLatitude(props.position.lat === 0 ? 10.826567739464473 : props.position.lat);
+        setLongitude(props.position.lng === 0 ? 106.66679907558624 : props.position.lng);
+        setDisplayLng(props.position.lng === 0 ? 106.66679907558624 : props.position.lng)
     }, [props.position]);
 
     const onClose = (_event: object, reason: string) => {

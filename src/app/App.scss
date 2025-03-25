@@ -7,7 +7,7 @@
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
   @include respond(tablet) {
     width: 0;
   }
@@ -16,12 +16,17 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: $blue-400;
+  border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: $blue-200;
   cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+  background: $gray-100;
 }
 
 .App {

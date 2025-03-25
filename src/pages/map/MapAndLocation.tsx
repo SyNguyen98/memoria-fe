@@ -16,21 +16,21 @@ import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import LocationDetail from "./location-detail/LocationDetail.tsx";
 import LocationList from "./location-list/LocationList.tsx";
+import FilterDrawer from "./filter-drawer/FilterDrawer.tsx";
 // Models & Services
+import {Collection} from "../../models/Collection.ts";
 import {Location} from "../../models/Location";
 import {DateUtil} from "../../utils/DateUtil";
-import {Collection} from "../../models/Collection.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import FilterDrawer from "./filter-drawer/FilterDrawer.tsx";
 
 const redIcon = new Icon({
-    iconUrl: 'https://github.com/SyNguyen98/image-storage/blob/main/red-marker.png?raw=true',
+    iconUrl: `${import.meta.env.BASE_URL}red-marker.webp`,
     iconSize: [42, 42],
     iconAnchor: [20, 18],
 });
 
 const blueIcon = new Icon({
-    iconUrl: 'https://github.com/SyNguyen98/image-storage/blob/main/blue-marker.png?raw=true',
+    iconUrl: `${import.meta.env.BASE_URL}blue-marker.webp`,
     iconSize: [40, 40],
     iconAnchor: [18, 15],
 });

@@ -3,6 +3,8 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import jestDom from "eslint-plugin-jest-dom";
+import testingLibrary from "eslint-plugin-testing-library";
 import vitest from "eslint-plugin-vitest";
 
 export default tseslint.config(
@@ -27,7 +29,9 @@ export default tseslint.config(
         plugins: {
             'react-hooks': reactHooks,
             'react-refresh': reactRefresh,
-            'vitest': vitest,
+            "jest-dom": jestDom,
+            "testing-library": testingLibrary,
+            vitest,
         },
         rules: {
             ...reactHooks.configs.recommended.rules,
@@ -37,6 +41,8 @@ export default tseslint.config(
                     allowConstantExport: true
                 },
             ],
+            ...jestDom.configs.recommended.rules,
+            ...testingLibrary.configs.react.rules,
             ...vitest.configs.recommended.rules,
         },
     },

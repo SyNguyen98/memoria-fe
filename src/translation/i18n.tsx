@@ -13,8 +13,8 @@ i18n.use(initReactI18next)
                 translation: VI_TRANSLATION
             }
         },
-        lng: "en",
-        fallbackLng: "en",
+        lng: "vn",
+        fallbackLng: "vn",
         interpolation: {
             escapeValue: false
         }

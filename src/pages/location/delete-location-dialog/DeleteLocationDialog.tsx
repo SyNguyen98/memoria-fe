@@ -27,7 +27,7 @@ function DeleteLocationDialog(props: Props) {
                 const collectionId = searchParams.get("id");
                 props.onClose();
                 dispatch(openSnackbar({type: "success", message: "Đã xóa địa điểm"}));
-                queryClient.invalidateQueries({queryKey: ['getAllLocationsByCollectionId', collectionId]}).catch(() => {
+                queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId]}).catch(() => {
                     dispatch(openSnackbar({type: "error", message: "Không thể tải địa điểm"}));
                 });
             },
