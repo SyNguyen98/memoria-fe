@@ -36,7 +36,7 @@ export default function Header() {
             <div className="header-content">
                 <Link to="/" className="logo-app-name">
                     <img className="app-logo" alt="App Logo"
-                         src="https://github.com/SyNguyen98/image-storage/blob/main/app-logo.png?raw=true"/>
+                         src="https://github.com/SyNguyen98/image-storage/blob/main/app-logo.webp?raw=true"/>
                     <div className="app-name">
                         ME<span>MO</span>RIA
                     </div>
