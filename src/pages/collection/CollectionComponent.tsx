@@ -1,5 +1,5 @@
 import './CollectionComponent.scss';
-import {ChangeEvent, MouseEvent, useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
@@ -13,6 +13,7 @@ import {
     CardContent,
     Chip,
     IconButton,
+    Pagination,
     Table,
     TableBody,
     TableCell,
@@ -88,7 +89,7 @@ function CollectionComponent() {
         navigate(`/${PathName.LOCATION}?id=${collection.id}`);
     }
 
-    const handleOnChangePage = (_event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    const handleOnChangePage = (newPage: number) => {
         setPage(newPage);
         refreshCollections(newPage, rowsPerPage);
     }
@@ -289,14 +290,20 @@ function CollectionComponent() {
             {collectionQuery.isLoading ? <AppLoader/> : renderCollectionList()}
 
             {collectionQuery.data?.data && collectionQuery.data?.data.length > 0 && (
-                <TablePagination count={numOfCollections}
-                                 page={page}
-                                 onPageChange={handleOnChangePage}
-                                 rowsPerPage={rowsPerPage}
-                                 rowsPerPageOptions={[5, 10, 20, 50]}
-                                 onRowsPerPageChange={handleOnChangeRowsPerPage}
-                                 labelRowsPerPage={t("table.rows_per_page")}
-                                 labelDisplayedRows={({ from, to, count }) => t("table.displayed_rows", { from, to, count })}/>
+                isTabletOrPhone() ? (
+                    <Pagination color="primary" count={Math.round(numOfCollections / rowsPerPage) + 1}
+                                page={page + 1}
+                                onChange={(_event, newPage) => handleOnChangePage(newPage - 1)}/>
+                ) : (
+                    <TablePagination count={numOfCollections}
+                                     page={page}
+                                     onPageChange={(_event, newPage) => handleOnChangePage(newPage)}
+                                     rowsPerPage={rowsPerPage}
+                                     rowsPerPageOptions={[5, 10, 20, 50]}
+                                     onRowsPerPageChange={handleOnChangeRowsPerPage}
+                                     labelRowsPerPage={t("table.rows_per_page")}
+                                     labelDisplayedRows={({from, to, count}) => t("table.displayed_rows", {from, to, count})}/>
+                )
             )}
 
             {/* Edit dialog */}
