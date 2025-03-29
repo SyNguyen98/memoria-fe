@@ -1,6 +1,6 @@
 import "./PositionDialog.scss";
 import {useEffect, useState} from "react";
-import {Button, Dialog, DialogContent, DialogTitle, Grid2 as Grid, TextField} from "@mui/material";
+import {Button, Dialog, DialogContent, DialogTitle, Grid, TextField} from "@mui/material";
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
 import {LatLng, LeafletMouseEvent} from "leaflet";
 import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";

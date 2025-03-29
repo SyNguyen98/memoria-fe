@@ -1,6 +1,6 @@
 import "./Home.scss";
 import {Link} from "react-router";
-import {Button, Divider, Grid2, Typography} from "@mui/material";
+import {Button, Divider, Grid, Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {VERSION} from "../../constants";
@@ -95,47 +95,47 @@ export default function Home() {
                         </Typography>
                     </Fragment>
                 ) : (
-                    <Grid2 container rowSpacing={10}>
+                    <Grid container rowSpacing={10}>
                         {/* Row 1 */}
-                        <Grid2 size={{xs: 6}}>
+                        <Grid size={{xs: 6}}>
                             <img alt="man-and-camera" width={350} height={350}
                                  src="https://github.com/SyNguyen98/image-storage/blob/main/man-and-camera.webp?raw=truev"/>
-                        </Grid2>
-                        <Grid2 size={{xs: 6}} className="text-wrapper">
+                        </Grid>
+                        <Grid size={{xs: 6}} className="text-wrapper">
                             <Typography variant="h3">
                                 {t('homepage.features.1.title')}
                             </Typography>
                             <Typography variant="body1">
                                 {t('homepage.features.1.description')}
                             </Typography>
-                        </Grid2>
+                        </Grid>
                         {/* Row 2 */}
-                        <Grid2 size={{xs: 6}} className="text-wrapper">
+                        <Grid size={{xs: 6}} className="text-wrapper">
                             <Typography variant="h3">
                                 {t('homepage.features.2.title')}
                             </Typography>
                             <Typography variant="body1">
                                 {t('homepage.features.2.description')}
                             </Typography>
-                        </Grid2>
-                        <Grid2 size={{xs: 6}} className="img-wrapper">
+                        </Grid>
+                        <Grid size={{xs: 6}} className="img-wrapper">
                             <img className="float-right" alt="album" width={450} height={400}
                                  src="https://github.com/SyNguyen98/image-storage/blob/main/album.webp?raw=true"/>
-                        </Grid2>
+                        </Grid>
                         {/* Row 3 */}
-                        <Grid2 size={{xs: 6}}>
+                        <Grid size={{xs: 6}}>
                             <img alt="man-with-map" width={500} height={450}
                                  src="https://github.com/SyNguyen98/image-storage/blob/main/man-with-map.webp?raw=true"/>
-                        </Grid2>
-                        <Grid2 size={{xs: 6}} className="text-wrapper">
+                        </Grid>
+                        <Grid size={{xs: 6}} className="text-wrapper">
                             <Typography variant="h3">
                                 {t('homepage.features.3.title')}
                             </Typography>
                             <Typography variant="body1">
                                 {t('homepage.features.3.description')}
                             </Typography>
-                        </Grid2>
-                    </Grid2>
+                        </Grid>
+                    </Grid>
                 )}
             </div>
 

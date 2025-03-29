@@ -1,7 +1,7 @@
 import "./ItemComponent.scss";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {AppBar, Grid2 as Grid, IconButton, Toolbar, Typography} from "@mui/material";
+import {AppBar, Grid, IconButton, Toolbar, Typography} from "@mui/material";
 import {Link, useSearchParams} from "react-router";
 import {KeyboardArrowRight} from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu';

@@ -19,6 +19,13 @@ export default function Header() {
     const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const dispatch = useAppDispatch();
 
+    const MENU_ITEM = [
+        { name: t('header_menu.homepage'), link: '/' },
+        // { name: t('header_menu.about_memoria'), link: `/${PathName.ABOUT_MEMORIA}` },
+        // { name: t('header_menu.about_me'), link: `/${PathName.ABOUT_ME}` },
+        // { name: 'FAQ', link: `/${PathName.FAQ}` },
+    ]
+
     const handleChangeLanguage = (event: SelectChangeEvent) => {
         dispatch(setLanguage(event.target.value));
     }
@@ -58,26 +65,13 @@ export default function Header() {
                                   vertical: 'top',
                                   horizontal: 'right',
                               }}>
-                            <Link to="/">
-                                <MenuItem onClick={handleClose}>
-                                    {t('header_menu.homepage')}
+                            {MENU_ITEM.map((item, index) => (
+                                <MenuItem key={index} onClick={handleClose}>
+                                    <Link to={item.link}>
+                                        {item.name}
+                                    </Link>
                                 </MenuItem>
-                            </Link>
-                            <Link to={`/${PathName.ABOUT_MEMORIA}`}>
-                                <MenuItem onClick={handleClose}>
-                                    {t('header_menu.about_memoria')}
-                                </MenuItem>
-                            </Link>
-                            <Link to={`/${PathName.ABOUT_ME}`}>
-                                <MenuItem onClick={handleClose}>
-                                    {t('header_menu.about_me')}
-                                </MenuItem>
-                            </Link>
-                            <Link to={`/${PathName.FAQ}`}>
-                                <MenuItem onClick={handleClose}>
-                                    FAQ
-                                </MenuItem>
-                            </Link>
+                            ))}
                             <Select className="language-select" autoWidth
                                     value={currentLanguage}
                                     onChange={handleChangeLanguage}
@@ -93,18 +87,11 @@ export default function Header() {
                     </Fragment>
                 ) : (
                     <div className="header-menu">
-                        <Link to="/">
-                            {t('header_menu.homepage')}
-                        </Link>
-                        <Link to={`/${PathName.ABOUT_MEMORIA}`}>
-                            {t('header_menu.about_memoria')}
-                        </Link>
-                        <Link to={`/${PathName.ABOUT_ME}`}>
-                            {t('header_menu.about_me')}
-                        </Link>
-                        <Link to={`/${PathName.FAQ}`}>
-                            FAQ
-                        </Link>
+                        {MENU_ITEM.map((item, index) => (
+                            <Link to={item.link} key={index}>
+                                {item.name}
+                            </Link>
+                        ))}
                         <Select className="language-select" autoWidth
                                 value={currentLanguage}
                                 onChange={handleChangeLanguage}
