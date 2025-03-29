@@ -1,5 +1,5 @@
 import './LocationComponent.scss';
-import {ChangeEvent, MouseEvent, useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Link, useNavigate, useSearchParams} from "react-router";
 import {useQueryClient} from "@tanstack/react-query";
 import {usePagingLocationQuery} from "../../custom-query/LocationQueryHook.ts";
@@ -13,6 +13,7 @@ import {
     CardActions,
     CardContent,
     IconButton,
+    Pagination,
     Table,
     TableBody,
     TableCell,
@@ -119,7 +120,7 @@ function LocationComponent() {
         setChoseLocation(null);
     }
 
-    const handleOnChangePage = (_event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    const handleOnChangePage = (newPage: number) => {
         setPage(newPage);
         refreshLocations(newPage, rowsPerPage);
     }
@@ -251,14 +252,20 @@ function LocationComponent() {
             {locationQuery.isLoading ? <AppLoader/> : renderLocationList()}
 
             {locationQuery.data?.data && locationQuery.data?.data.length > 0 && (
-                <TablePagination count={numOfLocations}
-                                 page={page}
-                                 onPageChange={handleOnChangePage}
-                                 rowsPerPage={rowsPerPage}
-                                 rowsPerPageOptions={[5, 10, 20, 50]}
-                                 onRowsPerPageChange={handleOnChangeRowsPerPage}
-                                 labelRowsPerPage={t("table.rows_per_page")}
-                                 labelDisplayedRows={({ from, to, count }) => t("table.displayed_rows", { from, to, count })}/>
+                isTabletOrPhone() ? (
+                    <Pagination color="primary" count={Math.round(numOfLocations / rowsPerPage) + 1}
+                                page={page + 1}
+                                onChange={(_event, newPage) => handleOnChangePage(newPage - 1)}/>
+                ) : (
+                    <TablePagination count={numOfLocations}
+                                     page={page}
+                                     onPageChange={(_event, newPage) => handleOnChangePage(newPage)}
+                                     rowsPerPage={rowsPerPage}
+                                     rowsPerPageOptions={[5, 10, 20, 50]}
+                                     onRowsPerPageChange={handleOnChangeRowsPerPage}
+                                     labelRowsPerPage={t("table.rows_per_page")}
+                                     labelDisplayedRows={({ from, to, count }) => t("table.displayed_rows", { from, to, count })}/>
+                )
             )}
 
             {/* Edit dialog */}
