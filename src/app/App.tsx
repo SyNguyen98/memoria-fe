@@ -1,5 +1,5 @@
 import './App.scss';
-import React, {Fragment, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Route, Routes, useNavigate} from "react-router";
 import i18n from "../translation/i18n.tsx";
 import {useUserQuery} from "../custom-query/UserQueryHook.ts";
@@ -7,7 +7,8 @@ import {useUserQuery} from "../custom-query/UserQueryHook.ts";
 import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";
 // Components
-import OAuthRedirectHandler from "../components/OAuthRedirectHandler/OAuthRedirectHandler.tsx";
+import AudioPlayer from "../components/audio-player/AudioPlayer";
+import OAuthRedirectHandler from "../components/OAuthRedirectHandler/OAuthRedirectHandler";
 import AppSnackbar from "../components/app-snackbar/AppSnackbar";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";
@@ -59,7 +60,8 @@ export default function App() {
     }, [dispatch, userQuery.data]);
 
     return (
-        <Fragment>
+        <>
+            <AudioPlayer/>
             <AppSnackbar/>
             <div className="App">
                 {(window.location.pathname === '/' || PATH_NOT_LOGIN.includes(window.location.pathname.slice(1))) && <Header/>}
@@ -101,7 +103,7 @@ export default function App() {
                     </Routes>
                 </div>
             </div>
-        </Fragment>
+        </>
     );
 }
 
