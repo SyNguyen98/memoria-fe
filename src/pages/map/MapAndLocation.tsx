@@ -1,12 +1,12 @@
 import "./MapAndLocation.scss";
-import {Fragment, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {MapContainer, Marker, TileLayer, Tooltip as TooltipMarker, useMap} from 'react-leaflet';
 import {Icon, LatLngBoundsExpression, LatLngExpression} from "leaflet";
 import {AppBar, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography} from "@mui/material";
 import {FilterAltOutlined, Menu} from "@mui/icons-material";
-import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
+import {SelectChangeEvent} from "@mui/material/Select";
 import {useAppDispatch} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useCollectionQuery, useYearsOfCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
@@ -187,7 +187,7 @@ export default function MapAndLocation() {
                             <FilterAltOutlined/>
                         </IconButton>
                     ) : (
-                        <Fragment>
+                        <>
                             <FormControl className="year-select" size="small" variant="filled">
                                 <InputLabel id="year-select">
                                     {t("input.year")}
@@ -224,7 +224,7 @@ export default function MapAndLocation() {
                                     )}
                                 </Select>
                             </FormControl>
-                        </Fragment>
+                        </>
                     )}
                 </Toolbar>
             </AppBar>

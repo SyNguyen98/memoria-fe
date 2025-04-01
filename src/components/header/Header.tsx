@@ -1,5 +1,5 @@
 import "./Header.scss";
-import {Fragment, MouseEvent, useState} from "react";
+import {MouseEvent, useState} from "react";
 import {Link} from "react-router";
 import {useTranslation} from "react-i18next";
 import {IconButton, InputAdornment, Menu, MenuItem, Select} from "@mui/material";
@@ -20,7 +20,7 @@ export default function Header() {
     const dispatch = useAppDispatch();
 
     const MENU_ITEM = [
-        { name: t('header_menu.homepage'), link: '/' },
+        // { name: t('header_menu.homepage'), link: '/' },
         // { name: t('header_menu.about_memoria'), link: `/${PathName.ABOUT_MEMORIA}` },
         // { name: t('header_menu.about_me'), link: `/${PathName.ABOUT_ME}` },
         // { name: 'FAQ', link: `/${PathName.FAQ}` },
@@ -48,63 +48,63 @@ export default function Header() {
                         ME<span>MO</span>RIA
                     </div>
                 </Link>
-                {isTabletOrPhone() ? (
-                    <Fragment>
-                        <IconButton size="large" onClick={handleOpenNavManu}>
-                            <MenuIcon/>
-                        </IconButton>
-                        <Menu id="header-nav-menu"
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose}
-                              anchorOrigin={{
-                                  vertical: 'bottom',
-                                  horizontal: 'right',
-                              }}
-                              transformOrigin={{
-                                  vertical: 'top',
-                                  horizontal: 'right',
-                              }}>
-                            {MENU_ITEM.map((item, index) => (
-                                <MenuItem key={index} onClick={handleClose}>
-                                    <Link to={item.link}>
-                                        {item.name}
-                                    </Link>
-                                </MenuItem>
-                            ))}
-                            <Select className="language-select" autoWidth
-                                    value={currentLanguage}
-                                    onChange={handleChangeLanguage}
-                                    startAdornment={<InputAdornment position="start"><Language/></InputAdornment>}>
-                                <MenuItem value="vn" onClick={handleClose}>
-                                    Tiếng Việt
-                                </MenuItem>
-                                <MenuItem value="en" onClick={handleClose}>
-                                    English
-                                </MenuItem>
-                            </Select>
-                        </Menu>
-                    </Fragment>
-                ) : (
+                {/*{isTabletOrPhone() ? (*/}
+                {/*    <>*/}
+                {/*        <IconButton size="large" onClick={handleOpenNavManu}>*/}
+                {/*            <MenuIcon/>*/}
+                {/*        </IconButton>*/}
+                {/*        <Menu id="header-nav-menu"*/}
+                {/*              anchorEl={anchorEl}*/}
+                {/*              open={open}*/}
+                {/*              onClose={handleClose}*/}
+                {/*              anchorOrigin={{*/}
+                {/*                  vertical: 'bottom',*/}
+                {/*                  horizontal: 'right',*/}
+                {/*              }}*/}
+                {/*              transformOrigin={{*/}
+                {/*                  vertical: 'top',*/}
+                {/*                  horizontal: 'right',*/}
+                {/*              }}>*/}
+                {/*            {MENU_ITEM.map((item, index) => (*/}
+                {/*                <MenuItem key={index} onClick={handleClose}>*/}
+                {/*                    <Link to={item.link}>*/}
+                {/*                        {item.name}*/}
+                {/*                    </Link>*/}
+                {/*                </MenuItem>*/}
+                {/*            ))}*/}
+                {/*            <Select className="language-select" autoWidth*/}
+                {/*                    value={currentLanguage}*/}
+                {/*                    onChange={handleChangeLanguage}*/}
+                {/*                    startAdornment={<InputAdornment position="start"><Language/></InputAdornment>}>*/}
+                {/*                <MenuItem value="vn" onClick={handleClose}>*/}
+                {/*                    Tiếng Việt*/}
+                {/*                </MenuItem>*/}
+                {/*                <MenuItem value="en" onClick={handleClose}>*/}
+                {/*                    English*/}
+                {/*                </MenuItem>*/}
+                {/*            </Select>*/}
+                {/*        </Menu>*/}
+                {/*    </>*/}
+                {/*) : (*/}
                     <div className="header-menu">
-                        {MENU_ITEM.map((item, index) => (
-                            <Link to={item.link} key={index}>
-                                {item.name}
-                            </Link>
-                        ))}
+                        {/*{MENU_ITEM.map((item, index) => (*/}
+                        {/*    <Link to={item.link} key={index}>*/}
+                        {/*        {item.name}*/}
+                        {/*    </Link>*/}
+                        {/*))}*/}
                         <Select className="language-select" autoWidth
                                 value={currentLanguage}
                                 onChange={handleChangeLanguage}
                                 startAdornment={<InputAdornment position="start"><Language/></InputAdornment>}>
                             <MenuItem value="vn">
-                                Tiếng Việt
+                                VI
                             </MenuItem>
                             <MenuItem value="en">
-                                English
+                                EN
                             </MenuItem>
                         </Select>
                     </div>
-                )}
+                {/*)}*/}
             </div>
         </div>
     );
