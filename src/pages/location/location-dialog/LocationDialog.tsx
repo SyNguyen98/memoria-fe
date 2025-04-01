@@ -1,5 +1,5 @@
 import "./LocationDialog.scss";
-import React, {Fragment, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
@@ -175,7 +175,7 @@ export default function LocationDialog(props: Readonly<Props>) {
     }
 
     return (
-        <Fragment>
+        <>
             <Dialog className="location-dialog" maxWidth={isTabletOrPhone() ? "xs" : "lg"}
                     open={props.open} onClose={onClose}>
                 <DialogTitle>
@@ -294,6 +294,6 @@ export default function LocationDialog(props: Readonly<Props>) {
                             onClose={handleClosePositionDialog}
                             position={{lat: inputs.latitude, lng: inputs.longitude}}
                             setPosition={handleSetPosition} />
-        </Fragment>
+        </>
     )
 }

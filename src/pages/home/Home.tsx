@@ -6,7 +6,6 @@ import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {VERSION} from "../../constants";
 import {PathName} from "../../constants/Page.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import {Fragment} from "react";
 
 export default function Home() {
     const {t} = useTranslation();
@@ -63,7 +62,7 @@ export default function Home() {
                     {t('homepage.features.title')}
                 </Typography>
                 {isTabletOrPhone() ? (
-                    <Fragment>
+                    <>
                         {/* Feature 1 */}
                         <Typography variant="h5">
                             {t('homepage.features.1.title')}
@@ -93,7 +92,7 @@ export default function Home() {
                         <Typography variant="body1">
                             {t('homepage.features.3.description')}
                         </Typography>
-                    </Fragment>
+                    </>
                 ) : (
                     <Grid container rowSpacing={10}>
                         {/* Row 1 */}

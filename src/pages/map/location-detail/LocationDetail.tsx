@@ -1,5 +1,5 @@
 import "./LocationDetail.scss";
-import React, {Fragment, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
 import {IconButton, ImageList, ImageListItem} from "@mui/material";
 import {AccessTime, HorizontalRule} from "@mui/icons-material";
@@ -79,7 +79,7 @@ function LocationDetail(props: Readonly<Props>) {
     }
 
     return (
-        <Fragment>
+        <>
             <div className="location-detail-container"
                  style={{height: showDetail ? MAX_HEIGHT : `${minHeight}px`}}>
                 <div className="detail-wrapper" {...detailSwipeHandlers}>
@@ -121,7 +121,7 @@ function LocationDetail(props: Readonly<Props>) {
             </div>
 
             <PhoneImageDialog open={dialogOpen} onClose={handleCloseDialog} location={props.location} index={index}/>
-        </Fragment>
+        </>
     )
 }
 
