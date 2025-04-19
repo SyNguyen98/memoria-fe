@@ -10,6 +10,7 @@ export type CollectionApiParams = {
     size?: number;
     sort?: string;
     unpaged?: boolean;
+    tags?: string;
 }
 
 export const useCollectionQuery = (params: CollectionApiParams) => {
