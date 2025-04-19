@@ -2,6 +2,7 @@ import './CollectionComponent.scss';
 import {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
+import {useQueryClient} from "@tanstack/react-query";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
@@ -12,8 +13,12 @@ import {
     CardActions,
     CardContent,
     Chip,
+    FormControl,
     IconButton,
+    InputLabel,
+    MenuItem,
     Pagination,
+    Select,
     Table,
     TableBody,
     TableCell,
@@ -23,6 +28,7 @@ import {
     Toolbar,
     Typography
 } from "@mui/material";
+import {SelectChangeEvent} from "@mui/material/Select";
 import {Add, Delete, Edit, KeyboardArrowRight, Menu} from "@mui/icons-material";
 // Components
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
@@ -31,13 +37,14 @@ import DeleteCollectionDialog from "./delete-collection-dialog/DeleteCollectionD
 // Models & Constants
 import {Collection} from "../../models/Collection";
 import {PathName} from "../../constants/Page";
+import {TAGS} from "../../constants/Tag.ts";
 // Utils & Services
 import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
 import {DateUtil} from "../../utils/DateUtil.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import {useQueryClient} from "@tanstack/react-query";
 
 function CollectionComponent() {
+    const [tags, setTags] = useState<string[]>([]);
     const [choseCollection, setChoseCollection] = useState<Collection | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
@@ -49,7 +56,7 @@ function CollectionComponent() {
     const {t} = useTranslation();
 
     const queryClient = useQueryClient();
-    const collectionQuery = useCollectionQuery({page, size: rowsPerPage});
+    const collectionQuery = useCollectionQuery({page, size: rowsPerPage, tags: tags.join(",")});
 
     const currentUser = useAppSelector(state => state.user.value);
     const navigate = useNavigate();
@@ -68,11 +75,16 @@ function CollectionComponent() {
         }
     }, [collectionQuery.data]);
 
-    const refreshCollections = (page: number, size: number) => {
-        queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess', {page, size}]}).catch(() => {
+    const refreshCollections = (page: number, size: number, tags?: string) => {
+        queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess', {page, size, tags}]}).catch(() => {
             dispatch(openSnackbar({type: "error", message: t("collection.cannot_load")}));
         });
     }
+
+    const handleFilterTagChange = (event: SelectChangeEvent<string[]>) => {
+        const {target: {value}} = event;
+        setTags(typeof value === 'string' ? value.split(',') : value);
+    };
 
     const handleOpenMenu = () => {
         dispatch(openSidebar())
@@ -120,7 +132,7 @@ function CollectionComponent() {
         setChoseCollection(null);
     }
 
-    const getLabelTag = (tagName: string): string => {
+    const getTagTranslation = (tagName: string): string => {
         switch (tagName) {
             case "FAMILY":
                 return t("tags.family");
@@ -162,7 +174,7 @@ function CollectionComponent() {
                                     </div>
                                     <div className="collection-tag">
                                         {collection.tags?.map(tag =>
-                                            <Chip key={tag} label={getLabelTag(tag)}/>
+                                            <Chip key={tag} label={getTagTranslation(tag)}/>
                                         )}
                                     </div>
                                 </div>
@@ -237,7 +249,7 @@ function CollectionComponent() {
                             </TableCell>
                             <TableCell>
                                 {collection.tags?.map(tag =>
-                                    <Chip key={tag} label={getLabelTag(tag)}/>
+                                    <Chip key={tag} label={getTagTranslation(tag)}/>
                                 )}
                             </TableCell>
                             <TableCell width={100}>
@@ -280,6 +292,29 @@ function CollectionComponent() {
                     <Typography variant="h6" sx={{flexGrow: 1}}>
                         {t("page.collection")}
                     </Typography>
+                    <FormControl className="tag-select" size="small" variant="filled">
+                        <InputLabel id="tag-label">
+                            {t("collection.tags")}
+                        </InputLabel>
+                        <Select labelId="tag-label"
+                                variant="filled"
+                                multiple
+                                value={tags}
+                                onChange={handleFilterTagChange}
+                                renderValue={(selected: string[]) => (
+                                    selected.map((value: string) => (
+                                        <Chip className="tag-chip" size="small"
+                                              key={value}
+                                              label={getTagTranslation(value)}/>
+                                    ))
+                                )}>
+                            {TAGS.map(name => (
+                                <MenuItem key={name} value={name}>
+                                    {getTagTranslation(name)}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <Button className="add-btn" variant="outlined" startIcon={<Add/>}
                             onClick={() => handleOpenEditDialog()}>
                         {t("button.add")}
@@ -302,7 +337,11 @@ function CollectionComponent() {
                                      rowsPerPageOptions={[5, 10, 20, 50]}
                                      onRowsPerPageChange={handleOnChangeRowsPerPage}
                                      labelRowsPerPage={t("table.rows_per_page")}
-                                     labelDisplayedRows={({from, to, count}) => t("table.displayed_rows", {from, to, count})}/>
+                                     labelDisplayedRows={({from, to, count}) => t("table.displayed_rows", {
+                                         from,
+                                         to,
+                                         count
+                                     })}/>
                 )
             )}
 
