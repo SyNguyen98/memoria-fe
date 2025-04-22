@@ -19,12 +19,16 @@
 
   .MuiDialogContent-root {
 
+    .MuiGrid-root {
+      margin: auto 0;
+    }
+
     .MuiTextField-root {
       margin: .5rem 0;
     }
 
     .time-input {
-      min-width: 100%;
+      width: 100%;
     }
 
     .coor-btn {
