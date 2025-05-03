@@ -6,6 +6,7 @@ import App from './app/App';
 import {Provider} from "react-redux";
 import store from './app/store';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import AudioProvider from "./providers/AudioProvider.tsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -19,9 +20,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <Provider store={store}>
-                <BrowserRouter basename={import.meta.env.VITE_BASENAME}>
-                    <App/>
-                </BrowserRouter>
+                <AudioProvider>
+                    <BrowserRouter basename={import.meta.env.VITE_BASENAME}>
+                        <App/>
+                    </BrowserRouter>
+                </AudioProvider>
             </Provider>
         </QueryClientProvider>
     </React.StrictMode>
