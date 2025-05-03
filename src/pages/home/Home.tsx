@@ -6,6 +6,7 @@ import {GOOGLE_AUTH_URL} from "../../constants/Url";
 import {VERSION} from "../../constants";
 import {PathName} from "../../constants/Page.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import AudioPlayer from "../../components/audio-player/AudioPlayer.tsx";
 
 export default function Home() {
     const {t} = useTranslation();
@@ -16,6 +17,7 @@ export default function Home() {
 
     return (
         <section className="home-container">
+            <AudioPlayer/>
             <div className="banner">
                 <video autoPlay loop muted playsInline className="video-bg">
                     <source src="https://github.com/SyNguyen98/image-storage/blob/main/home-bg.mp4?raw=true"
