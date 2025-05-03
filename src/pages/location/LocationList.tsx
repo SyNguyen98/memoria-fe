@@ -1,13 +1,11 @@
-import './LocationComponent.scss';
+import './LocationList.scss';
 import {ChangeEvent, useEffect, useState} from "react";
-import {Link, useNavigate, useSearchParams} from "react-router";
+import {useNavigate, useSearchParams} from "react-router";
 import {useQueryClient} from "@tanstack/react-query";
 import {usePagingLocationQuery} from "../../custom-query/LocationQueryHook.ts";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
-    AppBar,
     Button,
     Card,
     CardActions,
@@ -20,10 +18,9 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Toolbar,
     Typography
 } from "@mui/material";
-import {Add, Delete, Edit, KeyboardArrowRight, Menu} from "@mui/icons-material";
+import {Add, Delete, Edit, KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
 // Components
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import LocationDialog from "./location-dialog/LocationDialog";
@@ -37,9 +34,8 @@ import {useTranslation} from "react-i18next";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 import {useCollectionByIdQuery} from "../../custom-query/CollectionQueryHook.ts";
 
-function LocationComponent() {
+function LocationList() {
     const [collectionId, setCollectionId] = useState('');
-    const [collectionName, setCollectionName] = useState('');
     const [choseLocation, setChoseLocation] = useState<Location | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [dltDialogOpened, setDltDialogOpened] = useState(false);
@@ -58,6 +54,12 @@ function LocationComponent() {
     const collectionQuery = useCollectionByIdQuery(collectionId);
 
     useEffect(() => {
+        if (collectionQuery.data) {
+            document.title = `MEMORIA | ${collectionQuery.data.name}`;
+        }
+    }, [collectionQuery.data]);
+
+    useEffect(() => {
         const collectionId = searchParams.get("id");
         if (collectionId) {
             setCollectionId(collectionId);
@@ -71,21 +73,11 @@ function LocationComponent() {
         }
     }, [locationQuery.data]);
 
-    useEffect(() => {
-        if (collectionQuery.data) {
-            setCollectionName(collectionQuery.data.name);
-            document.title = `MEMORIA | ${collectionQuery.data.name}`;
-        }
-    }, [collectionQuery.data]);
 
     const refreshLocations = (page: number, size: number) => {
         queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId, page, size]}).catch(() => {
             dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
         });
-    }
-
-    const handleOpenMenu = () => {
-        dispatch(openSidebar())
     }
 
     const isCollectionOwner = () => {
@@ -229,25 +221,36 @@ function LocationComponent() {
 
     return (
         <section className="location-container">
-            {/* App Bar */}
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton size="large" edge="start" color="inherit" onClick={handleOpenMenu}>
-                        <Menu/>
-                    </IconButton>
-                    <Typography className="page-title" variant="h6" component="div" sx={{flexGrow: 1}}>
-                        <Link className="collection-title" to={`/${PathName.COLLECTION}`}>
-                            {t("page.collection")}
-                        </Link>
-                        <KeyboardArrowRight/>
-                        {collectionName}
-                    </Typography>
-                    <Button className="add-btn" variant="outlined" startIcon={<Add/>}
-                            onClick={() => handleOpenEditDialog()}>
-                        {t("button.add")}
-                    </Button>
-                </Toolbar>
-            </AppBar>
+            {isTabletOrPhone() ? (
+                <Button className="back-btn" variant="text"
+                        onClick={() => navigate(`/${PathName.COLLECTION}`)}>
+                    <KeyboardArrowLeft/> {t("button.back")}
+                </Button>
+            ) : null}
+            <div className="collection-bar">
+                {isTabletOrPhone() ? (
+                    <>
+                        <Typography variant="h6">
+                            {collectionQuery.data?.name}
+                        </Typography>
+                        <Button className="add-btn" variant="text"
+                                onClick={() => handleOpenEditDialog()}>
+                            <Add/> {t("button.add")}
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        <Button className="back-btn" variant="text"
+                                onClick={() => navigate(`/${PathName.COLLECTION}`)}>
+                            <KeyboardArrowLeft/> {t("button.back")}
+                        </Button>
+                        <Button className="add-btn" variant="contained" startIcon={<Add/>}
+                                onClick={() => handleOpenEditDialog()}>
+                            {t("button.add")}
+                        </Button>
+                    </>
+                )}
+            </div>
             {/* Location List */}
             {locationQuery.isLoading ? <AppLoader/> : renderLocationList()}
 
@@ -264,7 +267,11 @@ function LocationComponent() {
                                      rowsPerPageOptions={[5, 10, 20, 50]}
                                      onRowsPerPageChange={handleOnChangeRowsPerPage}
                                      labelRowsPerPage={t("table.rows_per_page")}
-                                     labelDisplayedRows={({ from, to, count }) => t("table.displayed_rows", { from, to, count })}/>
+                                     labelDisplayedRows={({from, to, count}) => t("table.displayed_rows", {
+                                         from,
+                                         to,
+                                         count
+                                     })}/>
                 )
             )}
 
@@ -276,4 +283,4 @@ function LocationComponent() {
     )
 }
 
-export default LocationComponent;
+export default LocationList;

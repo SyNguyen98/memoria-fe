@@ -6,16 +6,21 @@
   position: relative;
   overflow-x: hidden;
 
-  .map-title {
-    font-size: 20px;
-    font-weight: 700;
+  .filter-container {
+    position: fixed;
+    top: 80px;
+    right: 16px;
+    z-index: 999;
     @include respond(tablet) {
-      font-size: 16px;
+      top: 64px;
+      right: 12px;
     }
   }
 
-  .collection-menu-btn {
-    padding: 1rem 0;
+  .filter-btn {
+    background-color: $white !important;
+    min-width: 48px;
+    padding: .5rem;
   }
 
   .year-select {

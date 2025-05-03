@@ -16,6 +16,7 @@
     "profile": "Profile"
   },
   "button": {
+    "back": "Back",
     "save": "Save",
     "cancel": "Cancel",
     "add": "Add",

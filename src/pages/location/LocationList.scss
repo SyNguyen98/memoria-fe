@@ -5,41 +5,26 @@
   display: flex;
   flex-direction: column;
 
-  .page-title {
-    display: flex;
-    @include respond(tablet) {
-      font-size: 14px;
-    }
-
-    .collection-title {
-      text-decoration: unset;
-      font-weight: 400;
-      color: white;
-
-      &:hover {
-        cursor: pointer;
-        opacity: .8;
-      }
-    }
-
-    .MuiSvgIcon-root {
-      margin: auto .5rem;
-      @include respond(tablet) {
-        margin: auto 2px;
-      }
-    }
+  .back-btn {
+    margin: .5rem auto 0 0;
   }
 
-  .add-btn {
-    color: $white;
+  .collection-bar {
+    margin: 1rem 2rem 0;
+    display: flex;
+    justify-content: space-between;
     @include respond(tablet) {
-      padding: 0 !important;
+      margin: 0 1rem .5rem;
+    }
+
+    .add-btn {
+      margin-left: 2rem;
     }
   }
 
   .location-table {
-    width: calc(100vw - 2rem);
-    margin: 1rem;
+    width: calc(100vw - 4rem);
+    margin: 1rem 2rem;
 
     .location-name {
       font-size: 16px;

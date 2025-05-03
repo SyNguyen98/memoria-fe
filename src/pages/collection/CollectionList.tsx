@@ -1,13 +1,11 @@
-import './CollectionComponent.scss';
+import './CollectionList.scss';
 import {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {openSidebar} from "../../reducers/SidebarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
-    AppBar,
     Button,
     Card,
     CardActions,
@@ -15,6 +13,7 @@ import {
     Chip,
     FormControl,
     IconButton,
+    Input,
     InputLabel,
     MenuItem,
     Pagination,
@@ -25,11 +24,10 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Toolbar,
     Typography
 } from "@mui/material";
 import {SelectChangeEvent} from "@mui/material/Select";
-import {Add, Delete, Edit, KeyboardArrowRight, Menu} from "@mui/icons-material";
+import {Add, Delete, Edit, KeyboardArrowRight} from "@mui/icons-material";
 // Components
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import CollectionDialog from "./collection-dialog/CollectionDialog";
@@ -37,13 +35,13 @@ import DeleteCollectionDialog from "./delete-collection-dialog/DeleteCollectionD
 // Models & Constants
 import {Collection} from "../../models/Collection";
 import {PathName} from "../../constants/Page";
-import {TAGS} from "../../constants/Tag.ts";
 // Utils & Services
 import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
 import {DateUtil} from "../../utils/DateUtil.ts";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import {TAGS} from "../../constants/Tag.ts";
 
-function CollectionComponent() {
+function CollectionList() {
     const [tags, setTags] = useState<string[]>([]);
     const [choseCollection, setChoseCollection] = useState<Collection | null>(null);
     const [dialogOpened, setDialogOpened] = useState(false);
@@ -85,10 +83,6 @@ function CollectionComponent() {
         const {target: {value}} = event;
         setTags(typeof value === 'string' ? value.split(',') : value);
     };
-
-    const handleOpenMenu = () => {
-        dispatch(openSidebar())
-    }
 
     const isCollectionOwner = (collection: Collection) => {
         if (currentUser && collection.ownerEmail) {
@@ -281,46 +275,35 @@ function CollectionComponent() {
 
     return (
         <section className="collection-container">
-            {/* App Bar */}
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton size="large" edge="start" color="inherit"
-                                aria-label="menu"
-                                onClick={handleOpenMenu}>
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant="h6" sx={{flexGrow: 1}}>
-                        {t("page.collection")}
-                    </Typography>
-                    <FormControl className="tag-select" size="small" variant="filled">
-                        <InputLabel id="tag-label">
-                            {t("collection.tags")}
-                        </InputLabel>
-                        <Select labelId="tag-label"
-                                variant="filled"
-                                multiple
-                                value={tags}
-                                onChange={handleFilterTagChange}
-                                renderValue={(selected: string[]) => (
-                                    selected.map((value: string) => (
-                                        <Chip className="tag-chip" size="small"
-                                              key={value}
-                                              label={getTagTranslation(value)}/>
-                                    ))
-                                )}>
-                            {TAGS.map(name => (
-                                <MenuItem key={name} value={name}>
-                                    {getTagTranslation(name)}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <Button className="add-btn" variant="outlined" startIcon={<Add/>}
-                            onClick={() => handleOpenEditDialog()}>
-                        {t("button.add")}
-                    </Button>
-                </Toolbar>
-            </AppBar>
+            <div className="collection-bar">
+                <FormControl size="small" className="tag-select">
+                    <InputLabel id="tag-label">
+                        {t("collection.tags")}
+                    </InputLabel>
+                    <Select labelId="tag-label"
+                            multiple
+                            value={tags}
+                            onChange={handleFilterTagChange}
+                            input={<Input/>}
+                            renderValue={(selected: string[]) => (
+                                selected.map((value: string) => (
+                                    <Chip className="tag-chip" size="small"
+                                          key={value}
+                                          label={getTagTranslation(value)}/>
+                                ))
+                            )}>
+                        {TAGS.map(name => (
+                            <MenuItem key={name} value={name}>
+                                {getTagTranslation(name)}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <Button className="add-btn" variant={isTabletOrPhone()? 'text':'contained'} startIcon={<Add/>}
+                        onClick={() => handleOpenEditDialog()}>
+                    {t("button.add")}
+                </Button>
+            </div>
             {/* Collection List */}
             {collectionQuery.isLoading ? <AppLoader/> : renderCollectionList()}
 
@@ -354,4 +337,4 @@ function CollectionComponent() {
     )
 }
 
-export default CollectionComponent;
+export default CollectionList;

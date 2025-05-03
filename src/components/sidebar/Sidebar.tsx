@@ -1,5 +1,4 @@
 import "./Sidebar.scss";
-import React, {useState} from "react";
 import {useLocation, useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
@@ -13,26 +12,18 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Tooltip
+    ListItemText
 } from "@mui/material";
-import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Language, Logout, Map} from "@mui/icons-material";
+import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Logout, Map} from "@mui/icons-material";
 import {CookieUtil} from "../../utils/CookieUtil.ts";
 import {CookieKey} from "../../constants/Storage.ts";
 import {PathName} from "../../constants/Page.ts";
 import {VERSION} from "../../constants";
 import {clearUser} from "../../reducers/UserReducer.ts";
-import {setLanguage} from "../../reducers/LanguageReducer.ts";
 
 export default function Sidebar() {
-    const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
-    const openMenu = Boolean(menuAnchorEl);
-
     const currentUser = useAppSelector(state => state.user.value);
     const sidebarOpened = useAppSelector(state => state.sidebar.opened);
-    const currentLanguage = useAppSelector(state => state.language.currentLanguage);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {pathname} = useLocation();
@@ -45,19 +36,6 @@ export default function Sidebar() {
     const handleListItemClick = (url: string) => {
         navigate(url);
     };
-
-    const handleOpenLanguageMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setMenuAnchorEl(event.currentTarget);
-    };
-
-    const handleCloseLanguageMenu = () => {
-        setMenuAnchorEl(null);
-    };
-
-    const handleChangeLanguage = (value: 'vn' | 'en') => {
-        dispatch(setLanguage(value));
-        setMenuAnchorEl(null);
-    }
 
     const handleOpenFeedback = () => {
         window.open("https://forms.gle/K9b1Rr3TXEYYfx8p6", "_blank");
@@ -110,14 +88,6 @@ export default function Sidebar() {
                                 <ListItemText primary={currentUser.name}/>
                             </ListItemButton>
                         )}
-                        <ListItemButton onClick={handleOpenLanguageMenu}>
-                            <ListItemIcon>
-                                <Language/>
-                            </ListItemIcon>
-                            <Tooltip title={t("language")}>
-                                <ListItemText primary={currentLanguage === 'vn' ? "Tiếng Việt" : "English"}/>
-                            </Tooltip>
-                        </ListItemButton>
                         <ListItemButton onClick={handleOpenFeedback}>
                             <ListItemIcon>
                                 <FeedbackOutlined/>
@@ -136,25 +106,6 @@ export default function Sidebar() {
                     </div>
                 </div>
             </div>
-            <Menu id="language-menu"
-                  anchorEl={menuAnchorEl}
-                  open={openMenu}
-                  onClose={handleCloseLanguageMenu}
-                  anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                  }}>
-                <MenuItem onClick={() => handleChangeLanguage('vn')}>
-                    Tiếng Việt
-                </MenuItem>
-                <MenuItem onClick={() => handleChangeLanguage('en')}>
-                    English
-                </MenuItem>
-            </Menu>
         </Drawer>
     )
 }

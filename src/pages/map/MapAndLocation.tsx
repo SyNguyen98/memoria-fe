@@ -4,11 +4,9 @@ import {useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {MapContainer, Marker, TileLayer, Tooltip as TooltipMarker, useMap} from 'react-leaflet';
 import {Icon, LatLngBoundsExpression, LatLngExpression} from "leaflet";
-import {AppBar, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography} from "@mui/material";
-import {FilterAltOutlined, Menu} from "@mui/icons-material";
+import {Button, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
+import {FilterAltOutlined} from "@mui/icons-material";
 import {SelectChangeEvent} from "@mui/material/Select";
-import {useAppDispatch} from "../../app/hook";
-import {openSidebar} from "../../reducers/SidebarReducer";
 import {useCollectionQuery, useYearsOfCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
 import {useAllLocationsQuery} from "../../custom-query/LocationQueryHook.ts";
 // Components
@@ -51,7 +49,6 @@ export default function MapAndLocation() {
     const locationQuery = useAllLocationsQuery(collectionId, year);
     const yearsQuery = useYearsOfCollectionQuery();
 
-    const dispatch = useAppDispatch();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -86,10 +83,6 @@ export default function MapAndLocation() {
 
     const handleCloseFilterMenu = () => {
         setFilterMenuOpened(false);
-    }
-
-    const handleOpenMenu = () => {
-        dispatch(openSidebar())
     }
 
     const handleChangeYear = (event: SelectChangeEvent) => {
@@ -172,62 +165,53 @@ export default function MapAndLocation() {
     return (
         <section className="map-and-location-container">
             {/* App Bar*/}
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton size="large" edge="start" color="inherit"
-                                onClick={handleOpenMenu}>
-                        <Menu/>
-                    </IconButton>
-                    <Typography className="map-title" sx={{flexGrow: 1}}>
-                        {t("page.map")}
-                    </Typography>
-                    {isTabletOrPhone() ? (
-                        <IconButton className="collection-menu-btn" size="large" color="inherit"
-                                    onClick={handleOpenFilterMenu}>
-                            <FilterAltOutlined/>
-                        </IconButton>
-                    ) : (
-                        <>
-                            <FormControl className="year-select" size="small" variant="filled">
-                                <InputLabel id="year-select">
-                                    {t("input.year")}
-                                </InputLabel>
-                                <Select labelId="year-select"
-                                        variant="filled"
-                                        value={year}
-                                        onChange={handleChangeYear}>
-                                    <MenuItem key="all" value="all">
-                                        {t("select.all")}
+            <div className="filter-container">
+                {isTabletOrPhone() ? (
+                    <Button className="filter-btn" size="medium" color="inherit" variant="contained"
+                                onClick={handleOpenFilterMenu}>
+                        <FilterAltOutlined/>
+                    </Button>
+                ) : (
+                    <>
+                        <FormControl className="year-select" size="small" variant="filled">
+                            <InputLabel id="year-select">
+                                {t("input.year")}
+                            </InputLabel>
+                            <Select labelId="year-select"
+                                    variant="filled"
+                                    value={year}
+                                    onChange={handleChangeYear}>
+                                <MenuItem key="all" value="all">
+                                    {t("select.all")}
+                                </MenuItem>
+                                {yearsQuery.data?.sort((a, b) => a - b).map(year =>
+                                    <MenuItem key={year} value={year}>
+                                        {year}
                                     </MenuItem>
-                                    {yearsQuery.data?.sort((a, b) => a - b).map(year =>
-                                        <MenuItem key={year} value={year}>
-                                            {year}
-                                        </MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                            <FormControl className="collection-select" size="small" variant="filled">
-                                <InputLabel id="collection-select">
-                                    {t("page.collection")}
-                                </InputLabel>
-                                <Select labelId="collection-select"
-                                        variant="filled"
-                                        value={collectionId}
-                                        onChange={handleChangeCollection}>
-                                    <MenuItem key="all" value="all">
-                                        {t("select.all")}
+                                )}
+                            </Select>
+                        </FormControl>
+                        <FormControl className="collection-select" size="small" variant="filled">
+                            <InputLabel id="collection-select">
+                                {t("page.collection")}
+                            </InputLabel>
+                            <Select labelId="collection-select"
+                                    variant="filled"
+                                    value={collectionId}
+                                    onChange={handleChangeCollection}>
+                                <MenuItem key="all" value="all">
+                                    {t("select.all")}
+                                </MenuItem>
+                                {collectionQuery.data?.data.map(collection =>
+                                    <MenuItem key={collection.id} value={collection.id}>
+                                        {collection.name}
                                     </MenuItem>
-                                    {collectionQuery.data?.data.map(collection =>
-                                        <MenuItem key={collection.id} value={collection.id}>
-                                            {collection.name}
-                                        </MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </>
-                    )}
-                </Toolbar>
-            </AppBar>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </>
+                )}
+            </div>
             <div className="map-wrapper">
                 {(collectionQuery.isLoading || locationQuery.isLoading) && <AppLoader/>}
 

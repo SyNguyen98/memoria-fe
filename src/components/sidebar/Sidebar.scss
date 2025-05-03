@@ -28,18 +28,6 @@
     }
   }
 
-  .Mui-selected {
-    background-color: $blue-500;
-    color: white;
-    &:hover {
-      background-color: $blue-400;
-    }
-
-    .MuiSvgIcon-root {
-      color: white;
-    }
-  }
-
   .menu-footer {
     margin: auto 0 0;
     display: flex;
