@@ -5,24 +5,45 @@
   display: flex;
   flex-direction: column;
 
-  .tag-select {
-    margin-right: 1rem;
-    min-width: 120px;
-    width: fit-content;
-    background-color: $white;
+  .collection-bar {
+    margin: 1rem 2rem 0;
+    display: flex;
+    @include respond(tablet) {
+      margin: 1rem 1rem .5rem;
+    }
 
-    .tag-chip {
-      margin: .125rem !important;
+    .tag-select {
+      margin: .5rem .5rem auto auto;
+      min-width: 120px;
+      width: fit-content;
+      @include respond(tablet) {
+        margin: auto .5rem auto auto;
+        max-width: 100%;
+      }
+
+      .MuiInput-root {
+        margin-top: .5rem;
+        .MuiInput-input {
+          padding-right: 1.75rem;
+        }
+      }
+
+      .MuiChip-root {
+        margin: .125rem !important;
+      }
+    }
+
+    .add-btn {
+      margin-left: 1rem;
+      @include respond(tablet) {
+        margin-left: 0;
+      }
     }
   }
 
-  .add-btn {
-    color: $white;
-  }
-
   .collection-table {
-    width: calc(100vw - 2rem);
-    margin: 1rem;
+    width: calc(100vw - 4rem);
+    margin: 1rem 2rem;
 
     .collection-name {
       font-size: 16px;
@@ -52,6 +73,7 @@
     .MuiCard-root {
       margin-bottom: .5rem;
       border-top: 3px solid $green-500;
+
       &:nth-child(even) {
         border-top: 3px solid $green-900;
       }
