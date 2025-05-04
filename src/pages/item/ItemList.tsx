@@ -7,6 +7,7 @@ import {useAppDispatch} from "../../app/hook";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {useItemQuery} from "../../custom-query/ItemQueryHook.ts";
 import {useLocationByIdQuery} from "../../custom-query/LocationQueryHook.ts";
+import {useCollectionByLocationIdQuery} from "../../custom-query/CollectionQueryHook.ts";
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {Item} from "../../models/Item";
@@ -25,6 +26,7 @@ export default function ItemList() {
     const dispatch = useAppDispatch();
     const itemQuery = useItemQuery(locationId, "medium");
     const locationQuery = useLocationByIdQuery(locationId);
+    const collectionQuery = useCollectionByLocationIdQuery(locationId);
 
     useEffect(() => {
         if (locationQuery.data) {
@@ -63,7 +65,7 @@ export default function ItemList() {
     return (
         <section className="item-container">
             <Button className="back-btn" variant="text" startIcon={<KeyboardArrowLeft/>}
-                    onClick={() => navigate(`/${PathName.LOCATION}`)}>
+                    onClick={() => navigate(`/${PathName.LOCATION}?id=${collectionQuery.data?.id}`)}>
                 {t("button.back")}
             </Button>
             {isTabletOrPhone() &&

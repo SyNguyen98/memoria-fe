@@ -48,7 +48,7 @@ export const useCollectionByLocationIdQuery = (locationId: string) => {
             const res = await appAxios.get(`${API_URL}/locations/${locationId}`);
             return res.data;
         },
-        enabled: appAxios.defaults.headers.Authorization !== undefined
+        enabled: appAxios.defaults.headers.Authorization !== undefined && locationId !== ''
     })
 }
 
