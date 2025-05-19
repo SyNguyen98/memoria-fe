@@ -6,7 +6,7 @@ import {KeyboardArrowRight, Language, Menu, MusicNote, MusicOff, Shuffle} from "
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
 import {useLocationByIdQuery} from "../../custom-query/LocationQueryHook.ts";
-import {useCollectionByIdQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {useCollectionByIdQuery, useCollectionByLocationIdQuery} from "../../custom-query/CollectionQueryHook.ts";
 import {PathName} from "../../constants/Page";
 import {useAudio} from "../../providers/AudioProvider.tsx";
 import {SelectChangeEvent} from "@mui/material/Select";
@@ -28,6 +28,7 @@ export default function AppToolbar() {
     const dispatch = useAppDispatch();
 
     const collectionQuery = useCollectionByIdQuery(collectionId);
+    const collectionLocationQuery = useCollectionByLocationIdQuery(locationId);
     const locationQuery = useLocationByIdQuery(locationId);
 
     useEffect(() => {
@@ -44,8 +45,17 @@ export default function AppToolbar() {
     useEffect(() => {
         if (collectionQuery.data) {
             setCollectionName(collectionQuery.data.name);
+            setCollectionId(collectionQuery.data.id!);
         }
     }, [collectionQuery.data]);
+
+    useEffect(() => {
+        if (collectionLocationQuery.data) {
+            setCollectionName(collectionLocationQuery.data.name);
+            setCollectionId(collectionLocationQuery.data.id!);
+            console.log(collectionLocationQuery.data.id!)
+        }
+    }, [collectionLocationQuery.data]);
 
     useEffect(() => {
         if (locationQuery.data) {
@@ -84,7 +94,7 @@ export default function AppToolbar() {
                             {(pathname.includes(PathName.LOCATION) || pathname.includes(PathName.ITEM)) &&
                                 <>
                                     <KeyboardArrowRight sx={{margin: "auto .5rem"}}/>
-                                    <Link to={`/${PathName.LOCATION}?id=${collectionQuery.data?.id}`}>
+                                    <Link to={`/${PathName.LOCATION}?id=${collectionId}`}>
                                         {collectionName}
                                     </Link>
                                 </>
