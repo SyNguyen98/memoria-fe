@@ -10,6 +10,7 @@ import {Location} from "../../../models/Location";
 import {HashLoader} from "react-spinners";
 import {useTranslation} from "react-i18next";
 import {useSwipeable} from "react-swipeable";
+import HeicImg from "../../../components/heic-img/HeicImg.tsx";
 
 type Props = {
     open: boolean;
@@ -21,7 +22,6 @@ export default function ImageDialog(props: Readonly<Props>) {
     const [items, setItems] = useState<Item[]>([]);
     const [itemChose, setItemChose] = useState<Item | null>(null);
     const [index, setIndex] = useState(0);
-    const [itemLoading, setItemLoading] = useState(true);
 
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
@@ -47,7 +47,6 @@ export default function ImageDialog(props: Readonly<Props>) {
     }, [itemQuery.data]);
 
     const handlePrevious = () => {
-        setItemLoading(true);
         if (index === 0) {
             setIndex(items.length - 1);
             setItemChose(items[items.length - 1]);
@@ -58,7 +57,6 @@ export default function ImageDialog(props: Readonly<Props>) {
     }
 
     const handleNext = () => {
-        setItemLoading(true);
         if (index === items.length - 1) {
             setIndex(0);
             setItemChose(items[0]);
@@ -72,7 +70,6 @@ export default function ImageDialog(props: Readonly<Props>) {
     const handleChangeItem = (item: Item, index: number) => {
         setItemChose(item);
         setIndex(index);
-        setItemLoading(true);
     }
 
     /**
@@ -127,21 +124,18 @@ export default function ImageDialog(props: Readonly<Props>) {
             )}
             <div className="dialog-body" {...handlers}>
                 <div className="item-wrapper">
-                    {itemLoading && (<HashLoader className="item-loading" color="#2196F3" size={80}/>)}
+                    <HashLoader className="item-loading" color="#2196F3" size={80}/>
                     {itemChose && (itemChose.mimeType.includes('image') ? (
-                        <img className="item-chose"
-                             style={{display: `${itemLoading ? 'none' : 'block'}`}}
-                             alt={itemChose.name} src={itemChose.downloadUrl}
-                             onLoadCapture={() => {
-                                 setItemLoading(false)
-                             }}/>
+                        itemChose.mimeType.includes('heic') ? (
+                            <HeicImg alt={itemChose.name} url={itemChose.downloadUrl}/>
+                        ) : (
+                            <img className="item-chose"
+                                 alt={itemChose.name} src={itemChose.downloadUrl}/>
+                        )
+
                     ) : (
                         <video className="item-chose" controls autoPlay
-                               style={{display: `${itemLoading ? 'none' : 'block'}`}}
-                               src={itemChose.downloadUrl}
-                               onLoadedData={() => {
-                                   setItemLoading(false)
-                               }}>
+                               src={itemChose.downloadUrl}>
                             <track kind="captions" src={itemChose.downloadUrl} srcLang="en" label="English"/>
                         </video>
                     ))}
