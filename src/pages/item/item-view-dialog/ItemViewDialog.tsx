@@ -6,6 +6,7 @@ import {Item} from "../../../models/Item";
 import {HashLoader} from "react-spinners";
 import {useSwipeable} from "react-swipeable";
 import {useTranslation} from "react-i18next";
+import HeicImg from "../../../components/heic-img/HeicImg.tsx";
 
 type Props = {
     open: boolean;
@@ -17,11 +18,9 @@ type Props = {
 export default function ItemViewDialog(props: Readonly<Props>) {
     const [item, setItem] = useState<Item | null>(null);
     const [index, setIndex] = useState(-1);
-    const [itemLoading, setItemLoading] = useState(true);
     const {t} = useTranslation();
 
     useEffect(() => {
-        setItemLoading(true)
         setIndex(props.itemIndex);
         setItem(props.items[props.itemIndex]);
     }, [props]);
@@ -46,7 +45,6 @@ export default function ItemViewDialog(props: Readonly<Props>) {
     }
 
     const handlePrevious = () => {
-        setItemLoading(true);
         if (index === 0) {
             setIndex(props.items.length - 1);
             setItem(props.items[props.items.length - 1]);
@@ -57,7 +55,6 @@ export default function ItemViewDialog(props: Readonly<Props>) {
     }
 
     const handleNext = () => {
-        setItemLoading(true);
         if (index === props.items.length - 1) {
             setIndex(0);
             setItem(props.items[0]);
@@ -105,21 +102,18 @@ export default function ItemViewDialog(props: Readonly<Props>) {
             </Toolbar>
             <DialogContent>
                 <div className="item-wrapper" {...handlers}>
-                    {itemLoading && (<HashLoader className="loading" color="#2196F3" size={80}/>)}
+                    <HashLoader className="loading" color="#2196F3" size={80}/>
                     {item && (item.mimeType.includes('image') ? (
-                        <img className="item"
-                             style={{display: `${itemLoading ? 'none' : 'block'}`}}
-                             alt={item.name} src={item.downloadUrl}
-                             onLoadCapture={() => {
-                                 setItemLoading(false)
-                             }}/>
+                        item.mimeType.includes('heic') ? (
+                            <HeicImg alt={item.name} url={item.downloadUrl}/>
+                        ) : (
+                            <img alt={item.name} src={item.downloadUrl}/>
+                        )
                     ) : (
-                        <video className="item" controls autoPlay
-                               style={{display: `${itemLoading ? 'none' : 'block'}`}}
-                               src={item.downloadUrl}
-                               onLoadedData={() => {
-                                   setItemLoading(false)
-                               }}/>
+                        <video className="item" controls>
+                            <source src={item.downloadUrl} type="video/mp4"/>
+                            Your browser does not support the video tag.
+                        </video>
                     ))}
                 </div>
 
