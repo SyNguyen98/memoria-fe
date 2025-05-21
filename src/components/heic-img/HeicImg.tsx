@@ -4,7 +4,7 @@ import heic2any from "heic2any";
 
 const useHeicImgQuery = (url: string) => {
     return useQuery({
-        queryKey: ['getHeicImg'],
+        queryKey: ['getHeicImg', url],
         queryFn: async (): Promise<Response> => {
             return await fetch(url);
         }
@@ -24,7 +24,11 @@ const HeicImg = ({alt, url}: { alt: string, url: string }) => {
                 });
             });
         }
-    }, [heicImageQuery.data, url]);
+    }, [heicImageQuery.data]);
+
+    useEffect(() => {
+        setImageSrc(null)
+    }, [url]);
 
     return (
         imageSrc && <img src={imageSrc} alt={alt} style={{width: '100%', height: 'auto'}}/>
