@@ -68,15 +68,11 @@
       justify-content: center;
       align-items: center;
 
-      .loading {
+      .item, img {
         position: absolute;
-      }
-
-      .item {
-        position: absolute;
-        max-height: 99%;
+        height: 99% !important;
+        width: auto !important;
         max-width: 100%;
-        width: auto;
       }
     }
   }

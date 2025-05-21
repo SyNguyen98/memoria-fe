@@ -80,9 +80,10 @@
           position: absolute;
         }
 
-        .item-chose {
+        .item-chose, img {
           position: absolute;
           max-height: 100%;
+          width: auto !important;
           max-width: 100%;
         }
       }

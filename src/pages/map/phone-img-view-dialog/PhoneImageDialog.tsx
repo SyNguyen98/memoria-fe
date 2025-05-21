@@ -1,5 +1,5 @@
 import "./PhoneImageDialog.scss";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog, DialogActions, DialogContent, DialogTitle, IconButton} from "@mui/material";
 import {Close} from "@mui/icons-material";
@@ -9,6 +9,7 @@ import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
 import {Location} from "../../../models/Location";
+import HeicImg from "../../../components/heic-img/HeicImg.tsx";
 
 type Props = {
     open: boolean;
@@ -19,21 +20,13 @@ type Props = {
 
 export default function PhoneImageDialog(props: Readonly<Props>) {
     const [index, setIndex] = useState(0);
-    const sliderRef = useRef<Slider | null>(null);
-
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-
     const itemQuery = useItemQuery(props.location.id!, "medium");
 
     useEffect(() => {
         setIndex(props.index);
-        setTimeout(() => {
-            if (sliderRef.current) {
-                sliderRef.current.slickGoTo(props.index);
-            }
-        }, 100);
-    }, [props, sliderRef.current]);
+    }, [props]);
 
     useEffect(() => {
         if (itemQuery.isError) {
@@ -63,23 +56,27 @@ export default function PhoneImageDialog(props: Readonly<Props>) {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                {<HashLoader className="item-loading" color="#2196F3" size={50}/>}
-                <Slider ref={sliderRef}
-                        arrows={false} dots={false} infinite={true}
-                        slidesToShow={1} slidesToScroll={1}
+                <HashLoader className="item-loading" color="#2196F3" size={50}/>
+                <Slider arrows={false} dots={false} infinite={true}
+                        slidesToShow={1} slidesToScroll={1} initialSlide={index}
                         speed={500}
-                        lazyLoad="progressive"
+                        lazyLoad="ondemand"
                         afterChange={handleSlide}>
-                    {itemQuery.data?.map(item =>
-                        item.mimeType.includes('image') ? (
-                            <img key={item.id} alt={item.name} src={item.downloadUrl}/>
-                        ) : (
+                    {itemQuery.data?.map(item => {
+                        if (item.mimeType.includes('image')) {
+                            return item.mimeType.includes('heic') ? (
+                                <HeicImg key={item.id} alt={item.name} url={item.downloadUrl}/>
+                            ) : (
+                                <img key={item.id} alt={item.name} src={item.downloadUrl}/>
+                            );
+                        }
+                        return (
                             <video key={item.id} controls>
                                 <source src={item.downloadUrl} type="video/mp4"/>
                                 Your browser does not support the video tag.
                             </video>
-                        )
-                    )}
+                        );
+                    })}
                 </Slider>
             </DialogContent>
             <DialogActions>
