@@ -58,6 +58,27 @@
     display: flex;
     @include respond(tablet) {
       padding: 1rem 0;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .item-loading {
+      position: absolute !important;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(165deg) !important;
+    }
+
+    .slick-slider {
+      margin: auto 0;
+
+      .slick-list, .slick-track, .slick-slide {
+        display: flex;
+
+        .slick-slide div {
+          margin: auto 0;
+        }
+      }
     }
 
     .item-wrapper {
@@ -68,10 +89,10 @@
       justify-content: center;
       align-items: center;
 
-      .item, img {
+      img, video {
         position: absolute;
-        height: 99% !important;
         width: auto !important;
+        max-height: 99% !important;
         max-width: 100%;
       }
     }

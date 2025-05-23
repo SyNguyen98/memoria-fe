@@ -3,10 +3,10 @@ import React, {useEffect, useState} from "react";
 import {Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from "@mui/icons-material";
 import {Item} from "../../../models/Item";
-import {HashLoader} from "react-spinners";
-import {useSwipeable} from "react-swipeable";
 import {useTranslation} from "react-i18next";
-import HeicImg from "../../../components/heic-img/HeicImg.tsx";
+import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
+import Slider from "react-slick";
+import {HashLoader} from "react-spinners";
 
 type Props = {
     open: boolean;
@@ -24,11 +24,6 @@ export default function ItemViewDialog(props: Readonly<Props>) {
         setIndex(props.itemIndex);
         setItem(props.items[props.itemIndex]);
     }, [props]);
-
-    const handlers = useSwipeable({
-        onSwipedLeft: () => handleNext(),
-        onSwipedRight: () => handlePrevious()
-    });
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         switch (event.key) {
@@ -70,6 +65,12 @@ export default function ItemViewDialog(props: Readonly<Props>) {
         props.onClose();
     }
 
+    const handleSlide = (index: number) => {
+        const videos = document.querySelectorAll('video');
+        videos.forEach(video => video.pause());
+        setIndex(index);
+    }
+
     return (
         <Dialog className="item-view-dialog" fullScreen
                 open={props.open} onClose={onClose} onKeyDown={onKeyDown}>
@@ -101,22 +102,39 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                 </div>
             </Toolbar>
             <DialogContent>
-                <div className="item-wrapper" {...handlers}>
-                    <HashLoader className="loading" color="#2196F3" size={80}/>
-                    {item && (item.mimeType.includes('image') ? (
-                        item.mimeType.includes('heic') ? (
-                            <HeicImg alt={item.name} url={item.downloadUrl}/>
-                        ) : (
+                <HashLoader className="item-loading" color="#2196F3" size={50}/>
+                {isTabletOrPhone() ? (
+                    <Slider arrows={false} dots={false} infinite={true}
+                            slidesToShow={1} slidesToScroll={1} initialSlide={index}
+                            speed={500}
+                            lazyLoad="ondemand"
+                            afterChange={handleSlide}>
+                        {props.items.map(item => {
+                            if (item.mimeType.includes('image')) {
+                                return (
+                                    <img key={item.id} alt={item.name} src={item.downloadUrl}/>
+                                );
+                            }
+                            return (
+                                <video key={item.id} controls>
+                                    <source src={item.downloadUrl} type="video/mp4"/>
+                                    Your browser does not support the video tag.
+                                </video>
+                            );
+                        })}
+                    </Slider>
+                ) : (
+                    <div className="item-wrapper">
+                        {item && (item.mimeType.includes('image') ? (
                             <img alt={item.name} src={item.downloadUrl}/>
-                        )
-                    ) : (
-                        <video className="item" controls>
-                            <source src={item.downloadUrl} type="video/mp4"/>
-                            Your browser does not support the video tag.
-                        </video>
-                    ))}
-                </div>
-
+                        ) : (
+                            <video controls>
+                                <source src={item.downloadUrl} type="video/mp4"/>
+                                Your browser does not support the video tag.
+                            </video>
+                        ))}
+                    </div>
+                )}
             </DialogContent>
         </Dialog>
     )
