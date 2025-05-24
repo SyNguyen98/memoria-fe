@@ -199,7 +199,9 @@
     "contact_us_body": "If you have any questions about this Privacy Policy, You can contact us by this email: "
   },
   "map": {
-    "location_list_title": "Location List"
+    "location_list_title": "Location List",
+    "view_list": "View List",
+    "close_list": "Close List"
   },
   "collection": {
     "name": "Name",

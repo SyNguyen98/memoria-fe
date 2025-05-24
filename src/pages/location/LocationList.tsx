@@ -130,7 +130,8 @@ function LocationList() {
                     {locationQuery.data?.data.map(location => (
                         <Card key={location.id}>
                             <CardContent>
-                                <div className="location-place">
+                                <div className="location-place"
+                                     onClick={() => handleNavigateToItem(location)}>
                                     {location.place}
                                 </div>
                                 <div className="location-description">

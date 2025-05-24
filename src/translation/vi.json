@@ -199,7 +199,9 @@
     "contact_us_body": "Nếu bạn có bất kỳ câu hỏi nào về Chính sách bảo mật này, bạn có thể liên hệ với chúng tôi qua email này: "
   },
   "map": {
-    "location_list_title": "Danh Sách Địa Điểm"
+    "location_list_title": "Danh Sách Địa Điểm",
+    "view_list": "Xem Danh Sách",
+    "close_list": "Đóng Danh Sách"
   },
   "collection": {
     "name": "Tên",

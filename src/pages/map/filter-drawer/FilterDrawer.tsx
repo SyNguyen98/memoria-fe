@@ -2,7 +2,7 @@ import './FilterDrawer.scss';
 import {useEffect, useState} from 'react';
 import {useSearchParams} from "react-router";
 import {Divider, Drawer, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
-import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
+import {SelectChangeEvent} from "@mui/material/Select";
 import {useTranslation} from "react-i18next";
 import {useCollectionQuery, useYearsOfCollectionQuery} from "../../../custom-query/CollectionQueryHook.ts";
 import {useAllLocationsQuery} from "../../../custom-query/LocationQueryHook.ts";

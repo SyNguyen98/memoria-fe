@@ -9,7 +9,6 @@ import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
 import {Location} from "../../../models/Location";
-import HeicImg from "../../../components/heic-img/HeicImg.tsx";
 
 type Props = {
     open: boolean;
@@ -64,11 +63,7 @@ export default function PhoneImageDialog(props: Readonly<Props>) {
                         afterChange={handleSlide}>
                     {itemQuery.data?.map(item => {
                         if (item.mimeType.includes('image')) {
-                            return item.mimeType.includes('heic') ? (
-                                <HeicImg key={item.id} alt={item.name} url={item.downloadUrl}/>
-                            ) : (
-                                <img key={item.id} alt={item.name} src={item.downloadUrl}/>
-                            );
+                            return <img key={item.id} alt={item.name} src={item.downloadUrl}/>
                         }
                         return (
                             <video key={item.id} controls>
