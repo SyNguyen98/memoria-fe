@@ -23,14 +23,14 @@ import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
 
 const redIcon = new Icon({
     iconUrl: `${import.meta.env.BASE_URL}red-marker.webp`,
-    iconSize: [42, 42],
-    iconAnchor: [20, 18],
+    iconSize: isTabletOrPhone() ? [42, 42] : [38, 38],
+    iconAnchor: isTabletOrPhone() ? [20, 18] : [19, 18],
 });
 
 const blueIcon = new Icon({
     iconUrl: `${import.meta.env.BASE_URL}blue-marker.webp`,
-    iconSize: [40, 40],
-    iconAnchor: [18, 15],
+    iconSize: isTabletOrPhone() ? [40, 40] : [36, 36],
+    iconAnchor: isTabletOrPhone() ? [18, 15] : [17, 15],
 });
 
 export default function MapAndLocation() {
