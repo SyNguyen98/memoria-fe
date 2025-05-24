@@ -65,71 +65,74 @@
     }
 
     .dialog-body {
-      height: calc(100% - 200px);
+      height: calc(100% - 92px);
+      padding: 1rem;
       display: flex;
+      transition: margin 225ms cubic-bezier(0.4, 0, 0.6, 1); /* MUI sharp easing */
+      position: relative;
 
-      .item-wrapper {
-        position: relative;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      .item-loading {
+        margin: auto;
+      }
 
-        .item-loading {
-          position: absolute;
-        }
-
-        .item-chose, img {
-          position: absolute;
-          max-height: 100%;
-          width: auto !important;
-          max-width: 100%;
-        }
+      .item-chose, img {
+        margin: auto;
+        max-height: 100%;
+        max-width: 100%;
+        width: auto !important;
+        z-index: 999;
       }
     }
 
-    .dialog-footer {
-      display: flex;
-      justify-content: center;
+    .drawer-open {
+      margin-right: 240px;
+      transition-duration: 225ms;
+    }
 
-      /* width */
-      ::-webkit-scrollbar {
-        height: 6px;
+    .drawer-closed {
+      margin-right: 0;
+      transition-duration: 195ms;
+    }
+
+    .open-list-btn {
+      position: absolute;
+      top: 60px;
+      right: 1rem;
+      color: white;
+      z-index: 1000;
+      &:hover {
+        color: $blue-50;
       }
+    }
+  }
+}
 
-      /* Handle */
-      ::-webkit-scrollbar-thumb {
-        background: $white;
-      }
+.item-list-drawer {
+  width: 240px;
+  flex-shrink: 0;
 
-      /* Handle on hover */
-      ::-webkit-scrollbar-thumb:hover {
-        background: $blue-50;
-        cursor: pointer;
-      }
+  .MuiDrawer-paper {
+    margin-top: 60px;
+    height: calc(100% - 60px);
+    width: 240px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.2) !important;
+  }
 
-      .item-list {
-        margin-top: .5rem;
-        max-width: 100%;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        display: flex;
+  .close-list-btn {
+    width: fit-content;
+    color: white;
+  }
 
-        .MuiButtonBase-root {
-          padding-top: 0;
-          min-width: unset;
+  .item {
+    height: 40px;
+    width: 50%;
 
-          img, video {
-            height: 100px;
-
-            &:hover {
-              cursor: pointer;
-              transform: scale(1.05);
-            }
-          }
-        }
-      }
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      object-fit: cover;
     }
   }
 }

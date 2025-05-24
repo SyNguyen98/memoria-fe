@@ -1,16 +1,14 @@
 import "./ItemViewDialog.scss";
-import React, {useEffect, useState} from "react";
-import {Button, Dialog, DialogTitle, Divider, IconButton} from "@mui/material";
-import {Close, SkipNext, SkipPrevious} from '@mui/icons-material';
+import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
+import {Button, Dialog, DialogTitle, Divider, Drawer, IconButton} from "@mui/material";
+import {Close, KeyboardArrowLeft, KeyboardArrowRight, SkipNext, SkipPrevious} from '@mui/icons-material';
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
 import {Item} from "../../../models/Item";
 import {Location} from "../../../models/Location";
-import {HashLoader} from "react-spinners";
-import {useTranslation} from "react-i18next";
-import {useSwipeable} from "react-swipeable";
-import HeicImg from "../../../components/heic-img/HeicImg.tsx";
+import AppLoader from "../../../components/app-loader/AppLoader.tsx";
 
 type Props = {
     open: boolean;
@@ -22,16 +20,13 @@ export default function ImageDialog(props: Readonly<Props>) {
     const [items, setItems] = useState<Item[]>([]);
     const [itemChose, setItemChose] = useState<Item | null>(null);
     const [index, setIndex] = useState(0);
+    const [itemLoading, setItemLoading] = useState(true);
+    const [listOpen, setListOpen] = useState(true);
 
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
 
     const itemQuery = useItemQuery(props.location.id!, "medium")
-
-    const handlers = useSwipeable({
-        onSwipedLeft: () => handleNext(),
-        onSwipedRight: () => handlePrevious()
-    });
 
     useEffect(() => {
         if (itemQuery.isError) {
@@ -66,24 +61,10 @@ export default function ImageDialog(props: Readonly<Props>) {
         }
     }
 
-
     const handleChangeItem = (item: Item, index: number) => {
+        setItemLoading(true);
         setItemChose(item);
         setIndex(index);
-    }
-
-    /**
-     * Handles the wheel event to scroll the specified element horizontally.
-     */
-    const onWheel = (event: React.WheelEvent<HTMLDivElement>, elementId: string) => {
-        const scrollSpeedMultiplier = 3; // Increase this value to make scrolling faster
-        const container = document.getElementById(elementId)!;
-        const containerScrollPosition = document.getElementById(elementId)!.scrollLeft;
-        container.scrollTo({
-            top: 0,
-            left: containerScrollPosition + event.deltaY * scrollSpeedMultiplier,
-            behavior: 'smooth'
-        });
     }
 
     const onClose = () => {
@@ -122,34 +103,51 @@ export default function ImageDialog(props: Readonly<Props>) {
                     </div>
                 </DialogTitle>
             )}
-            <div className="dialog-body" {...handlers}>
-                <div className="item-wrapper">
-                    <HashLoader className="item-loading" color="#2196F3" size={80}/>
-                    {itemChose && (itemChose.mimeType.includes('image') ? (
-                        itemChose.mimeType.includes('heic') ? (
-                            <HeicImg alt={itemChose.name} url={itemChose.downloadUrl}/>
-                        ) : (
-                            <img className="item-chose"
-                                 alt={itemChose.name} src={itemChose.downloadUrl}/>
-                        )
-
-                    ) : (
-                        <video className="item-chose" controls autoPlay
-                               src={itemChose.downloadUrl}>
-                            <track kind="captions" src={itemChose.downloadUrl} srcLang="en" label="English"/>
-                        </video>
-                    ))}
-                </div>
+            {!listOpen && (
+                <Button className="open-list-btn"
+                        onClick={() => setListOpen(true)}
+                        startIcon={<KeyboardArrowLeft/>}>
+                    {t("map.view_list")}
+                </Button>
+            )}
+            <div className={`dialog-body ${listOpen ? 'drawer-open' : 'drawer-closed'}`}>
+                <AppLoader/>
+                {itemChose && (itemChose.mimeType.includes('image') ? (
+                    <img className="item-chose"
+                         style={{display: `${itemLoading ? 'none' : 'block'}`}}
+                         alt={itemChose.name}
+                         src={itemChose.downloadUrl}
+                         onLoadCapture={() => {
+                             setItemLoading(false)
+                         }}/>
+                ) : (
+                    <video className="item-chose" controls autoPlay
+                           style={{display: `${itemLoading ? 'none' : 'block'}`}}
+                           src={itemChose.downloadUrl}
+                           onLoadedData={() => {
+                               setItemLoading(false)
+                           }}>
+                        <track kind="captions" src={itemChose.downloadUrl} srcLang="en" label="English"/>
+                    </video>
+                ))}
             </div>
-            <div className="dialog-footer">
-                <div id="item-list" className="item-list" onWheel={event => onWheel(event, 'item-list')}>
+            <Drawer className='item-list-drawer'
+                    variant="persistent"
+                    anchor="right"
+                    open={listOpen}>
+                <Button className="close-list-btn" onClick={() => {setListOpen(false)}}
+                        endIcon={<KeyboardArrowRight/>}>
+                    {t("map.close_list")}
+                </Button>
+                <div style={{overflowY: 'auto'}}>
                     {items.map((item, index) =>
-                        <Button key={item.id} onClick={() => handleChangeItem(item, index)}>
+                        <Button key={item.id} className="item"
+                                onClick={() => handleChangeItem(item, index)}>
                             <img alt={item.name} src={item.thumbnailUrl}/>
                         </Button>
                     )}
                 </div>
-            </div>
+            </Drawer>
         </Dialog>
     )
 }
