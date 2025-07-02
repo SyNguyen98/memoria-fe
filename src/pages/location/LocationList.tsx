@@ -257,7 +257,7 @@ function LocationList() {
 
             {locationQuery.data?.data && locationQuery.data?.data.length > 0 && (
                 isTabletOrPhone() ? (
-                    <Pagination color="primary" count={Math.round(numOfLocations / rowsPerPage) + 1}
+                    <Pagination color="primary" count={Math.floor(numOfLocations / rowsPerPage) + 1}
                                 page={page + 1}
                                 onChange={(_event, newPage) => handleOnChangePage(newPage - 1)}/>
                 ) : (
