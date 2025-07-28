@@ -1,6 +1,6 @@
 {
   "name": "memoria",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "A Web App storages all your memory resources.",
   "private": true,
   "type": "module",
