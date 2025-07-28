@@ -248,7 +248,8 @@
   },
   "item": {
     "img_video": "Hình Ảnh / Video",
-    "cannot_load": "Không thể tải hình ảnh"
+    "cannot_load": "Không thể tải hình ảnh",
+    "no_item": "Không có hình ảnh nào"
   },
   "user": {
     "cannot_load": "Không thể tải thông tin người dùng"
