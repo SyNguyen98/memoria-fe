@@ -248,7 +248,8 @@
   },
   "item": {
     "img_video": "Imaged / Videos",
-    "cannot_load": "Cannot load images"
+    "cannot_load": "Cannot load images",
+    "no_item": "There is no item to display"
   },
   "user": {
     "cannot_load": "Cannot load user's information"
