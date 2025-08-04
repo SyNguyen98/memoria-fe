@@ -7,6 +7,10 @@ import {useTranslation} from "react-i18next";
 import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
 import Slider from "react-slick";
 import {HashLoader} from "react-spinners";
+import {ReactPhotoSphereViewer} from "react-photo-sphere-viewer";
+import {GyroscopePlugin} from "@photo-sphere-viewer/gyroscope-plugin";
+import {VideoPlugin} from "@photo-sphere-viewer/video-plugin";
+import 'react-photo-sphere-viewer/dist/index.css';
 
 type Props = {
     open: boolean;
@@ -126,12 +130,24 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                 ) : (
                     <div className="item-wrapper">
                         {item && (item.mimeType.includes('image') ? (
-                            <img alt={item.name} src={item.downloadUrl}/>
+                            item.name.startsWith("IMG360") ? (
+                                <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                        src={item.downloadUrl}
+                                                        plugins={[GyroscopePlugin]}/>
+                            ) : (
+                                <img alt={item.name} src={item.downloadUrl}/>
+                            )
                         ) : (
-                            <video controls>
-                                <source src={item.downloadUrl} type="video/mp4"/>
-                                Your browser does not support the video tag.
-                            </video>
+                            item.name.startsWith("360") ? (
+                                <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                        src={item.downloadUrl}
+                                                        plugins={[VideoPlugin]}/>
+                            ) : (
+                                <video controls>
+                                    <source src={item.downloadUrl} type="video/mp4"/>
+                                    Your browser does not support the video tag.
+                                </video>
+                            )
                         ))}
                     </div>
                 )}
