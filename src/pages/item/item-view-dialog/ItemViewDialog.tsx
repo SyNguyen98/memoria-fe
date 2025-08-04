@@ -11,6 +11,8 @@ import {ReactPhotoSphereViewer} from "react-photo-sphere-viewer";
 import {GyroscopePlugin} from "@photo-sphere-viewer/gyroscope-plugin";
 import {VideoPlugin} from "@photo-sphere-viewer/video-plugin";
 import 'react-photo-sphere-viewer/dist/index.css';
+import "@photo-sphere-viewer/core/index.css";
+import "@photo-sphere-viewer/video-plugin/index.css";
 
 type Props = {
     open: boolean;
@@ -115,15 +117,31 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                             afterChange={handleSlide}>
                         {props.items.map(item => {
                             if (item.mimeType.includes('image')) {
-                                return (
-                                    <img key={item.id} alt={item.name} src={item.downloadUrl}/>
-                                );
+                                return item.name.startsWith("IMG360") ? (
+                                    <div className="render-360">
+                                        <ReactPhotoSphereViewer width="100%" height="100%"
+                                                                touchmoveTwoFingers={true} navbar={false}
+                                                                src={item.downloadUrl}
+                                                                plugins={[GyroscopePlugin]}/>
+                                    </div>
+                                ) : (
+                                    <img alt={item.name} src={item.downloadUrl}/>
+                                )
                             }
                             return (
-                                <video key={item.id} controls>
-                                    <source src={item.downloadUrl} type="video/mp4"/>
-                                    Your browser does not support the video tag.
-                                </video>
+                                item.name.startsWith("IMG360") ? (
+                                    <div className="render-360">
+                                        <ReactPhotoSphereViewer width="100%" height="100%"
+                                                                touchmoveTwoFingers={true} navbar={false}
+                                                                src={item.downloadUrl}
+                                                                plugins={[VideoPlugin]}/>
+                                    </div>
+                                ) : (
+                                    <video key={item.id} controls>
+                                        <source src={item.downloadUrl} type="video/mp4"/>
+                                        Your browser does not support the video tag.
+                                    </video>
+                                )
                             );
                         })}
                     </Slider>
