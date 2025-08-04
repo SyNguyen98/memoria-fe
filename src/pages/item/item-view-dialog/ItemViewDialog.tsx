@@ -117,33 +117,13 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                             afterChange={handleSlide}>
                         {props.items.map(item => {
                             if (item.mimeType.includes('image')) {
-                                return item.name.startsWith("IMG360") ? (
-                                    <div className="render-360"
-                                         onTouchStart={(e) => {if (e.touches.length > 2) e.stopPropagation()}}>
-                                        <ReactPhotoSphereViewer width="100%" height="100%" navbar={false}
-                                                                touchmoveTwoFingers={true}
-                                                                src={item.downloadUrl}
-                                                                plugins={[GyroscopePlugin]}/>
-                                    </div>
-                                ) : (
-                                    <img alt={item.name} src={item.downloadUrl}/>
-                                )
+                                <img alt={item.name} src={item.downloadUrl}/>
                             }
                             return (
-                                item.name.startsWith("IMG360") ? (
-                                    <div className="render-360"
-                                         onTouchMove={(e) => {if (e.touches.length > 2) e.stopPropagation()}}>
-                                        <ReactPhotoSphereViewer width="100%" height="100%" navbar={false}
-                                                                touchmoveTwoFingers={true}
-                                                                src={item.downloadUrl}
-                                                                plugins={[VideoPlugin]}/>
-                                    </div>
-                                ) : (
-                                    <video key={item.id} controls>
-                                        <source src={item.downloadUrl} type="video/mp4"/>
-                                        Your browser does not support the video tag.
-                                    </video>
-                                )
+                                <video key={item.id} controls>
+                                    <source src={item.downloadUrl} type="video/mp4"/>
+                                    Your browser does not support the video tag.
+                                </video>
                             );
                         })}
                     </Slider>
