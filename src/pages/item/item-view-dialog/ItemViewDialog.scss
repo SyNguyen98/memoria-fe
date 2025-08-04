@@ -77,6 +77,11 @@
 
         .slick-slide div {
           margin: auto 0;
+
+          .render-360 {
+            width: 100vw !important;
+            height: calc(100svh - 88px) !important;
+          }
         }
       }
     }
