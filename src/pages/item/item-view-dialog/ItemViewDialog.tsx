@@ -118,7 +118,8 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                         {props.items.map(item => {
                             if (item.mimeType.includes('image')) {
                                 return item.name.startsWith("IMG360") ? (
-                                    <div className="render-360">
+                                    <div className="render-360"
+                                         onTouchMove={(e) => {e.stopPropagation()}}>
                                         <ReactPhotoSphereViewer width="100%" height="100%"
                                                                 touchmoveTwoFingers={true} navbar={false}
                                                                 src={item.downloadUrl}
@@ -130,7 +131,8 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                             }
                             return (
                                 item.name.startsWith("IMG360") ? (
-                                    <div className="render-360">
+                                    <div className="render-360"
+                                         onTouchMove={(e) => {e.stopPropagation()}}>
                                         <ReactPhotoSphereViewer width="100%" height="100%"
                                                                 touchmoveTwoFingers={true} navbar={false}
                                                                 src={item.downloadUrl}
