@@ -53,7 +53,6 @@ export default function AppToolbar() {
         if (collectionLocationQuery.data) {
             setCollectionName(collectionLocationQuery.data.name);
             setCollectionId(collectionLocationQuery.data.id!);
-            console.log(collectionLocationQuery.data.id!)
         }
     }, [collectionLocationQuery.data]);
 
