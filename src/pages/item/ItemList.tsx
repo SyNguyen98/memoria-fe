@@ -74,8 +74,6 @@ export default function ItemList() {
                 </Typography>
             }
             {/* Image/Video List */}
-            {itemQuery.isLoading && <AppLoader/>}
-
             {items.length > 0 ? (
                 <Grid className="item-list" container spacing={1}>
                     {items.map((item, index) =>
@@ -87,9 +85,11 @@ export default function ItemList() {
                     )}
                 </Grid>
             ) : (
-                <Typography variant="body1" className="no-item-text">
-                    {t("item.no_item")}
-                </Typography>
+                itemQuery.isLoading ? <AppLoader/> : (
+                    <Typography variant="body1" className="no-item-text">
+                        {t("item.no_item")}
+                    </Typography>
+                )
             )}
 
             {/* Dialogs */}
