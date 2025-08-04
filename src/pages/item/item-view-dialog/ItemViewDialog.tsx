@@ -119,9 +119,9 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                             if (item.mimeType.includes('image')) {
                                 return item.name.startsWith("IMG360") ? (
                                     <div className="render-360"
-                                         onTouchMove={(e) => {e.stopPropagation()}}>
-                                        <ReactPhotoSphereViewer width="100%" height="100%"
-                                                                touchmoveTwoFingers={true} navbar={false}
+                                         onTouchStart={(e) => {if (e.touches.length > 2) e.stopPropagation()}}>
+                                        <ReactPhotoSphereViewer width="100%" height="100%" navbar={false}
+                                                                touchmoveTwoFingers={true}
                                                                 src={item.downloadUrl}
                                                                 plugins={[GyroscopePlugin]}/>
                                     </div>
@@ -132,9 +132,9 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                             return (
                                 item.name.startsWith("IMG360") ? (
                                     <div className="render-360"
-                                         onTouchMove={(e) => {e.stopPropagation()}}>
-                                        <ReactPhotoSphereViewer width="100%" height="100%"
-                                                                touchmoveTwoFingers={true} navbar={false}
+                                         onTouchMove={(e) => {if (e.touches.length > 2) e.stopPropagation()}}>
+                                        <ReactPhotoSphereViewer width="100%" height="100%" navbar={false}
+                                                                touchmoveTwoFingers={true}
                                                                 src={item.downloadUrl}
                                                                 plugins={[VideoPlugin]}/>
                                     </div>
