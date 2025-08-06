@@ -117,7 +117,16 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                             afterChange={handleSlide}>
                         {props.items.map(item => {
                             if (item.mimeType.includes('image')) {
-                                <img alt={item.name} src={item.downloadUrl}/>
+                               return (
+                                   <>
+                                       <img style={{ width: "100%", height: "auto" }} alt={item.name} src={item.downloadUrl}/>
+                                       {item.name.startsWith("IMG360") && (
+                                           <div style={{ position: "fixed", bottom: "10px", transform: "translate(100%, 0)" }}>
+                                               Open in 360 Viewer
+                                           </div>
+                                       )}
+                                   </>
+                               )
                             }
                             return (
                                 <video key={item.id} controls>
