@@ -71,17 +71,15 @@
 
     .slick-slider {
       margin: auto 0;
+      height: 100%;
 
       .slick-list, .slick-track, .slick-slide {
         display: flex;
+        height: 100%;
 
         .slick-slide div {
           margin: auto 0;
-
-          .render-360 {
-            width: 100vw !important;
-            height: calc(100svh - 88px) !important;
-          }
+          text-align: center;
         }
       }
     }
@@ -101,5 +99,16 @@
         max-width: 100%;
       }
     }
+  }
+}
+
+.img-360-dialog {
+  .MuiIconButton-root {
+    position: fixed;
+    right: 8px;
+    top: 8px;
+    z-index: 2;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 }
