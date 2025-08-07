@@ -1,6 +1,6 @@
 import "./ItemViewDialog.scss";
 import React, {useEffect, useState} from "react";
-import {Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
+import {Button, Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from "@mui/icons-material";
 import {Item} from "../../../models/Item";
 import {useTranslation} from "react-i18next";
@@ -24,6 +24,8 @@ type Props = {
 export default function ItemViewDialog(props: Readonly<Props>) {
     const [item, setItem] = useState<Item | null>(null);
     const [index, setIndex] = useState(-1);
+    const [img360, setImg360] = useState<Item | null>(null);
+
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -77,81 +79,120 @@ export default function ItemViewDialog(props: Readonly<Props>) {
         setIndex(index);
     }
 
+    const handleOpenImg360Dialog = (item: Item) => {
+        setImg360(item);
+    }
+
+    const handleCloseImg360Dialog = () => {
+        setImg360(null);
+    }
+
     return (
-        <Dialog className="item-view-dialog" fullScreen
-                open={props.open} onClose={onClose} onKeyDown={onKeyDown}>
-            <Toolbar>
-                <Typography variant="h6" component="div">
-                    {t("item.img_video")}
-                </Typography>
-                <p className="item-name">
-                    {item ? item.name : ''}
-                </p>
-                <div className="btn-wrapper">
-                    <div className="item-index">
-                        <IconButton aria-label="previous"
-                                    onClick={() => handlePrevious()}>
-                            <SkipPrevious/>
-                        </IconButton>
-                        <span className="index">
+        <>
+            <Dialog className="item-view-dialog" fullScreen
+                    open={props.open} onClose={onClose} onKeyDown={onKeyDown}>
+                <Toolbar>
+                    <Typography variant="h6" component="div">
+                        {t("item.img_video")}
+                    </Typography>
+                    <p className="item-name">
+                        {item ? item.name : ''}
+                    </p>
+                    <div className="btn-wrapper">
+                        <div className="item-index">
+                            <IconButton aria-label="previous"
+                                        onClick={() => handlePrevious()}>
+                                <SkipPrevious/>
+                            </IconButton>
+                            <span className="index">
                             {index + 1} / {props.items.length}
                         </span>
-                        <IconButton aria-label="next"
-                                    onClick={() => handleNext()}>
-                            <SkipNext/>
+                            <IconButton aria-label="next"
+                                        onClick={() => handleNext()}>
+                                <SkipNext/>
+                            </IconButton>
+                        </div>
+                        <Divider orientation="vertical"/>
+                        <IconButton onClick={onClose}>
+                            <Close/>
                         </IconButton>
                     </div>
-                    <Divider orientation="vertical"/>
-                    <IconButton onClick={onClose}>
+                </Toolbar>
+                <DialogContent>
+                    <HashLoader className="item-loading" color="#2196F3" size={50}/>
+                    {isTabletOrPhone() ? (
+                        <Slider arrows={false} dots={false} infinite={true}
+                                slidesToShow={1} slidesToScroll={1} initialSlide={index}
+                                speed={500}
+                                lazyLoad="ondemand"
+                                afterChange={handleSlide}>
+                            {props.items.map(item => {
+                                if (item.mimeType.includes('image')) {
+                                    return (
+                                        <>
+                                            <img style={{width: "100%", height: "auto"}} alt={item.name}
+                                                 src={item.downloadUrl}/>
+                                            {item.name.startsWith("IMG360") && (
+                                                <Button style={{
+                                                    position: "fixed",
+                                                    bottom: "10px",
+                                                    transform: "translate(-50%, 0)"
+                                                }}
+                                                        onClick={() => handleOpenImg360Dialog(item)}>
+                                                    Open in 360 Viewer
+                                                </Button>
+                                            )}
+                                        </>
+                                    )
+                                }
+                                return (
+                                    <video key={item.id} controls>
+                                        <source src={item.downloadUrl} type="video/mp4"/>
+                                        Your browser does not support the video tag.
+                                    </video>
+                                );
+                            })}
+                        </Slider>
+                    ) : (
+                        <div className="item-wrapper">
+                            {item && (item.mimeType.includes('image') ? (
+                                item.name.startsWith("IMG360") ? (
+                                    <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                            src={item.downloadUrl}
+                                                            plugins={[GyroscopePlugin]}/>
+                                ) : (
+                                    <img alt={item.name} src={item.downloadUrl}/>
+                                )
+                            ) : (
+                                item.name.startsWith("360") ? (
+                                    <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                            src={item.downloadUrl}
+                                                            plugins={[VideoPlugin]}/>
+                                ) : (
+                                    <video controls>
+                                        <source src={item.downloadUrl} type="video/mp4"/>
+                                        Your browser does not support the video tag.
+                                    </video>
+                                )
+                            ))}
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            {img360 && (
+                <Dialog className="img-360-dialog" open={true}
+                        onClose={handleCloseImg360Dialog} fullScreen>
+                    <IconButton aria-label="close" onClick={handleCloseImg360Dialog}>
                         <Close/>
                     </IconButton>
-                </div>
-            </Toolbar>
-            <DialogContent>
-                <HashLoader className="item-loading" color="#2196F3" size={50}/>
-                {isTabletOrPhone() ? (
-                    <Slider arrows={false} dots={false} infinite={true}
-                            slidesToShow={1} slidesToScroll={1} initialSlide={index}
-                            speed={500}
-                            lazyLoad="ondemand"
-                            afterChange={handleSlide}>
-                        {props.items.map(item => {
-                            if (item.mimeType.includes('image')) {
-                                <img alt={item.name} src={item.downloadUrl}/>
-                            }
-                            return (
-                                <video key={item.id} controls>
-                                    <source src={item.downloadUrl} type="video/mp4"/>
-                                    Your browser does not support the video tag.
-                                </video>
-                            );
-                        })}
-                    </Slider>
-                ) : (
-                    <div className="item-wrapper">
-                        {item && (item.mimeType.includes('image') ? (
-                            item.name.startsWith("IMG360") ? (
-                                <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
-                                                        src={item.downloadUrl}
-                                                        plugins={[GyroscopePlugin]}/>
-                            ) : (
-                                <img alt={item.name} src={item.downloadUrl}/>
-                            )
-                        ) : (
-                            item.name.startsWith("360") ? (
-                                <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
-                                                        src={item.downloadUrl}
-                                                        plugins={[VideoPlugin]}/>
-                            ) : (
-                                <video controls>
-                                    <source src={item.downloadUrl} type="video/mp4"/>
-                                    Your browser does not support the video tag.
-                                </video>
-                            )
-                        ))}
-                    </div>
-                )}
-            </DialogContent>
-        </Dialog>
+                    <DialogContent style={{padding: "0"}}>
+                        <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                src={img360.downloadUrl}
+                                                plugins={[GyroscopePlugin]}/>
+                    </DialogContent>
+                </Dialog>
+            )}
+        </>
     )
 }
