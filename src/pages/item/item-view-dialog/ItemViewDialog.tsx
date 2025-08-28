@@ -1,5 +1,5 @@
 import "./ItemViewDialog.scss";
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useRef, useState} from "react";
 import {Button, Dialog, DialogContent, Divider, IconButton, Toolbar, Typography} from "@mui/material";
 import {Close, SkipNext, SkipPrevious} from "@mui/icons-material";
 import {Item} from "../../../models/Item";
@@ -7,9 +7,10 @@ import {useTranslation} from "react-i18next";
 import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
 import Slider from "react-slick";
 import {HashLoader} from "react-spinners";
-import {ReactPhotoSphereViewer} from "react-photo-sphere-viewer";
+import {ReactPhotoSphereViewer, ViewerAPI} from "react-photo-sphere-viewer";
 import {GyroscopePlugin} from "@photo-sphere-viewer/gyroscope-plugin";
 import {VideoPlugin} from "@photo-sphere-viewer/video-plugin";
+import {EquirectangularVideoAdapter} from "@photo-sphere-viewer/equirectangular-video-adapter";
 import 'react-photo-sphere-viewer/dist/index.css';
 import "@photo-sphere-viewer/core/index.css";
 import "@photo-sphere-viewer/video-plugin/index.css";
@@ -26,12 +27,23 @@ export default function ItemViewDialog(props: Readonly<Props>) {
     const [index, setIndex] = useState(-1);
     const [img360, setImg360] = useState<Item | null>(null);
 
+    const psvRef = useRef<ViewerAPI | null>(null);
+
     const {t} = useTranslation();
 
     useEffect(() => {
         setIndex(props.itemIndex);
         setItem(props.items[props.itemIndex]);
     }, [props]);
+
+    const handleDestroyVideoPSV = () => {
+        if (psvRef.current) {
+            const videoPlugin = psvRef.current.getPlugin(VideoPlugin) as VideoPlugin;
+            if (videoPlugin) {
+                videoPlugin.pause();
+            }
+        }
+    }
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         switch (event.key) {
@@ -48,6 +60,7 @@ export default function ItemViewDialog(props: Readonly<Props>) {
     }
 
     const handlePrevious = () => {
+        handleDestroyVideoPSV();
         if (index === 0) {
             setIndex(props.items.length - 1);
             setItem(props.items[props.items.length - 1]);
@@ -58,6 +71,7 @@ export default function ItemViewDialog(props: Readonly<Props>) {
     }
 
     const handleNext = () => {
+        handleDestroyVideoPSV();
         if (index === props.items.length - 1) {
             setIndex(0);
             setItem(props.items[0]);
@@ -68,6 +82,7 @@ export default function ItemViewDialog(props: Readonly<Props>) {
     }
 
     const onClose = () => {
+        handleDestroyVideoPSV();
         setItem(null);
         setIndex(-1);
         props.onClose();
@@ -84,6 +99,7 @@ export default function ItemViewDialog(props: Readonly<Props>) {
     }
 
     const handleCloseImg360Dialog = () => {
+        handleDestroyVideoPSV();
         setImg360(null);
     }
 
@@ -127,30 +143,33 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                                 lazyLoad="ondemand"
                                 afterChange={handleSlide}>
                             {props.items.map(item => {
-                                if (item.mimeType.includes('image')) {
-                                    return (
-                                        <>
-                                            <img style={{width: "100%", height: "auto"}} alt={item.name}
-                                                 src={item.downloadUrl}/>
-                                            {item.name.startsWith("IMG360") && (
-                                                <Button style={{
+                                const isImage = item.mimeType.includes('image');
+                                const is360 = item.name.startsWith(isImage ? "IMG360" : "VID360");
+
+                                return (
+                                    <Fragment key={item.id}>
+                                        {isImage ? (
+                                            <img style={{width: "100%", height: "auto"}} alt={item.name} src={item.downloadUrl}/>
+                                        ) : (
+                                            <video style={{width: "100%", height: "auto"}} controls>
+                                                <source src={item.downloadUrl} type="video/mp4"/>
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        )}
+                                        {is360 && (
+                                            <Button
+                                                style={{
                                                     position: "fixed",
                                                     bottom: "10px",
-                                                    transform: "translate(-50%, 0)"
+                                                    transform: "translate(-180%, 0)"
                                                 }}
-                                                        onClick={() => handleOpenImg360Dialog(item)}>
-                                                    Open in 360 Viewer
-                                                </Button>
-                                            )}
-                                        </>
-                                    )
-                                }
-                                return (
-                                    <video key={item.id} controls>
-                                        <source src={item.downloadUrl} type="video/mp4"/>
-                                        Your browser does not support the video tag.
-                                    </video>
-                                );
+                                                onClick={() => handleOpenImg360Dialog(item)}
+                                            >
+                                                Open in 360 Viewer
+                                            </Button>
+                                        )}
+                                    </Fragment>
+                                )
                             })}
                         </Slider>
                     ) : (
@@ -164,9 +183,12 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                                     <img alt={item.name} src={item.downloadUrl}/>
                                 )
                             ) : (
-                                item.name.startsWith("360") ? (
+                                item.name.startsWith("VID360") ? (
                                     <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                            ref={psvRef}
                                                             src={item.downloadUrl}
+                                                            panorama={{source: item.downloadUrl}}
+                                                            adapter={EquirectangularVideoAdapter}
                                                             plugins={[VideoPlugin]}/>
                                 ) : (
                                     <video controls>
@@ -187,9 +209,18 @@ export default function ItemViewDialog(props: Readonly<Props>) {
                         <Close/>
                     </IconButton>
                     <DialogContent style={{padding: "0"}}>
-                        <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
-                                                src={img360.downloadUrl}
-                                                plugins={[GyroscopePlugin]}/>
+                        {img360.mimeType.includes('image') ? (
+                            <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                    src={img360.downloadUrl}
+                                                    plugins={[GyroscopePlugin]}/>
+                        ) : (
+                            <ReactPhotoSphereViewer width="100%" height="100%" defaultZoomLvl={0}
+                                                    ref={psvRef}
+                                                    src={img360.downloadUrl}
+                                                    panorama={{source: img360.downloadUrl}}
+                                                    adapter={EquirectangularVideoAdapter}
+                                                    plugins={[VideoPlugin]}/>
+                        )}
                     </DialogContent>
                 </Dialog>
             )}
