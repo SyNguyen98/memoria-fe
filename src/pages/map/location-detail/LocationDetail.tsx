@@ -7,7 +7,7 @@ import {Location} from "../../../models/Location";
 import {Item} from "../../../models/Item.ts";
 import {useSwipeable} from "react-swipeable";
 import {DateUtil} from "../../../utils/DateUtil.ts";
-import PhoneImageDialog from "../phone-img-view-dialog/PhoneImageDialog.tsx";
+import PhoneItemViewDialog from "../phone-item-view-dialog/PhoneItemViewDialog.tsx";
 import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
 import {HashLoader} from "react-spinners";
 
@@ -120,7 +120,7 @@ function LocationDetail(props: Readonly<Props>) {
                 )}
             </div>
 
-            <PhoneImageDialog open={dialogOpen} onClose={handleCloseDialog} location={props.location} index={index}/>
+            <PhoneItemViewDialog open={dialogOpen} onClose={handleCloseDialog} location={props.location} index={index}/>
         </>
     )
 }

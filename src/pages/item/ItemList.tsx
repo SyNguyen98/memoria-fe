@@ -1,8 +1,9 @@
 import "./ItemList.scss";
 import {useEffect, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Button, Grid, Typography} from "@mui/material";
-import {useNavigate, useSearchParams} from "react-router";
+import {KeyboardArrowLeft, PlayArrow} from "@mui/icons-material";
 import {useAppDispatch} from "../../app/hook";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {useItemQuery} from "../../custom-query/ItemQueryHook.ts";
@@ -12,7 +13,6 @@ import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {Item} from "../../models/Item";
 import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import {KeyboardArrowLeft} from "@mui/icons-material";
 import {PathName} from "../../constants/Page.ts";
 
 export default function ItemList() {
@@ -81,6 +81,9 @@ export default function ItemList() {
                             // onContextMenu={(event) => handleRightClickImage(event)}
                               onClick={() => handleOpenViewDialog(index)}>
                             <img alt={item.name} src={item.thumbnailUrl}/>
+                            {item.mimeType === "video/mp4" && (
+                                <PlayArrow/>
+                            )}
                         </Grid>
                     )}
                 </Grid>

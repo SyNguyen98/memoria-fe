@@ -21,6 +21,11 @@
     .MuiGrid-root {
       display: flex;
       flex-direction: column;
+      position: relative;
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.03);
+      }
 
       img {
         margin: auto;
@@ -28,10 +33,18 @@
         border: 1px solid white;
         border-radius: 3%;
         box-shadow: 0 2px 6px 0 $gray-500, 0 4px 8px 0 $gray-300;
-        &:hover {
-          cursor: pointer;
-          transform: scale(1.03);
-        }
+
+      }
+
+      .MuiSvgIcon-root {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 2px 6px 0 $gray-500, 0 4px 8px 0 $gray-300;
       }
     }
   }
