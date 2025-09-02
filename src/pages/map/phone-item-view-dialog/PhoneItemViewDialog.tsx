@@ -1,4 +1,4 @@
-import "./PhoneImageDialog.scss";
+import "./PhoneItemViewDialog.scss";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog, DialogActions, DialogContent, DialogTitle, IconButton} from "@mui/material";
@@ -17,7 +17,7 @@ type Props = {
     index: number;
 }
 
-export default function PhoneImageDialog(props: Readonly<Props>) {
+export default function PhoneItemViewDialog(props: Readonly<Props>) {
     const [index, setIndex] = useState(0);
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
