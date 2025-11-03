@@ -81,7 +81,7 @@ export default function ItemList() {
                             // onContextMenu={(event) => handleRightClickImage(event)}
                               onClick={() => handleOpenViewDialog(index)}>
                             <img alt={item.name} src={item.thumbnailUrl}/>
-                            {item.mimeType === "video/mp4" && (
+                            {item.mimeType.includes("video") && (
                                 <PlayArrow/>
                             )}
                         </Grid>
