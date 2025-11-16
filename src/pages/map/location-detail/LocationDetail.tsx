@@ -1,14 +1,14 @@
 import "./LocationDetail.scss";
 import React, {useEffect, useRef, useState} from "react";
-import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
+import {useItemQuery} from "@queries/ItemQueryHook.ts";
 import {IconButton, ImageList, ImageListItem} from "@mui/material";
 import {AccessTime, HorizontalRule} from "@mui/icons-material";
-import {Location} from "../../../models/Location";
-import {Item} from "../../../models/Item.ts";
+import {Location} from "@models/Location.ts";
+import {Item} from "@models/Item.ts";
 import {useSwipeable} from "react-swipeable";
-import {DateUtil} from "../../../utils/DateUtil.ts";
+import {DateUtil} from "@utils/DateUtil.ts";
 import PhoneItemViewDialog from "../phone-item-view-dialog/PhoneItemViewDialog.tsx";
-import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import {HashLoader} from "react-spinners";
 
 type Props = {

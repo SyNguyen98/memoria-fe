@@ -7,8 +7,8 @@ import Slider from "react-slick";
 import {HashLoader} from "react-spinners";
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
-import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
-import {Location} from "../../../models/Location";
+import {useItemQuery} from "@queries/ItemQueryHook.ts";
+import {Location} from "@models/Location.ts";
 
 type Props = {
     open: boolean;

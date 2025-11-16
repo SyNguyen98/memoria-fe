@@ -4,9 +4,9 @@ import {useSearchParams} from "react-router";
 import {Divider, Drawer, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
 import {SelectChangeEvent} from "@mui/material/Select";
 import {useTranslation} from "react-i18next";
-import {useCollectionQuery, useYearsOfCollectionQuery} from "../../../custom-query/CollectionQueryHook.ts";
-import {useAllLocationsQuery} from "../../../custom-query/LocationQueryHook.ts";
-import {Location} from "../../../models/Location.ts";
+import {useCollectionQuery, useYearsOfCollectionQuery} from "@queries/CollectionQueryHook.ts";
+import {useAllLocationsQuery} from "@queries/LocationQueryHook.ts";
+import {Location} from "@models/Location.ts";
 
 type Props = {
     open: boolean;

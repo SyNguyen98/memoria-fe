@@ -5,9 +5,9 @@ import {Button, Dialog, DialogTitle, Divider, Drawer, IconButton} from "@mui/mat
 import {Close, KeyboardArrowLeft, KeyboardArrowRight, SkipNext, SkipPrevious} from '@mui/icons-material';
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
-import {useItemQuery} from "../../../custom-query/ItemQueryHook.ts";
-import {Item} from "../../../models/Item";
-import {Location} from "../../../models/Location";
+import {useItemQuery} from "@queries/ItemQueryHook.ts";
+import {Item} from "@models/Item.ts";
+import {Location} from "@models/Location.ts";
 import AppLoader from "../../../components/app-loader/AppLoader.tsx";
 
 type Props = {
@@ -84,18 +84,21 @@ export default function ImageDialog(props: Readonly<Props>) {
                     <p className="item-name">
                         {itemChose ? itemChose.name : ''}
                     </p>
+
                     <div className="btn-wrapper">
-                        <div className="item-index">
-                            <IconButton aria-label="previous" onClick={() => handlePrevious()}>
-                                <SkipPrevious/>
-                            </IconButton>
-                            <span className="index">
-                                {index + 1} / {items.length}
-                            </span>
-                            <IconButton aria-label="next" onClick={() => handleNext()}>
-                                <SkipNext/>
-                            </IconButton>
-                        </div>
+                        {items.length > 0 && (
+                            <div className="item-index">
+                                <IconButton aria-label="previous" onClick={() => handlePrevious()}>
+                                    <SkipPrevious/>
+                                </IconButton>
+                                <span className="index">
+                                    {index + 1} / {items.length}
+                                </span>
+                                <IconButton aria-label="next" onClick={() => handleNext()}>
+                                    <SkipNext/>
+                                </IconButton>
+                            </div>
+                        )}
                         <Divider orientation="vertical"/>
                         <IconButton onClick={onClose}>
                             <Close/>
@@ -135,7 +138,9 @@ export default function ImageDialog(props: Readonly<Props>) {
                     variant="persistent"
                     anchor="right"
                     open={listOpen}>
-                <Button className="close-list-btn" onClick={() => {setListOpen(false)}}
+                <Button className="close-list-btn" onClick={() => {
+                    setListOpen(false)
+                }}
                         endIcon={<KeyboardArrowRight/>}>
                     {t("map.close_list")}
                 </Button>

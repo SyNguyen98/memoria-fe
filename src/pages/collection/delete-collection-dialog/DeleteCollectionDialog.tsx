@@ -2,10 +2,10 @@ import "./DeleteCollectionDialog.scss";
 import {useTranslation} from "react-i18next";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
-import {useDeleteCollectionMutation} from "../../../custom-query/CollectionQueryHook.ts";
+import {useDeleteCollectionMutation} from "@queries/CollectionQueryHook.ts";
 import {openSnackbar} from "../../../reducers/SnackbarReducer.ts";
 import {useAppDispatch} from "../../../app/hook.ts";
-import {Collection} from "../../../models/Collection.ts";
+import {Collection} from "@models/Collection.ts";
 
 type Props = {
     open: boolean;

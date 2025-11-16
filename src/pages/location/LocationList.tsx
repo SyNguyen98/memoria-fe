@@ -2,7 +2,9 @@ import './LocationList.scss';
 import {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router";
 import {useQueryClient} from "@tanstack/react-query";
-import {usePagingLocationQuery} from "../../custom-query/LocationQueryHook.ts";
+import {useTranslation} from "react-i18next";
+import {usePagingLocationQuery} from "@queries/LocationQueryHook.ts";
+import {useCollectionByIdQuery} from "@queries/CollectionQueryHook.ts";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
@@ -26,13 +28,11 @@ import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import LocationDialog from "./location-dialog/LocationDialog";
 import DeleteLocationDialog from "./delete-location-dialog/DeleteLocationDialog.tsx";
 // Models & Constants
-import {Location} from "../../models/Location";
-import {PathName} from "../../constants/Page";
+import {Location} from "@models/Location.ts";
+import {PathName} from "@constants/Page.ts";
 // Utils & Services
-import {DateUtil} from "../../utils/DateUtil";
-import {useTranslation} from "react-i18next";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import {useCollectionByIdQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {DateUtil} from "@utils/DateUtil.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 
 function LocationList() {
     const [collectionId, setCollectionId] = useState('');

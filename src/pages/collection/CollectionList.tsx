@@ -33,13 +33,13 @@ import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import CollectionDialog from "./collection-dialog/CollectionDialog";
 import DeleteCollectionDialog from "./delete-collection-dialog/DeleteCollectionDialog.tsx";
 // Models & Constants
-import {Collection} from "../../models/Collection";
-import {PathName} from "../../constants/Page";
+import {Collection} from "@models/Collection.ts";
+import {PathName} from "@constants/Page.ts";
+import {TAGS} from "@constants/Tag.ts";
 // Utils & Services
-import {useCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
-import {DateUtil} from "../../utils/DateUtil.ts";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import {TAGS} from "../../constants/Tag.ts";
+import {useCollectionQuery} from "@queries/CollectionQueryHook.ts";
+import {DateUtil} from "@utils/DateUtil.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 
 function CollectionList() {
     const [tags, setTags] = useState<string[]>([]);

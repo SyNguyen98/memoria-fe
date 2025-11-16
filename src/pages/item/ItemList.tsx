@@ -6,14 +6,14 @@ import {Button, Grid, Typography} from "@mui/material";
 import {KeyboardArrowLeft, PlayArrow} from "@mui/icons-material";
 import {useAppDispatch} from "../../app/hook";
 import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {useItemQuery} from "../../custom-query/ItemQueryHook.ts";
-import {useLocationByIdQuery} from "../../custom-query/LocationQueryHook.ts";
-import {useCollectionByLocationIdQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {useItemQuery} from "@queries/ItemQueryHook.ts";
+import {useLocationByIdQuery} from "@queries/LocationQueryHook.ts";
+import {useCollectionByLocationIdQuery} from "@queries/CollectionQueryHook.ts";
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
-import {Item} from "../../models/Item";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
-import {PathName} from "../../constants/Page.ts";
+import {Item} from "@models/Item.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
+import {PathName} from "@constants/Page.ts";
 
 export default function ItemList() {
     const [locationId, setLocationId] = useState('');
