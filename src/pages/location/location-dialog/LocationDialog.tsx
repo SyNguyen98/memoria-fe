@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
-import {useCreateLocationMutation, useUpdateLocationMutation} from "../../../custom-query/LocationQueryHook.ts";
+import {useCreateLocationMutation, useUpdateLocationMutation} from "@queries/LocationQueryHook.ts";
 import {
     Button,
     Dialog,
@@ -19,10 +19,10 @@ import {MyLocation} from "@mui/icons-material";
 import {LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {useAppDispatch} from "../../../app/hook";
-import {Location} from "../../../models/Location";
+import {Location} from "@models/Location.ts";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
-import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
-import {isLeapYear} from "../../../utils/DateUtil.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
+import {isLeapYear} from "@utils/DateUtil.ts";
 import PositionDialog from "../position-dialog/PositionDialog.tsx";
 
 type Props = {

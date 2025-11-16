@@ -5,8 +5,8 @@ import {AppBar, IconButton, InputAdornment, MenuItem, Select, Toolbar, Tooltip, 
 import {KeyboardArrowRight, Language, Menu, MusicNote, MusicOff, Shuffle} from "@mui/icons-material";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {openSidebar} from "../../reducers/SidebarReducer";
-import {useLocationByIdQuery} from "../../custom-query/LocationQueryHook.ts";
-import {useCollectionByIdQuery, useCollectionByLocationIdQuery} from "../../custom-query/CollectionQueryHook.ts";
+import {useLocationByIdQuery} from "../../queries/LocationQueryHook.ts";
+import {useCollectionByIdQuery, useCollectionByLocationIdQuery} from "../../queries/CollectionQueryHook.ts";
 import {PathName} from "../../constants/Page";
 import {useAudio} from "../../providers/AudioProvider.tsx";
 import {SelectChangeEvent} from "@mui/material/Select";

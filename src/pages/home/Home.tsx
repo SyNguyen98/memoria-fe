@@ -2,10 +2,10 @@ import "./Home.scss";
 import {Link} from "react-router";
 import {Button, Divider, Grid, Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
-import {GOOGLE_AUTH_URL} from "../../constants/Url";
+import {GOOGLE_AUTH_URL} from "@constants/Url.ts";
 import {VERSION} from "../../constants";
-import {PathName} from "../../constants/Page.ts";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import {PathName} from "@constants/Page.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import AudioPlayer from "../../components/audio-player/AudioPlayer.tsx";
 
 export default function Home() {

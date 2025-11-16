@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Button, Dialog, DialogContent, DialogTitle, Grid, TextField} from "@mui/material";
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
 import {LatLng, LeafletMouseEvent} from "leaflet";
-import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import {useTranslation} from "react-i18next";
 
 type PositionDialogProps = {

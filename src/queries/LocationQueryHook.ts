@@ -65,7 +65,7 @@ export const useUpdateLocationMutation = (onSuccess: () => void, onError: () => 
     return useMutation({
         mutationKey: ['updateLocation'],
         mutationFn: async (location: Location): Promise<Location> => {
-            const res = await appAxios.put(API_URL, location);
+            const res = await appAxios.put(`${API_URL}/${location.id}`, location);
             return res.data;
         },
         onSuccess,

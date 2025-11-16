@@ -90,7 +90,7 @@ export const useUpdateCollectionMutation = (onSuccess: () => void, onError: () =
     return useMutation({
         mutationKey: ['updateCollection'],
         mutationFn: async (collection: Collection): Promise<Collection> => {
-            const res = await appAxios.put(API_URL, collection);
+            const res = await appAxios.put(`${API_URL}/${collection.id}`, collection);
             return res.data;
         },
         onSuccess,

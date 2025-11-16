@@ -4,9 +4,9 @@ import {Card, CardContent, Divider, Tooltip, Typography} from "@mui/material";
 import {AccessTime, Room} from "@mui/icons-material";
 import {useTranslation} from "react-i18next";
 import {HashLoader} from "react-spinners";
-import {DateUtil} from "../../../utils/DateUtil.ts";
-import {Collection} from "../../../models/Collection.ts";
-import {Location} from "../../../models/Location";
+import {DateUtil} from "@utils/DateUtil.ts";
+import {Collection} from "@models/Collection.ts";
+import {Location} from "@models/Location.ts";
 
 type Props = {
     collection: Collection | null;

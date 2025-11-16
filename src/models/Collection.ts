@@ -1,4 +1,4 @@
-export type Collection = {
+export interface Collection {
     id?: string;
     name: string;
     tags: string[];
@@ -6,7 +6,7 @@ export type Collection = {
     ownerEmail?: string;
     userEmails: string[];
     lastModifiedDate?: Date;
-    locations: {
+    locations?: {
         name: string;
         isoLevel: string;
         coordinate: {

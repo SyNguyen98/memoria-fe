@@ -6,7 +6,7 @@ import {
     useCreateCollectionMutation,
     useUpdateCollectionMutation,
     useUserEmailsCollectionQuery
-} from "../../../custom-query/CollectionQueryHook.ts";
+} from "@queries/CollectionQueryHook.ts";
 import {
     Autocomplete,
     Button,
@@ -22,8 +22,8 @@ import {
 import {useAppDispatch} from "../../../app/hook";
 import {openSnackbar} from "../../../reducers/SnackbarReducer";
 // Models
-import {Collection} from "../../../models/Collection";
-import {isTabletOrPhone} from "../../../utils/ScreenUtil.ts";
+import {Collection} from "@models/Collection.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 
 type Props = {
     open: boolean;
@@ -139,7 +139,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
             name: inputs.name,
             description: inputs.description,
             tags,
-            userEmails: inputs.userEmails,
+            userEmails: inputs.userEmails
         }
         if (props.collection) {
             collection.id = props.collection.id;

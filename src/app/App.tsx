@@ -2,7 +2,7 @@ import './App.scss';
 import React, {useEffect} from 'react';
 import {Route, Routes, useNavigate} from "react-router";
 import i18n from "../translation/i18n.tsx";
-import {useUserQuery} from "../custom-query/UserQueryHook.ts";
+import {useUserQuery} from "@queries/UserQueryHook.ts";
 // Redux
 import {useAppDispatch, useAppSelector} from "./hook";
 import {setUser} from "../reducers/UserReducer";

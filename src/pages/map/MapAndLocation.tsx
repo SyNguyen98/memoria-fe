@@ -7,8 +7,8 @@ import {Icon, LatLngBoundsExpression, LatLngExpression} from "leaflet";
 import {Button, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
 import {FilterAltOutlined} from "@mui/icons-material";
 import {SelectChangeEvent} from "@mui/material/Select";
-import {useCollectionQuery, useYearsOfCollectionQuery} from "../../custom-query/CollectionQueryHook.ts";
-import {useAllLocationsQuery} from "../../custom-query/LocationQueryHook.ts";
+import {useCollectionQuery, useYearsOfCollectionQuery} from "@queries/CollectionQueryHook.ts";
+import {useAllLocationsQuery} from "@queries/LocationQueryHook.ts";
 // Components
 import AppLoader from "../../components/app-loader/AppLoader.tsx";
 import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
@@ -16,10 +16,10 @@ import LocationDetail from "./location-detail/LocationDetail.tsx";
 import LocationList from "./location-list/LocationList.tsx";
 import FilterDrawer from "./filter-drawer/FilterDrawer.tsx";
 // Models & Services
-import {Collection} from "../../models/Collection.ts";
-import {Location} from "../../models/Location";
-import {DateUtil} from "../../utils/DateUtil";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import {Collection} from "@models/Collection.ts";
+import {Location} from "@models/Location.ts";
+import {DateUtil} from "@utils/DateUtil.ts";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 
 const redIcon = new Icon({
     iconUrl: `${import.meta.env.BASE_URL}red-marker.webp`,
