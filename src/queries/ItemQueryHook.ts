@@ -11,6 +11,6 @@ export const useItemQuery = (locationId: string, thumbnailSize?: "large" | "medi
             const res = await appAxios.get(API_URL, {params: { locationId, thumbnailSize }});
             return res.data;
         },
-        enabled: locationId !== "" && appAxios.defaults.headers.Authorization !== undefined
+        enabled: locationId !== ""
     })
 }

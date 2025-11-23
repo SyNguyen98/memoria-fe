@@ -3,9 +3,8 @@ import {useTranslation} from "react-i18next";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
 import {useDeleteCollectionMutation} from "@queries/CollectionQueryHook.ts";
-import {openSnackbar} from "../../../reducers/SnackbarReducer.ts";
-import {useAppDispatch} from "../../../app/hook.ts";
 import {Collection} from "@models/Collection.ts";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 type Props = {
     open: boolean;
@@ -15,19 +14,19 @@ type Props = {
 
 function DeleteCollectionDialog(props: Props) {
     const {t} = useTranslation();
-    const dispatch = useAppDispatch();
+    const {openSnackbar} = useAppSnackbarContext();
     const queryClient = useQueryClient();
 
     const onSuccess = () => {
         props.onClose();
-        dispatch(openSnackbar({type: "success", message: t("collection.delete_success")}));
-        queryClient.invalidateQueries({ queryKey: ['getAllCollectionsHavingAccess'] })
+        openSnackbar("success", t("collection.delete_success"));
+        queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess']})
     }
     const onError = () => {
-        dispatch(openSnackbar({type: "error", message: t("collection.delete_error")}));
+        openSnackbar("error", t("collection.delete_error"));
     }
 
-    const deleteMutation  = useDeleteCollectionMutation(onSuccess, onError);
+    const deleteMutation = useDeleteCollectionMutation(onSuccess, onError);
 
     const handleDeleteCollection = () => {
         deleteMutation.mutate(props.collection.id!);

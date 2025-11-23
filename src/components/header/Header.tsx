@@ -2,22 +2,17 @@ import "./Header.scss";
 import {MouseEvent, useState} from "react";
 import {Link} from "react-router";
 import {useTranslation} from "react-i18next";
-import {IconButton, InputAdornment, Menu, MenuItem, Select} from "@mui/material";
-import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
+import {InputAdornment, MenuItem, Select} from "@mui/material";
 import {Language} from "@mui/icons-material";
-import MenuIcon from "@mui/icons-material/Menu";
-import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
-import {setLanguage} from "../../reducers/LanguageReducer.ts";
-import {PathName} from "../../constants/Page.ts";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import {SelectChangeEvent} from "@mui/material/Select";
+import {useAppContext} from "../../providers/AppProvider.tsx";
 
 export default function Header() {
     const {t} = useTranslation();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
-    const currentLanguage = useAppSelector(state => state.language.currentLanguage);
-    const dispatch = useAppDispatch();
+    const {currentLanguage, setCurrentLanguage} = useAppContext();
 
     const MENU_ITEM = [
         // { name: t('header_menu.homepage'), link: '/' },
@@ -27,7 +22,7 @@ export default function Header() {
     ]
 
     const handleChangeLanguage = (event: SelectChangeEvent) => {
-        dispatch(setLanguage(event.target.value));
+        setCurrentLanguage(event.target.value);
     }
 
     const handleOpenNavManu = (event: MouseEvent<HTMLButtonElement>) => {

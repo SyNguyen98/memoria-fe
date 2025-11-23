@@ -3,12 +3,11 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Button, Dialog, DialogTitle, Divider, Drawer, IconButton} from "@mui/material";
 import {Close, KeyboardArrowLeft, KeyboardArrowRight, SkipNext, SkipPrevious} from '@mui/icons-material';
-import {useAppDispatch} from "../../../app/hook";
-import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {useItemQuery} from "@queries/ItemQueryHook.ts";
 import {Item} from "@models/Item.ts";
 import {Location} from "@models/Location.ts";
 import AppLoader from "../../../components/app-loader/AppLoader.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 type Props = {
     open: boolean;
@@ -24,15 +23,15 @@ export default function ImageDialog(props: Readonly<Props>) {
     const [listOpen, setListOpen] = useState(true);
 
     const {t} = useTranslation();
-    const dispatch = useAppDispatch();
+    const {openSnackbar} = useAppSnackbarContext();
 
     const itemQuery = useItemQuery(props.location.id!, "medium")
 
     useEffect(() => {
         if (itemQuery.isError) {
-            dispatch(openSnackbar({type: "error", message: t("item.cannot_load")}));
+            openSnackbar("error", t("item.cannot_load"));
         }
-    }, [dispatch, itemQuery.isError, t]);
+    }, [itemQuery.isError, openSnackbar, t]);
 
     useEffect(() => {
         if (itemQuery.data) {

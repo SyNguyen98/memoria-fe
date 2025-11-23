@@ -15,7 +15,6 @@ export const useAllLocationsQuery = (collectionId: string, year: string) => {
             const res = await appAxios.get(`${API_URL}/all`, { params });
             return res.data;
         },
-        enabled: appAxios.defaults.headers.Authorization !== undefined
     })
 }
 
@@ -33,8 +32,7 @@ export const usePagingLocationQuery = (collectionId: string, page: number, size:
                 header: res.headers as AxiosHeaders,
                 data: res.data
             };
-        },
-        enabled: appAxios.defaults.headers.Authorization !== undefined
+        }
     })
 }
 
@@ -45,7 +43,7 @@ export const useLocationByIdQuery = (id: string) => {
             const res = await appAxios.get(`${API_URL}/${id}`);
             return res.data;
         },
-        enabled: id !== undefined && id !== "" && appAxios.defaults.headers.Authorization !== undefined
+        enabled: id !== undefined && id !== ""
     })
 }
 

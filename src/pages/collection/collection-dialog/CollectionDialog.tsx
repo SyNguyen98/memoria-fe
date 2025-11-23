@@ -18,12 +18,10 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-// Redux
-import {useAppDispatch} from "../../../app/hook";
-import {openSnackbar} from "../../../reducers/SnackbarReducer";
 // Models
 import {Collection} from "@models/Collection.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 type Props = {
     open: boolean;
@@ -48,15 +46,16 @@ export default function CollectionDialog(props: Readonly<Props>) {
     const [tags, setTags] = useState<string[]>([]);
 
     const {t} = useTranslation();
-    const dispatch = useAppDispatch();
+    const {openSnackbar} = useAppSnackbarContext();
+
     const queryClient = useQueryClient();
     const onSuccess = () => {
-        dispatch(openSnackbar({type: "success", message: t("collection.save_success")}));
+        openSnackbar("success", t("collection.save_success"));
         handleClose();
         queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess']})
     }
     const onError = () => {
-        dispatch(openSnackbar({type: "error", message: t("collection.save_error")}));
+        openSnackbar("error", t("collection.save_error"));
     }
     const userEmailsCollectionQuery = useUserEmailsCollectionQuery();
     const createMutation = useCreateCollectionMutation(onSuccess, onError);

@@ -5,8 +5,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {useTranslation} from "react-i18next";
 import {Location} from "@models/Location.ts";
 import {useDeleteLocationMutation} from "@queries/LocationQueryHook.ts";
-import {openSnackbar} from "../../../reducers/SnackbarReducer.ts";
-import {useAppDispatch} from "../../../app/hook.ts";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 type Props = {
     open: boolean;
@@ -17,7 +16,7 @@ type Props = {
 function DeleteLocationDialog(props: Props) {
     const {t} = useTranslation();
     const [searchParams] = useSearchParams();
-    const dispatch = useAppDispatch();
+    const {openSnackbar} = useAppSnackbarContext();
     const queryClient = useQueryClient();
     const deleteMutation = useDeleteLocationMutation();
 
@@ -26,13 +25,13 @@ function DeleteLocationDialog(props: Props) {
             onSuccess: () => {
                 const collectionId = searchParams.get("id");
                 props.onClose();
-                dispatch(openSnackbar({type: "success", message: "Đã xóa địa điểm"}));
+                openSnackbar("success", "Đã xóa địa điểm");
                 queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId]}).catch(() => {
-                    dispatch(openSnackbar({type: "error", message: "Không thể tải địa điểm"}));
+                    openSnackbar("error", "Không thể tải địa điểm");
                 });
             },
             onError: () => {
-                dispatch(openSnackbar({type: "error", message: "Không thể xóa địa điểm"}));
+                openSnackbar("error", "Không thể xóa địa điểm");
             }
         });
     }

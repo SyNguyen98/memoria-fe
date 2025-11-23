@@ -5,8 +5,6 @@ import {useQueryClient} from "@tanstack/react-query";
 import {useTranslation} from "react-i18next";
 import {usePagingLocationQuery} from "@queries/LocationQueryHook.ts";
 import {useCollectionByIdQuery} from "@queries/CollectionQueryHook.ts";
-import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
     Button,
     Card,
@@ -33,6 +31,8 @@ import {PathName} from "@constants/Page.ts";
 // Utils & Services
 import {DateUtil} from "@utils/DateUtil.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
+import {useAppContext} from "@providers/AppProvider.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 function LocationList() {
     const [collectionId, setCollectionId] = useState('');
@@ -43,9 +43,9 @@ function LocationList() {
     const [page, setPage] = useState(0);
     const [numOfLocations, setNumOfLocations] = useState(0);
 
-    const currentUser = useAppSelector(state => state.user.value);
+    const {currentUser} = useAppContext();
+    const {openSnackbar} = useAppSnackbarContext();
     const [searchParams] = useSearchParams();
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {t} = useTranslation();
 
@@ -65,7 +65,7 @@ function LocationList() {
             setCollectionId(collectionId);
             refreshLocations(page, rowsPerPage);
         }
-    }, [dispatch, queryClient, searchParams, t]);
+    }, [page, queryClient, rowsPerPage, searchParams, t]);
 
     useEffect(() => {
         if (locationQuery.data) {
@@ -76,7 +76,7 @@ function LocationList() {
 
     const refreshLocations = (page: number, size: number) => {
         queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId, page, size]}).catch(() => {
-            dispatch(openSnackbar({type: "error", message: t("location.cannot_load")}));
+            openSnackbar("error", t("location.cannot_load"));
         });
     }
 

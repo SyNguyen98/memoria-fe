@@ -3,8 +3,6 @@ import {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
-import {openSnackbar} from "../../reducers/SnackbarReducer";
-import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {
     Button,
     Card,
@@ -40,6 +38,8 @@ import {TAGS} from "@constants/Tag.ts";
 import {useCollectionQuery} from "@queries/CollectionQueryHook.ts";
 import {DateUtil} from "@utils/DateUtil.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
+import {useAppContext} from "@providers/AppProvider.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 function CollectionList() {
     const [tags, setTags] = useState<string[]>([]);
@@ -50,22 +50,23 @@ function CollectionList() {
     const [page, setPage] = useState(0);
     const [numOfCollections, setNumOfCollections] = useState(0);
 
-    const dispatch = useAppDispatch();
+    const {currentUser} = useAppContext();
+    const {openSnackbar} = useAppSnackbarContext();
     const {t} = useTranslation();
 
     const queryClient = useQueryClient();
     const collectionQuery = useCollectionQuery({page, size: rowsPerPage, tags: tags.join(",")});
 
-    const currentUser = useAppSelector(state => state.user.value);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         document.title = `MEMORIA | ${t("page.collection")}`;
 
         if (collectionQuery.isError) {
-            dispatch(openSnackbar({type: "error", message: t("collection.cannot_load")}));
+            openSnackbar("error", t("collection.cannot_load"));
         }
-    }, [collectionQuery.isError, dispatch, t]);
+    }, [collectionQuery.isError, openSnackbar, t]);
 
     useEffect(() => {
         if (collectionQuery.data) {
@@ -75,7 +76,7 @@ function CollectionList() {
 
     const refreshCollections = (page: number, size: number, tags?: string) => {
         queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess', {page, size, tags}]}).catch(() => {
-            dispatch(openSnackbar({type: "error", message: t("collection.cannot_load")}));
+            openSnackbar("error", t("collection.cannot_load"));
         });
     }
 

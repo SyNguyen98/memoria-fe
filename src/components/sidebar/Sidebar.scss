@@ -28,6 +28,17 @@
     }
   }
 
+  .menu-body {
+    .Mui-selected {
+      color: $white;
+      background-color: $blue-500;
+
+      .MuiListItemIcon-root {
+        color: $white;
+      }
+    }
+  }
+
   .menu-footer {
     margin: auto 0 0;
     display: flex;
