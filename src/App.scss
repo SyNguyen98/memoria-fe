@@ -1,6 +1,6 @@
-@use "../assets/styles/breakpoint" as *;
-@use "../assets/styles/color" as *;
-@use "../assets/styles/custom-mui" as *;
+@use "./assets/styles/breakpoint" as *;
+@use "./assets/styles/color" as *;
+@use "./assets/styles/custom-mui" as *;
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Lemon&family=Rosario:ital,wght@1,300&family=Signika:wght@300;600&display=swap');
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";

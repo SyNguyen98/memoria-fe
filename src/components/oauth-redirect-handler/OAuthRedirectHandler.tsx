@@ -2,16 +2,15 @@ import {useEffect} from "react";
 import {useNavigate, useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useQueryClient} from "@tanstack/react-query";
-import {useAppDispatch} from "../../app/hook.ts";
-import {CookieUtil} from "../../utils/CookieUtil.ts";
-import {CookieKey} from "../../constants/Storage.ts";
+import {CookieUtil} from "@utils/CookieUtil.ts";
+import {CookieKey} from "@constants/Storage.ts";
 import {appAxios} from "../../api";
-import {openSnackbar} from "../../reducers/SnackbarReducer.ts";
 import AppLoader from "../app-loader/AppLoader.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 export default function OAuthRedirectHandler() {
     const [searchParams] = useSearchParams();
-    const dispatch = useAppDispatch();
+    const {openSnackbar} = useAppSnackbarContext();
     const navigate = useNavigate();
     const {t} = useTranslation();
     const queryClient = useQueryClient();
@@ -28,10 +27,10 @@ export default function OAuthRedirectHandler() {
                 const lastPath = localStorage.getItem("lastPath");
                 navigate(lastPath ? lastPath : "/map");
             }).catch(() => {
-                dispatch(openSnackbar({type: "error", message: t("user.cannot_load")}));
+                openSnackbar("error", t("user.cannot_load"));
             })
         }
-    }, [dispatch, navigate, queryClient, searchParams, t]);
+    }, [navigate, openSnackbar, queryClient, searchParams, t]);
 
     return <AppLoader/>;
 }

@@ -11,6 +11,7 @@
       "@constants/*": ["src/constants/*"],
       "@models/*": ["src/models/*"],
       "@queries/*": ["src/queries/*"],
+      "@providers/*": ["src/providers/*"],
       "@utils/*": ["src/utils/*"],
     },
 

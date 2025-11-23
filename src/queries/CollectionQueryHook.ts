@@ -25,8 +25,7 @@ export const useCollectionQuery = (params: CollectionApiParams) => {
                 header: res.headers as AxiosHeaders,
                 data: res.data
             };
-        },
-        enabled: appAxios.defaults.headers.Authorization !== undefined
+        }
     })
 }
 
@@ -36,8 +35,7 @@ export const useCollectionByIdQuery = (id: string) => {
         queryFn: async (): Promise<Collection> => {
             const res = await appAxios.get(`${API_URL}/${id}`);
             return res.data;
-        },
-        enabled: appAxios.defaults.headers.Authorization !== undefined
+        }
     })
 }
 
@@ -48,7 +46,7 @@ export const useCollectionByLocationIdQuery = (locationId: string) => {
             const res = await appAxios.get(`${API_URL}/locations/${locationId}`);
             return res.data;
         },
-        enabled: appAxios.defaults.headers.Authorization !== undefined && locationId !== ''
+        enabled: locationId !== ''
     })
 }
 
@@ -58,8 +56,7 @@ export const useUserEmailsCollectionQuery = () => {
         queryFn: async (): Promise<string[]> => {
             const res = await appAxios.get(`${API_URL}/user-emails`);
             return res.data;
-        },
-        enabled: appAxios.defaults.headers.Authorization !== undefined
+        }
     })
 }
 
@@ -69,8 +66,7 @@ export const useYearsOfCollectionQuery = () => {
         queryFn: async (): Promise<number[]> => {
             const res = await appAxios.get(`${API_URL}/years`);
             return res.data;
-        },
-        enabled: appAxios.defaults.headers.Authorization !== undefined
+        }
     })
 }
 

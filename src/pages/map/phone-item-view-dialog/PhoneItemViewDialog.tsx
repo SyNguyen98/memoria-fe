@@ -5,10 +5,9 @@ import {Dialog, DialogActions, DialogContent, DialogTitle, IconButton} from "@mu
 import {Close} from "@mui/icons-material";
 import Slider from "react-slick";
 import {HashLoader} from "react-spinners";
-import {useAppDispatch} from "../../../app/hook";
-import {openSnackbar} from "../../../reducers/SnackbarReducer";
 import {useItemQuery} from "@queries/ItemQueryHook.ts";
 import {Location} from "@models/Location.ts";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 type Props = {
     open: boolean;
@@ -20,7 +19,7 @@ type Props = {
 export default function PhoneItemViewDialog(props: Readonly<Props>) {
     const [index, setIndex] = useState(0);
     const {t} = useTranslation();
-    const dispatch = useAppDispatch();
+    const {openSnackbar} = useAppSnackbarContext();
     const itemQuery = useItemQuery(props.location.id!, "medium");
 
     useEffect(() => {
@@ -29,9 +28,9 @@ export default function PhoneItemViewDialog(props: Readonly<Props>) {
 
     useEffect(() => {
         if (itemQuery.isError) {
-            dispatch(openSnackbar({type: "error", message: t("item.cannot_load")}));
+            openSnackbar("error", t("item.cannot_load"));
         }
-    }, [dispatch, itemQuery.isError, t]);
+    }, [itemQuery.isError, openSnackbar, t]);
 
     const onClose = () => {
         setIndex(1);

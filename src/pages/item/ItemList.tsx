@@ -4,8 +4,6 @@ import {useNavigate, useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Button, Grid, Typography} from "@mui/material";
 import {KeyboardArrowLeft, PlayArrow} from "@mui/icons-material";
-import {useAppDispatch} from "../../app/hook";
-import {openSnackbar} from "../../reducers/SnackbarReducer";
 import {useItemQuery} from "@queries/ItemQueryHook.ts";
 import {useLocationByIdQuery} from "@queries/LocationQueryHook.ts";
 import {useCollectionByLocationIdQuery} from "@queries/CollectionQueryHook.ts";
@@ -14,6 +12,7 @@ import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {Item} from "@models/Item.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import {PathName} from "@constants/Page.ts";
+import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
 
 export default function ItemList() {
     const [locationId, setLocationId] = useState('');
@@ -23,7 +22,7 @@ export default function ItemList() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const {t} = useTranslation();
-    const dispatch = useAppDispatch();
+    const {openSnackbar} = useAppSnackbarContext();
     const itemQuery = useItemQuery(locationId, "medium");
     const locationQuery = useLocationByIdQuery(locationId);
     const collectionQuery = useCollectionByLocationIdQuery(locationId);
@@ -42,9 +41,9 @@ export default function ItemList() {
 
     useEffect(() => {
         if (itemQuery.isError) {
-            dispatch(openSnackbar({type: "error", message: t("item.cannot_load")}));
+            openSnackbar("error", t("item.cannot_load"));
         }
-    }, [dispatch, itemQuery.isError, t]);
+    }, [itemQuery.isError, openSnackbar, t]);
 
     useEffect(() => {
         if (itemQuery.data) {

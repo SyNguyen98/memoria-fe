@@ -1,4 +1,4 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 /// <reference types="vite/client" />
 
 import {defineConfig} from 'vite'
@@ -13,6 +13,7 @@ export default defineConfig({
           "@constants": path.join(__dirname, "src/constants/"),
           "@models": path.join(__dirname, "src/models/"),
           "@queries": path.join(__dirname, "src/queries/"),
+          "@providers": path.join(__dirname, "src/providers/"),
           "@utils": path.join(__dirname, "src/utils/"),
       }
     },

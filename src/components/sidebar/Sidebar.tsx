@@ -1,8 +1,6 @@
 import "./Sidebar.scss";
 import {useLocation, useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
-import {closeSidebar} from "../../reducers/SidebarReducer.ts";
 import {
     Avatar,
     Divider,
@@ -15,22 +13,23 @@ import {
     ListItemText
 } from "@mui/material";
 import {Collections, FeedbackOutlined, KeyboardDoubleArrowLeft, Logout, Map} from "@mui/icons-material";
-import {CookieUtil} from "../../utils/CookieUtil.ts";
-import {CookieKey} from "../../constants/Storage.ts";
-import {PathName} from "../../constants/Page.ts";
+import {CookieUtil} from "@utils/CookieUtil.ts";
+import {CookieKey} from "@constants/Storage.ts";
+import {PathName} from "@constants/Page.ts";
 import {VERSION} from "../../constants";
-import {clearUser} from "../../reducers/UserReducer.ts";
+import {useAppContext} from "@providers/AppProvider.tsx";
+import {useSidebarContext} from "@providers/SidebarProvider.tsx";
 
 export default function Sidebar() {
-    const currentUser = useAppSelector(state => state.user.value);
-    const sidebarOpened = useAppSelector(state => state.sidebar.opened);
-    const dispatch = useAppDispatch();
+    const {sidebarOpened, setSidebarOpened} = useSidebarContext();
+    const {currentUser, setCurrentUser} = useAppContext();
+
     const navigate = useNavigate();
     const {pathname} = useLocation();
     const {t} = useTranslation();
 
     const handleClose = () => {
-        dispatch(closeSidebar())
+        setSidebarOpened(false);
     }
 
     const handleListItemClick = (url: string) => {
@@ -43,7 +42,7 @@ export default function Sidebar() {
 
     const handleLogout = () => {
         CookieUtil.deleteCookie(CookieKey.ACCESS_TOKEN);
-        dispatch(clearUser());
+        setCurrentUser(null);
         navigate("/");
     }
 

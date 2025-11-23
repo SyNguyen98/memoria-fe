@@ -3,15 +3,14 @@ import {Link, useLocation, useSearchParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {AppBar, IconButton, InputAdornment, MenuItem, Select, Toolbar, Tooltip, Typography} from "@mui/material";
 import {KeyboardArrowRight, Language, Menu, MusicNote, MusicOff, Shuffle} from "@mui/icons-material";
-import {useAppDispatch, useAppSelector} from "../../app/hook";
-import {openSidebar} from "../../reducers/SidebarReducer";
-import {useLocationByIdQuery} from "../../queries/LocationQueryHook.ts";
-import {useCollectionByIdQuery, useCollectionByLocationIdQuery} from "../../queries/CollectionQueryHook.ts";
-import {PathName} from "../../constants/Page";
-import {useAudio} from "../../providers/AudioProvider.tsx";
 import {SelectChangeEvent} from "@mui/material/Select";
-import {setLanguage} from "../../reducers/LanguageReducer.ts";
-import {isTabletOrPhone} from "../../utils/ScreenUtil.ts";
+import {useLocationByIdQuery} from "@queries/LocationQueryHook.ts";
+import {useCollectionByIdQuery, useCollectionByLocationIdQuery} from "@queries/CollectionQueryHook.ts";
+import {PathName} from "@constants/Page.ts";
+import {useAudio} from "@providers/AudioProvider.tsx";
+import {useAppContext} from "@providers/AppProvider.tsx";
+import {useSidebarContext} from "@providers/SidebarProvider.tsx";
+import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 
 export default function AppToolbar() {
     const [collectionId, setCollectionId] = useState('');
@@ -24,8 +23,8 @@ export default function AppToolbar() {
     const {t} = useTranslation();
     const {isPlaying, playPause, nextTrack} = useAudio();
 
-    const currentLanguage = useAppSelector(state => state.language.currentLanguage);
-    const dispatch = useAppDispatch();
+    const {currentLanguage, setCurrentLanguage} = useAppContext();
+    const {setSidebarOpened} = useSidebarContext();
 
     const collectionQuery = useCollectionByIdQuery(collectionId);
     const collectionLocationQuery = useCollectionByLocationIdQuery(locationId);
@@ -63,11 +62,11 @@ export default function AppToolbar() {
     }, [locationQuery.data]);
 
     const handleOpenMenu = () => {
-        dispatch(openSidebar())
+        setSidebarOpened(true);
     }
 
     const handleChangeLanguage = (event: SelectChangeEvent) => {
-        dispatch(setLanguage(event.target.value));
+        setCurrentLanguage(event.target.value);
     }
 
     return (
@@ -83,10 +82,15 @@ export default function AppToolbar() {
                             {t("page.map")}
                         </>
                     }
-                    {pathname !== `/${PathName.MAP}` &&
+                    {(pathname === `/${PathName.COLLECTION}` || pathname === `/${PathName.LOCATION}` || pathname === `/${PathName.ITEM}`) &&
                         <Link to={`/${PathName.COLLECTION}`}>
                             {t("page.collection")}
                         </Link>
+                    }
+                    {pathname === `/${PathName.PROFILE}` &&
+                        <>
+                            {t("page.profile")}
+                        </>
                     }
                     {!isTabletOrPhone() &&
                         <>
