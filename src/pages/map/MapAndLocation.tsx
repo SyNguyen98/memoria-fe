@@ -68,7 +68,7 @@ export default function MapAndLocation() {
             setCollectionId("all");
             setCollectionChose(null);
         }
-        setYear(year || "all");
+        setYear(year || new Date().getFullYear().toString());
     }, [collectionQuery.data, searchParams]);
 
     useEffect(() => {
