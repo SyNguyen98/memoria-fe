@@ -22,7 +22,8 @@ import {Location} from "@models/Location.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import {isLeapYear} from "@utils/DateUtil.ts";
 import PositionDialog from "../position-dialog/PositionDialog.tsx";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
+import {useAppLoaderContext} from "@providers/AppLoaderProvider.tsx";
 
 type Props = {
     open: boolean;
@@ -63,15 +64,20 @@ export default function LocationDialog(props: Readonly<Props>) {
 
     const [searchParams] = useSearchParams();
     const {t} = useTranslation();
+    const {showAppLoader, hideAppLoader} = useAppLoaderContext();
     const {openSnackbar} = useAppSnackbarContext();
     const queryClient = useQueryClient();
     const onSuccess = () => {
         const collectionId = searchParams.get("id");
-        openSnackbar("success", t('location.save_success'));
-        handleClose();
-        queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId]})
+        queryClient.invalidateQueries({queryKey: ['getPagingLocationsByParams', collectionId]}).then(() => {
+            handleClose();
+            hideAppLoader();
+            openSnackbar("success", t('location.save_success'));
+        });
     }
     const onError = () => {
+        handleClose();
+        hideAppLoader();
         openSnackbar("error", t('location.save_error'));
     }
     const createMutation = useCreateLocationMutation(onSuccess, onError);
@@ -148,6 +154,7 @@ export default function LocationDialog(props: Readonly<Props>) {
     }
 
     const handleSave = () => {
+        showAppLoader();
         const location: Location = {
             place: inputs.place,
             description: inputs.description,

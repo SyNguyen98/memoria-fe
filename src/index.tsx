@@ -6,7 +6,8 @@ import App from "./App.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import AudioProvider from "./providers/AudioProvider.tsx";
 import AppProvider from "./providers/AppProvider.tsx";
-import AppSnackbarProvider from "@providers/AppSnackbar.tsx";
+import AppSnackbarProvider from "@providers/AppSnackbarProvider.tsx";
+import AppLoaderProvider from "@providers/AppLoaderProvider.tsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -20,13 +21,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <AppProvider>
-                <AppSnackbarProvider>
-                    <AudioProvider>
-                        <BrowserRouter basename={import.meta.env.VITE_BASENAME}>
-                            <App/>
-                        </BrowserRouter>
-                    </AudioProvider>
-                </AppSnackbarProvider>
+                <AppLoaderProvider>
+                    <AppSnackbarProvider>
+                        <AudioProvider>
+                            <BrowserRouter basename={import.meta.env.VITE_BASENAME}>
+                                <App/>
+                            </BrowserRouter>
+                        </AudioProvider>
+                    </AppSnackbarProvider>
+                </AppLoaderProvider>
             </AppProvider>
         </QueryClientProvider>
     </React.StrictMode>

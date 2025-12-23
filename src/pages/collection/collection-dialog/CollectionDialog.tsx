@@ -21,7 +21,7 @@ import {
 // Models
 import {Collection} from "@models/Collection.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 type Props = {
     open: boolean;

@@ -6,7 +6,7 @@ import {CookieUtil} from "@utils/CookieUtil.ts";
 import {CookieKey} from "@constants/Storage.ts";
 import {appAxios} from "../../api";
 import AppLoader from "../app-loader/AppLoader.tsx";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 export default function OAuthRedirectHandler() {
     const [searchParams] = useSearchParams();

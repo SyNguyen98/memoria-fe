@@ -7,7 +7,7 @@ import Slider from "react-slick";
 import {HashLoader} from "react-spinners";
 import {useItemQuery} from "@queries/ItemQueryHook.ts";
 import {Location} from "@models/Location.ts";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 type Props = {
     open: boolean;

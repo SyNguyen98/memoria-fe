@@ -5,7 +5,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {useTranslation} from "react-i18next";
 import {Location} from "@models/Location.ts";
 import {useDeleteLocationMutation} from "@queries/LocationQueryHook.ts";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 type Props = {
     open: boolean;
