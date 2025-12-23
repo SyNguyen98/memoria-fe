@@ -7,7 +7,7 @@ import {useItemQuery} from "@queries/ItemQueryHook.ts";
 import {Item} from "@models/Item.ts";
 import {Location} from "@models/Location.ts";
 import AppLoader from "../../../components/app-loader/AppLoader.tsx";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 type Props = {
     open: boolean;

@@ -32,7 +32,7 @@ import {PathName} from "@constants/Page.ts";
 import {DateUtil} from "@utils/DateUtil.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import {useAppContext} from "@providers/AppProvider.tsx";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 function LocationList() {
     const [collectionId, setCollectionId] = useState('');

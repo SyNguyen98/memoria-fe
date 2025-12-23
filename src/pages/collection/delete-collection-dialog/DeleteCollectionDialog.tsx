@@ -4,7 +4,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/ma
 import {useQueryClient} from "@tanstack/react-query";
 import {useDeleteCollectionMutation} from "@queries/CollectionQueryHook.ts";
 import {Collection} from "@models/Collection.ts";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 type Props = {
     open: boolean;

@@ -12,7 +12,7 @@ import ItemViewDialog from "./item-view-dialog/ItemViewDialog";
 import {Item} from "@models/Item.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import {PathName} from "@constants/Page.ts";
-import {useAppSnackbarContext} from "@providers/AppSnackbar.tsx";
+import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
 
 export default function ItemList() {
     const [locationId, setLocationId] = useState('');
