@@ -22,6 +22,7 @@ import {
 import {Collection} from "@models/Collection.ts";
 import {isTabletOrPhone} from "@utils/ScreenUtil.ts";
 import {useAppSnackbarContext} from "@providers/AppSnackbarProvider.tsx";
+import {useAppLoaderContext} from "@providers/AppLoaderProvider.tsx";
 
 type Props = {
     open: boolean;
@@ -46,15 +47,18 @@ export default function CollectionDialog(props: Readonly<Props>) {
     const [tags, setTags] = useState<string[]>([]);
 
     const {t} = useTranslation();
+    const {showAppLoader, hideAppLoader} = useAppLoaderContext();
     const {openSnackbar} = useAppSnackbarContext();
 
     const queryClient = useQueryClient();
     const onSuccess = () => {
+        hideAppLoader();
         openSnackbar("success", t("collection.save_success"));
         handleClose();
         queryClient.invalidateQueries({queryKey: ['getAllCollectionsHavingAccess']})
     }
     const onError = () => {
+        hideAppLoader();
         openSnackbar("error", t("collection.save_error"));
     }
     const userEmailsCollectionQuery = useUserEmailsCollectionQuery();
@@ -134,6 +138,7 @@ export default function CollectionDialog(props: Readonly<Props>) {
     }
 
     const handleSave = () => {
+        showAppLoader();
         const collection: Collection = {
             name: inputs.name,
             description: inputs.description,
