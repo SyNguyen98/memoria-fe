@@ -184,14 +184,18 @@ function CollectionList() {
                             </CardContent>
                             <CardActions>
                                 <div className="btn-wrapper">
-                                    <IconButton size="small" color="primary"
-                                                onClick={() => handleOpenEditDialog(collection)}>
-                                        <Edit/>
-                                    </IconButton>
-                                    <IconButton size="small" color="error"
-                                                onClick={() => handleOpenDeleteDialog(collection)}>
-                                        <Delete/>
-                                    </IconButton>
+                                    {isCollectionOwner(collection) && (
+                                        <>
+                                            <IconButton size="small" color="primary"
+                                                        onClick={() => handleOpenEditDialog(collection)}>
+                                                <Edit/>
+                                            </IconButton>
+                                            <IconButton size="small" color="error"
+                                                        onClick={() => handleOpenDeleteDialog(collection)}>
+                                                <Delete/>
+                                            </IconButton>
+                                        </>
+                                    )}
                                 </div>
                                 <Button size="small" color="primary" variant="text"
                                         onClick={() => handleNavigateToLocation(collection)}>
@@ -300,7 +304,7 @@ function CollectionList() {
                         ))}
                     </Select>
                 </FormControl>
-                <Button className="add-btn" variant={isTabletOrPhone()? 'text':'contained'} startIcon={<Add/>}
+                <Button className="add-btn" variant={isTabletOrPhone() ? 'text' : 'contained'} startIcon={<Add/>}
                         onClick={() => handleOpenEditDialog()}>
                     {t("button.add")}
                 </Button>
