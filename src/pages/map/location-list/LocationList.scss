@@ -45,7 +45,7 @@
     }
 
     .MuiCardContent-root {
-      padding: 1rem;
+      padding: 1rem 1rem 0;
 
       .location-place {
         display: flex;
@@ -88,6 +88,10 @@
         margin-top: .5rem;
         font-size: 14px;
       }
+    }
+
+    .MuiCardActions-root {
+      justify-content: flex-end;
     }
   }
 }

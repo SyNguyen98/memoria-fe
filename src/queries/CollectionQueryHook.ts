@@ -60,11 +60,15 @@ export const useUserEmailsCollectionQuery = () => {
     })
 }
 
-export const useYearsOfCollectionQuery = () => {
+export const useYearsOfCollectionQuery = (collectionId?: string) => {
     return useQuery({
-        queryKey: ['getAllYearsOfCollection'],
+        queryKey: ['getAllYearsOfCollection', collectionId],
         queryFn: async (): Promise<number[]> => {
-            const res = await appAxios.get(`${API_URL}/years`);
+            const params: { collectionId?: string } = {};
+            if (collectionId && collectionId !== 'all') {
+                params.collectionId = collectionId;
+            }
+            const res = await appAxios.get(`${API_URL}/years`, {params});
             return res.data;
         }
     })

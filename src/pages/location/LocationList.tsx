@@ -146,14 +146,18 @@ function LocationList() {
                             </CardContent>
                             <CardActions>
                                 <div className="btn-wrapper">
-                                    <IconButton size="small" color="primary"
-                                                onClick={() => handleOpenEditDialog(location)}>
-                                        <Edit/>
-                                    </IconButton>
-                                    <IconButton size="small" color="error"
-                                                onClick={() => handleOpenDeleteDialog(location)}>
-                                        <Delete/>
-                                    </IconButton>
+                                    {isCollectionOwner() && (
+                                        <>
+                                            <IconButton size="small" color="primary"
+                                                        onClick={() => handleOpenEditDialog(location)}>
+                                                <Edit/>
+                                            </IconButton>
+                                            <IconButton size="small" color="error"
+                                                        onClick={() => handleOpenDeleteDialog(location)}>
+                                                <Delete/>
+                                            </IconButton>
+                                        </>
+                                    )}
                                 </div>
                                 <Button size="small" color="primary" variant="text"
                                         onClick={() => handleNavigateToItem(location)}>

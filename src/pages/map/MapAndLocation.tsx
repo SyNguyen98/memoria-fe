@@ -47,7 +47,7 @@ export default function MapAndLocation() {
     const [searchParams, setSearchParams] = useSearchParams();
     const collectionQuery = useCollectionQuery({unpaged: true});
     const locationQuery = useAllLocationsQuery(collectionId, year);
-    const yearsQuery = useYearsOfCollectionQuery();
+    const yearsQuery = useYearsOfCollectionQuery(collectionId);
 
     const {t} = useTranslation();
 
@@ -68,7 +68,7 @@ export default function MapAndLocation() {
             setCollectionId("all");
             setCollectionChose(null);
         }
-        setYear(year || new Date().getFullYear().toString());
+        setYear(year || 'all');
     }, [collectionQuery.data, searchParams]);
 
     useEffect(() => {
@@ -76,6 +76,16 @@ export default function MapAndLocation() {
             setBounds(locationQuery.data.map(location => [location.coordinate.latitude, location.coordinate.longitude]));
         }
     }, [locationQuery.data]);
+
+    useEffect(() => {
+        if (yearsQuery.data) {
+            if (year !== "all" && !yearsQuery.data.includes(parseInt(year))) {
+                setYear("all");
+                const params: Record<string, string> = collectionId !== "all" ? {id: collectionId} : {};
+                setSearchParams(params);
+            }
+        }
+    }, [collectionId, setSearchParams, year, yearsQuery.data]);
 
     const handleOpenFilterMenu = () => {
         setFilterMenuOpened(true);
@@ -153,7 +163,7 @@ export default function MapAndLocation() {
     }
 
     const handleCloseDialog = () => {
-        setLocationChose(null);
+        // setLocationChose(null);
         setDialogOpened(false);
     }
 
@@ -168,7 +178,7 @@ export default function MapAndLocation() {
             <div className="filter-container">
                 {isTabletOrPhone() ? (
                     <Button className="filter-btn" size="medium" color="inherit" variant="contained"
-                                onClick={handleOpenFilterMenu}>
+                            onClick={handleOpenFilterMenu}>
                         <FilterAltOutlined/>
                     </Button>
                 ) : (
@@ -217,7 +227,8 @@ export default function MapAndLocation() {
 
                 <LocationList collection={collectionChose}
                               locations={locationQuery.data}
-                              handleChoseLocation={handleChoseLocation}/>
+                              handleChoseLocation={handleChoseLocation}
+                              handleOpenLocationItem={handleClickMarker}/>
 
                 <FilterDrawer open={filterMenuOpened} onClose={handleCloseFilterMenu}
                               locationChose={locationChose}
