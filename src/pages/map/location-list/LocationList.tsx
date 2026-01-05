@@ -1,7 +1,7 @@
 import "./LocationList.scss";
 import {useEffect} from "react";
-import {Card, CardContent, Divider, Tooltip, Typography} from "@mui/material";
-import {AccessTime, Room} from "@mui/icons-material";
+import {Button, Card, CardActions, CardContent, Divider, Tooltip, Typography} from "@mui/material";
+import {AccessTime, KeyboardArrowRight, Room} from "@mui/icons-material";
 import {useTranslation} from "react-i18next";
 import {HashLoader} from "react-spinners";
 import {DateUtil} from "@utils/DateUtil.ts";
@@ -12,6 +12,7 @@ type Props = {
     collection: Collection | null;
     locations: Location[] | undefined;
     handleChoseLocation: (location: Location) => void;
+    handleOpenLocationItem: (location: Location) => void;
 }
 
 function LocationList(props: Readonly<Props>) {
@@ -62,6 +63,13 @@ function LocationList(props: Readonly<Props>) {
                                 </Typography>
                             )}
                         </CardContent>
+                        <CardActions>
+                            <Button size="small" color="primary" variant="text"
+                                    onClick={() => props.handleOpenLocationItem(location)}>
+                                {t("button.view_item")}
+                                <KeyboardArrowRight/>
+                            </Button>
+                        </CardActions>
                     </Card>
                 ))
             ) : (
