@@ -21,17 +21,27 @@ function FilterDrawer(props: Readonly<Props>) {
     const [collectionId, setCollectionId] = useState("all");
     const [year, setYear] = useState("all");
 
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const {t} = useTranslation();
 
     const collectionQuery = useCollectionQuery({unpaged: true});
     const locationQuery = useAllLocationsQuery(collectionId, year);
-    const yearsQuery = useYearsOfCollectionQuery();
+    const yearsQuery = useYearsOfCollectionQuery(collectionId);
 
     useEffect(() => {
         setCollectionId(searchParams.get("id") || "all")
         setYear(searchParams.get("year") || "all");
     }, [searchParams]);
+
+    useEffect(() => {
+        if (yearsQuery.data) {
+            if (year !== "all" && !yearsQuery.data.includes(parseInt(year))) {
+                setYear("all");
+                const params: Record<string, string> = collectionId !== "all" ? {id: collectionId} : {};
+                setSearchParams(params);
+            }
+        }
+    }, [collectionId, setSearchParams, year, yearsQuery.data]);
 
     return (
         <Drawer anchor="right" open={props.open}
